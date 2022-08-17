@@ -16,6 +16,7 @@ body {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
   position: relative;
   color: black;
+  background:lightgrey;
 }
 
 /**
@@ -45,6 +46,7 @@ label:hover {
 textarea {
   resize: vertical;
   min-height: 214px;
+  
 }
 
 hr {
