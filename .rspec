@@ -1,0 +1,4 @@
+--color
+--backtrace
+--require spec_helper.rb
+

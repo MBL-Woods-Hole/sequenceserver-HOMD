@@ -1,0 +1,28 @@
+---
+version: "2"
+checks:
+  file-lines:
+    config:
+      threshold: 1000
+  method-count:
+    config:
+      threshold: 50
+plugins:
+  rubocop:
+    enabled: true
+    channel: rubocop-1-23-0
+  eslint:
+    enabled: true
+  stylelint:
+    enabled: true
+exclude_patterns:
+- public/css/sequenceserver.min.css
+- public/sequenceserver-*.min.js
+- public/js/sequence.js
+- public/js/kablammo/*
+- public/vendor/**/*
+- node_modules/**/*
+- public/shims/**/*
+- public/vendor/*
+- spec/**/*
+- coverage/

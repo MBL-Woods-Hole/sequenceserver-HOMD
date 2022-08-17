@@ -1,0 +1,12 @@
+*
+!Gemfil*
+!bin
+!config.ru
+!lib
+!package.json
+!package-lock.json
+!webpack.config.js
+!babel.config.js
+!public
+!sequenceserver.gemspec
+!views

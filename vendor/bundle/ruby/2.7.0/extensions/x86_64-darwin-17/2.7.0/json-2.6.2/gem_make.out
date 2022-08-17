@@ -1,0 +1,13 @@
+current directory: /Users/avoorhis/programming/sequenceserver-HOMD/vendor/bundle/ruby/2.7.0/gems/json-2.6.2/ext/json
+/usr/local/opt/ruby@2.7/bin/ruby -I /usr/local/Cellar/ruby@2.7/2.7.6/lib/ruby/2.7.0 -r ./siteconf20220817-66414-vwb6ah.rb extconf.rb
+creating Makefile
+
+current directory: /Users/avoorhis/programming/sequenceserver-HOMD/vendor/bundle/ruby/2.7.0/gems/json-2.6.2/ext/json
+make DESTDIR\= clean
+
+current directory: /Users/avoorhis/programming/sequenceserver-HOMD/vendor/bundle/ruby/2.7.0/gems/json-2.6.2/ext/json
+make DESTDIR\=
+make: Nothing to be done for `all'.
+
+current directory: /Users/avoorhis/programming/sequenceserver-HOMD/vendor/bundle/ruby/2.7.0/gems/json-2.6.2/ext/json
+make DESTDIR\= install
