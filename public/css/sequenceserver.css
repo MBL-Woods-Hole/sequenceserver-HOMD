@@ -16,7 +16,8 @@ body {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
   position: relative;
   color: black;
-  background:lightgrey;
+  background:#FAF8F6;
+  /* background:#CFCFC4; */
 }
 
 /**
@@ -389,12 +390,17 @@ td.nowrap-ellipsis {
   text-align: center;
   padding: 6px 12px 6px 12px;
 }
+.panel{
 
+}
 .databases .list-group-item {
   border: none;
-  padding: 1px 0 0;
+  padding: 1px 5px;
+  background:#CFCFC4;
 }
-
+.list-group-item label{
+  color:black;
+}
 #help pre:hover {
   background-color: #ffc;
 }

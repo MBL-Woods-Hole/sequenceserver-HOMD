@@ -10,7 +10,7 @@ export class Databases extends Component {
         this.nselected = this.nselected.bind(this);
         this.categories = this.categories.bind(this);
         this.handleClick = this.handleClick.bind(this);
-        this.handleToggle = this.handleToggle.bind(this);
+//this.handleToggle = this.handleToggle.bind(this);
         this.renderDatabases = this.renderDatabases.bind(this);
         this.renderDatabase = this.renderDatabase.bind(this);
     }
@@ -50,32 +50,32 @@ export class Databases extends Component {
         if (type != this.state.type) this.setState({ type: type });
     }
 
-    handleToggle(toggleState, type) {
-        switch (toggleState) {
-        case '[Select all]':
-            $(`.${type} .database input:not(:checked)`).click();
-            break;
-        case '[Deselect all]':
-            $(`.${type} .database input:checked`).click();
-            break;
-        }
-        this.forceUpdate();
-    }
+    // handleToggle(toggleState, type) {
+//         switch (toggleState) {
+//         case '[Select all]':
+//             $(`.${type} .database input:not(:checked)`).click();
+//             break;
+//         case '[Deselect all]':
+//             $(`.${type} .database input:checked`).click();
+//             break;
+//         }
+//         this.forceUpdate();
+//     }
     renderDatabases(category) {
     // Panel name and column width.
-        var panelTitle = category[0].toUpperCase() + category.substring(1).toLowerCase() + ' databases';
+        var panelTitle = category[0].toUpperCase() + category.substring(1).toLowerCase() + ' Databases';
         var columnClass = this.categories().length === 1 ? 'col-md-12' : 'col-md-6';
 
         // Toggle button.
-        var toggleState = '[Select all]';
-        var toggleClass = 'btn-link';
-        var toggleShown = this.databases(category).length > 1;
-        var toggleDisabled = this.state.type && this.state.type !== category;
-        if (toggleShown && toggleDisabled) toggleClass += ' disabled';
-        if (!toggleShown) toggleClass += ' hidden';
-        if (this.nselected() === this.databases(category).length) {
-            toggleState = '[Deselect all]';
-        }
+        // var toggleState = '[Select all]';
+//         var toggleClass = 'btn-link';
+//         var toggleShown = this.databases(category).length > 1;
+//         var toggleDisabled = this.state.type && this.state.type !== category;
+//         if (toggleShown && toggleDisabled) toggleClass += ' disabled';
+//         if (!toggleShown) toggleClass += ' hidden';
+//         if (this.nselected() === this.databases(category).length) {
+//             toggleState = '[Deselect all]';
+//         }
 
         // JSX.
         return (
@@ -83,16 +83,7 @@ export class Databases extends Component {
                 <div className="panel panel-default">
                     <div className="panel-heading">
                         <h4 style={{ display: 'inline' }}>{panelTitle}</h4> &nbsp;&nbsp;
-                        <button
-                            type="button"
-                            className={toggleClass}
-                            disabled={toggleDisabled}
-                            onClick={function () {
-                                this.handleToggle(toggleState, category);
-                            }.bind(this)}
-                        >
-                            {toggleState}
-                        </button>
+                        
                     </div>
                     <ul className={'list-group databases ' + category}>
                         {_.map(
@@ -118,7 +109,7 @@ export class Databases extends Component {
         var disabled = this.state.type && this.state.type !== database.type;
 
         return (
-            <label className={(disabled && 'disabled database') || 'database'}>
+            <label className={'database'}>
                 <input
                     type="checkbox"
                     name="databases[]"

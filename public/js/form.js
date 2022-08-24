@@ -182,15 +182,7 @@ export class Form extends Component {
                     }
                     <div className="form-group">
                         <Options ref="opts" />
-                        <div className="col-md-2">
-                            <div className="form-group" style={{ 'textAlign': 'center', 'padding': '7px 0' }}>
-                                <label>
-                                    <input type="checkbox" id="toggleNewTab"
-                                        onChange={() => { this.handleNewTabCheckbox(); }}
-                                    /> Open results in new tab
-                                </label>
-                            </div>
-                        </div>
+                        
                         <SearchButton ref="button" onAlgoChanged={this.handleAlgoChanged} />
                     </div>
                 </form>
