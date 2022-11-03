@@ -106,12 +106,13 @@ export class Databases extends Component {
     }
 
     renderDatabase(database) {
-        var disabled = this.state.type && this.state.type !== database.type;
-
+        //var disabled = this.state.type && this.state.type !== database.type;
+        var disabled = false
         return (
             <label className={'database'}>
                 <input
-                    type="checkbox"
+                    //type="checkbox"
+                    type="radio"
                     name="databases[]"
                     value={database.id}
                     data-type={database.type}

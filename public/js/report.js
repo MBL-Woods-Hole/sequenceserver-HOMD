@@ -167,7 +167,7 @@ class Report extends Component {
    */
     componentDidUpdate() {
     // Log to console how long the last update take?
-        console.log((Date.now() - this.lastTimeStamp) / 1000);
+        //console.log((Date.now() - this.lastTimeStamp) / 1000);
 
         // Lock sidebar in its position on the first update.
         if (this.nextQuery == 0 && this.nextHit == 0 && this.nextHSP == 0) {
