@@ -16,7 +16,7 @@ body {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
   position: relative;
   color: black;
-  background:lightgrey;
+  background:pink;
 }
 
 /**
@@ -125,7 +125,13 @@ a.disabled:hover,
 .navbar-brand > img {
   display: inline-block;
 }
-
+.homd-label{
+  color:navyblue;
+  font-size:22px;
+  position:relative;
+  top:10px;
+  left:30px;
+}
 /**
  * Like BS' .page-header but without extra margin and the ability to display a
  * sub-text on right.
@@ -171,6 +177,7 @@ a.disabled:hover,
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
+  
 }
 
 .panel .panel-heading {
@@ -392,7 +399,10 @@ td.nowrap-ellipsis {
 
 .databases .list-group-item {
   border: none;
-  padding: 1px 0 0;
+  padding: 0 5px;
+  background: white;
+  
+  
 }
 
 #help pre:hover {
@@ -593,7 +603,8 @@ input[type=checkbox] {
 
 /* CSS class for logo */
 .logo {
-  width: 205.05px;
+  /* width: 205.05px; */
+  width: 130px;
   max-height: 35px;
 }
 

@@ -143,7 +143,7 @@ begin
 
     on 'D', 'devel',
        'Start SequenceServer in development mode'
-
+        puts "Development mode"
     on '-v', '--version',
        'Print version number of SequenceServer that will be loaded'
 

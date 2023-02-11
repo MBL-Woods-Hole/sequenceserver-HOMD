@@ -310,18 +310,20 @@ export class SearchQueryWidget extends Component {
         return (
             <div
                 className="col-md-12">
+                
                 <div
                     className="sequence">
                     <textarea
                         id="sequence" ref={this.textareaRef}
                         className="form-control text-monospace"
                         name="sequence" value={this.state.value}
-                        placeholder="Paste query sequence(s) or drag file
+                        placeholder="XXPaste query sequence(s) or drag file
                         containing query sequence(s) in FASTA format here ..."
                         spellCheck="false" autoFocus
                         onChange={this.handleInput}>
                     </textarea>
                 </div>
+                
                 <div
                     className="hidden"
                     style={{ position: 'absolute', top: '4px', right: '19px' }}
