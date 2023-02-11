@@ -52,5 +52,6 @@ pkg
 *.swp
 *.~*~
 .gems/*
-Gemfile.lock
+bundler: command not foundGemfile.lock
 node_modules
+vendor

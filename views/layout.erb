@@ -22,19 +22,34 @@
 </head>
 
 <% if $DB_TYPE == 'refseq' %>
+<<<<<<< HEAD
     <body style='background:#BFD4DB;'>
 <% else %>
     <body style='background:#E8F4EA;'>
 <% end %>
+=======
+        <body style='background:#BFD4DB;'>
+      <% else %>
+        <body style='background:#E8F4EA;'>
+      <% end %>
+
+
+>>>>>>> 9f72f843d2176758d43ccce324fb639f6fe83567
   <div
     class="navbar">
     
     <div
       class="container">
       <% if $DB_TYPE == 'refseq' %>
+<<<<<<< HEAD
          <span class="homd-label">HOMD RefSeq BLAST Server</span>
       <% else %>
          <span class="homd-label">HOMD Genome BLAST Server</span>
+=======
+        <span class="homd-label">HOMD RefSeq BLAST Server</span>
+      <% else %>
+        <span class="homd-label">HOMD Genome BLAST Server</span>
+>>>>>>> 9f72f843d2176758d43ccce324fb639f6fe83567
       <% end %>
       <a
         class="navbar-brand"
@@ -54,11 +69,16 @@
           </a>
         </li>
       </ul>
+<<<<<<< HEAD
       
     </div>
    
   </div>
 
+=======
+    </div>
+  </div>
+>>>>>>> 9f72f843d2176758d43ccce324fb639f6fe83567
 
   <div
     class="container">
@@ -76,15 +96,43 @@
 
   <%= yield %>
 
-  <div class="footer" id="footer">
+  <div
+    class="footer" id="footer">
     <hr>
-    <div class="container">
-      <p class="text-center">Custom BLAST web interface by <a style='vertical-align: baseline' href="https://sequenceserver.com" target="_blank">SequenceServer.</a>
-      <br>Please cite data sources and 
-      <a style='vertical-align: baseline' href="https://doi.org/10.1093/molbev/msz185" target='_blank'>
-      Sequenceserver: a modern graphical user interface for custom BLAST databases. Molecular Biology and Evolution (2019).</a>
+    <div
+      class="container">
+      <p
+        class="text-center">
+	Please cite data sources and <a style='vertical-align: baseline' href="https://doi.org/10.1093/molbev/msz185">the paper</a> describing <a href="https://wurmlab.com">our</a> <a href="https://sequenceserver.com">SequenceServer BLAST interface</a>.
+        <a style='vertical-align: baseline'
+          href='https://sequenceserver.com'><em>
+          <%=
+            quote = [
+	      "Visualize BLAST results.",
+              "Run BLAST on local computer.",
+	      "BLAST on Mac.",
+	      "BLAST on Windows.",
+	      "Run blast on mac.",
+	      "Blast analysis software.",
+	      "Sequence Search on local computer.",
+	      "Blast DNA sequence search.",
+              "Custom BLAST search.",
+              "Install blast on Mac.",
+              "Perform BLAST analyses.",
+              "Custom BLAST web interface.",
+              "SequenceServer: Local BLAST with bespoke html interface.",
+              "Set up custom BLAST interface with SequenceServer.",
+              "Easy BLASTing with SequenceServer.",
+              "Run BLAST locally with Sequenceserver.",
+              "BLAST against a custom, local database with SequenceServer.",
+              "Run BLAST locally on Mac OSX with SequenceServer.",
+              "Run BLAST locally on Ubuntu with SequenceServer.",
+              "Run BLAST locally on Linux with SequenceServer."
+            ][rand(19)]
+          %>
+        </em></a>
       </p>
-    
+      <%= File.read(File.join(settings.root, '../website-extras/footer.html')) if File.exists?(File.join(settings.root, '../website-extras/footer.html')) %>
     </div> <!-- /container -->
   </div>
 
