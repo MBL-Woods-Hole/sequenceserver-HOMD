@@ -1,0 +1,42 @@
+see macbook 'notes' pgm
+
+sequenceserver
+BLAST server
+
+localhost (macbook)
+just run 'sequenceserver'   /usr/local/bin/sequenceserver
+will open http://localhost:4567/  (from /Users/avoorhis/programming/sequenceserver/)
+-edit the *.js files then run
+ "npm run build" to update the webpack file.
+ 
+on HOMD::
+config file: ~/.sequenceserver.conf
+/var/lib/gems/2.7.0/gems/sequenceserver-2.0.0/
+
+To change css +
+sequenceserver -D
+
+sudo systemctl start sequenceserver
+
+duplicate config.ru
+
+require ‘sequenceserver’
+SequenceServer.init(:config_file => ‘/absolute/path/to/config/file’)
+SequenceServer.init(:config_file => ‘/home/ubuntu/.sequenceserver.conf’) run SequenceServer
+
+nginx:
+/etc/nginx/conf.d/
+
+systemd:
+sudo systemctl daemon-reload
+/etc/systemd/system/SS-genome.service
+  SS-genome.service
+  SS-refseq.service
+
+SS binaries:
+/var/lib/gems/2.7.0/gems/sequenceserver-refseq-2.0.0/bin/sequenceserver -c ~/.sequenceserver-refseq.conf
+/var/lib/gems/2.7.0/gems/sequenceserver-genome-2.0.0/bin/sequenceserver -c ~/.sequenceserver-genome.conf
+
+
+To edit main page:
+To edit results page:

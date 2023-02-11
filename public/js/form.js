@@ -164,11 +164,13 @@ export class Form extends Component {
                 <div id="overlay" style={{ position: 'absolute', top: 0, left: 0, width: '100vw', height: '100vw', background: 'rgba(0, 0, 0, 0.2)', display: 'none', zIndex: 99 }} />
                 <form id="blast" method="post" className="form-horizontal">
                     
+
                     <div className="notifications" id="notifications">
                         <NucleotideNotification />
                         <ProteinNotification />
                         <MixedNotification />
                     </div>
+
                     {this.useTreeWidget() ?
                         <DatabasesTree ref="databases"
                             databases={this.state.databases} tree={this.state.tree}
@@ -183,8 +185,7 @@ export class Form extends Component {
                     <div className="form-group query-container">
                         <SearchQueryWidget ref="query" onSequenceTypeChanged={this.handleSequenceTypeChanged} />
                     </div>
-                    
-                    <br />                    
+
                     <div className="form-group">
                         <Options ref="opts" />
                         <div className="col-md-2">

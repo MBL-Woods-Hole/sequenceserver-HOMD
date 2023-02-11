@@ -16,7 +16,12 @@ body {
   font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
   position: relative;
   color: black;
+<<<<<<< HEAD
   background:pink;
+=======
+  background:#FAF8F6;
+  /* background:#CFCFC4; */
+>>>>>>> 7784f44c18f9d9107ed97b6980f9968bfd8e0fc3
 }
 
 /**
@@ -396,15 +401,24 @@ td.nowrap-ellipsis {
   text-align: center;
   padding: 6px 12px 6px 12px;
 }
+.panel{
 
+}
 .databases .list-group-item {
   border: none;
+<<<<<<< HEAD
   padding: 0 5px;
   background: white;
   
   
+=======
+  padding: 1px 5px;
+  background:#CFCFC4;
 }
-
+.list-group-item label{
+  color:black;
+>>>>>>> 7784f44c18f9d9107ed97b6980f9968bfd8e0fc3
+}
 #help pre:hover {
   background-color: #ffc;
 }

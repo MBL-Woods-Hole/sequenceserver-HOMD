@@ -210,7 +210,7 @@ class Graph {
             }, this)
         );
         if (count == this.chords_arr.length) {
-            console.log('no record found ' + id);
+            //console.log('no record found ' + id);
             this.delete_arr.push(index);
         }
     }
@@ -236,7 +236,7 @@ class Graph {
     }
 
     edit_labels() {
-        console.log('label edits');
+        //console.log('label edits');
         _.each(
             this.layout_arr,
             _.bind(function (obj) {
@@ -615,10 +615,10 @@ class Graph {
         var max = d3.max(this.ratioHSP, function (d) {
             return d.number;
         });
-        console.log('chords_arr ' + this.chords_arr.length);
-        console.log('ratioHSP test ' + this.ratioHSP.length);
-        console.log('paletteSize ' + this.paletteSize);
-        console.log('min ' + min + ' max ' + max);
+        // console.log('chords_arr ' + this.chords_arr.length);
+//         console.log('ratioHSP test ' + this.ratioHSP.length);
+//         console.log('paletteSize ' + this.paletteSize);
+//         console.log('min ' + min + ' max ' + max);
         this.legend = d3
             .select(this.svgContainer[0])
             .insert('svg', ':first-child')

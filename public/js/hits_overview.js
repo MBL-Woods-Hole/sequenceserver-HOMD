@@ -171,34 +171,41 @@ class Graph {
         svg_legend.append('rect')
             .attr('x', 7.5 * (width - 2 * options.margin) / 10)
             .attr('width', 2 * (width - 4 * options.margin) / 10)
-            .attr('height', options.legend)
+            .attr('height', options.legend +5)
             .attr('fill', 'url(#legend-grad)');
 
         svg_legend.append('text')
             .attr('class',' legend-text')
             .attr('transform', 'translate(0, ' +options.legend +')')
             .attr('x', 9.5 * (width - 2 * options.margin) / 10 + options.margin / 2)
+            .attr('y',2.0)
             .text('Weaker hits');
         // .text(function() {
-        //   return Helpers.prettify_evalue(hits[hits.length-1].hitEvalue);
-        // })
+//           return Helpers.prettify_evalue(hits[hits.length-1].hitEvalue);
+//          })
 
         svg_legend.append('text')
             .attr('class',' legend-text')
             .attr('transform', 'translate(0, ' + options.legend + ')')
             .attr('x', 6.7 * (width - 2 * options.margin) / 10 - options.margin / 2)
+            .attr('y',2.0)
+            //.attr('y',0)
             .text('Stronger hits');
         // .text(function () {
-        //   return Helpers.prettify_evalue(hits[0].hitEvalue);
-        // })
+//           return Helpers.prettify_evalue(hits[0].hitEvalue);
+//         })
 
         svg.append('linearGradient')
             .attr('id', 'legend-grad')
             .selectAll('stop')
             .data([
-                {offset: '0%', color: '#000'},
-                {offset: '45%', color: '#c74f14'},
-                {offset: '100%', color: '#f6bea2'}
+               //  {offset: '0%', color: '#000'}, 
+//                 {offset: '45%', color: '#c74f14'},
+//                 {offset: '100%', color: '#f6bea2'}
+                
+                {offset: '0%', color: '#000'}, 
+                {offset: '45%', color: '#8cA55d'},
+                {offset: '100%', color: '#cAD4B0'}
             ])
             .enter()
             .append('stop')
@@ -216,7 +223,7 @@ class Graph {
      * margin: Margin around the svg element.
      */
         var defaults = {
-                barHeight: 4,
+                barHeight: 8,
                 legend: inhits.length > 1 ? 3 : 0,
                 margin: 20
             },
@@ -312,6 +319,7 @@ class Graph {
                 }))
             ])
             .range([0,0.8]);
+            //.range([0.4,1.8]);
 
         svg.append('g')
             .attr('class', 'ghit')
@@ -331,8 +339,10 @@ class Graph {
                     // Drawing the HSPs connector line using the same
                     // color as that of the hit track (using lookahead).
                         var yHspline = y(d.hitId) + options.barHeight / 2;
-                        var hsplineColor = d3.hsl(20, 0.82, gradScale(v.hspEvalue));
-
+                        //var hsplineColor = d3.hsl(20, 0.82, gradScale(v.hspEvalue));
+                        var hsplineColor = d3.hsl(79, 0.3, gradScale(v.hspEvalue));
+                        //hsplineColor = 'green';
+                       // console.log('color: ',gradScale(v.hspEvalue))
                         if (j+1 < d.length) {
                             if (d[j].hspEnd <= d[j+1].hspStart) {
                                 d3.select(this.parentNode)
