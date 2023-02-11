@@ -22,30 +22,6 @@
 </head>
 
 <body>
-  <div
-    class="navbar">
-    <div
-      class="container">
-      <a
-        class="navbar-brand"
-        href="https://sequenceserver.com" target="_blank">
-        <img class="logo" src="SequenceServer_logo.png" alt="sequenceserver_logo">
-        <small>
-          <%= SequenceServer::VERSION %>
-        </small>
-      </a>
-      <ul class="nav navbar-nav navbar-right hover-reset focus-reset">
-        <li>
-          <a
-            target="_blank"
-            href="http://www.sequenceserver.com/#license-and-support">
-            <i class="fa fa-comment-o"></i>
-            &nbsp;Help &amp; Support
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
 
   <div
     class="container">
@@ -63,43 +39,15 @@
 
   <%= yield %>
 
-  <div
-    class="footer" id="footer">
+  <div class="footer" id="footer">
     <hr>
-    <div
-      class="container">
-      <p
-        class="text-center">
-	Please cite data sources and <a style='vertical-align: baseline' href="https://doi.org/10.1093/molbev/msz185">the paper</a> describing <a href="https://wurmlab.com">our</a> <a href="https://sequenceserver.com">SequenceServer BLAST interface</a>.
-        <a style='vertical-align: baseline'
-          href='https://sequenceserver.com'><em>
-          <%=
-            quote = [
-	      "Visualize BLAST results.",
-              "Run BLAST on local computer.",
-	      "BLAST on Mac.",
-	      "BLAST on Windows.",
-	      "Run blast on mac.",
-	      "Blast analysis software.",
-	      "Sequence Search on local computer.",
-	      "Blast DNA sequence search.",
-              "Custom BLAST search.",
-              "Install blast on Mac.",
-              "Perform BLAST analyses.",
-              "Custom BLAST web interface.",
-              "SequenceServer: Local BLAST with bespoke html interface.",
-              "Set up custom BLAST interface with SequenceServer.",
-              "Easy BLASTing with SequenceServer.",
-              "Run BLAST locally with Sequenceserver.",
-              "BLAST against a custom, local database with SequenceServer.",
-              "Run BLAST locally on Mac OSX with SequenceServer.",
-              "Run BLAST locally on Ubuntu with SequenceServer.",
-              "Run BLAST locally on Linux with SequenceServer."
-            ][rand(19)]
-          %>
-        </em></a>
+    <div class="container">
+      <p class="text-center">Custom BLAST web interface by <a style='vertical-align: baseline' href="https://sequenceserver.com" target="_blank">SequenceServer.</a>
+      <br>Please cite data sources and 
+      <a style='vertical-align: baseline' href="https://doi.org/10.1093/molbev/msz185" target='_blank'>
+      Sequenceserver: a modern graphical user interface for custom BLAST databases. Molecular Biology and Evolution (2019).</a>
       </p>
-      <%= File.read(File.join(settings.root, '../website-extras/footer.html')) if File.exists?(File.join(settings.root, '../website-extras/footer.html')) %>
+    
     </div> <!-- /container -->
   </div>
 
