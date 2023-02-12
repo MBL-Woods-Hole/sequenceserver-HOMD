@@ -185,7 +185,7 @@ export class Form extends Component {
                     <div className="form-group query-container">
                         <SearchQueryWidget ref="query" onSequenceTypeChanged={this.handleSequenceTypeChanged} />
                     </div>
-
+                    <br />
                     <div className="form-group">
                         <Options ref="opts" />
                         <div className="col-md-2">

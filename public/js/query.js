@@ -317,7 +317,7 @@ export class SearchQueryWidget extends Component {
                         id="sequence" ref={this.textareaRef}
                         className="form-control text-monospace"
                         name="sequence" value={this.state.value}
-                        placeholder="XXPaste query sequence(s) or drag file
+                        placeholder="Paste query sequence(s) or drag file
                         containing query sequence(s) in FASTA format here ..."
                         spellCheck="false" autoFocus
                         onChange={this.handleInput}>
