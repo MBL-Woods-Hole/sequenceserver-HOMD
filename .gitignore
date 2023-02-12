@@ -54,4 +54,4 @@ pkg
 .gems/*
 bundler: command not foundGemfile.lock
 node_modules
-vendor
+
