@@ -127,14 +127,14 @@ module SequenceServer
         fname_fna = gid+".fna"
         fname_ffn = gid+".ffn"
         
-        fn_path_faa_p = File.join(path_prokka, fname_faa)
+        fn_path_faa_p = File.join(path_prokka, 'faa', fname_faa)
         puts "prokka faa path: #{fn_path_faa_p}"
-        fn_path_fna_p = File.join(path_prokka, fname_fna)
-        fn_path_ffn_p = File.join(path_prokka, fname_ffn)
+        fn_path_fna_p = File.join(path_prokka, 'fna', fname_fna)
+        fn_path_ffn_p = File.join(path_prokka, 'ffn', fname_ffn)
         
-        fn_path_faa_n = File.join(path_ncbi, fname_faa)
-        fn_path_fna_n = File.join(path_ncbi, fname_fna)
-        fn_path_ffn_n = File.join(path_ncbi, fname_ffn)
+        fn_path_faa_n = File.join(path_ncbi, 'faa', fname_faa)
+        fn_path_fna_n = File.join(path_ncbi, 'fna', fname_fna)
+        fn_path_ffn_n = File.join(path_ncbi, 'ffn', fname_ffn)
         
         
         Database.clear
