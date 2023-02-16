@@ -112,8 +112,9 @@ module SequenceServer
       end
       #puts 'dbs', dbs
       if !params[:gid].nil?
-        puts  'has gid key and anno'
+        puts  'has gid key'
         gid  = params[:gid]
+        
         
         # if ext == 'faa'
 #            mol_type = 'Protein'
@@ -127,6 +128,7 @@ module SequenceServer
         fname_ffn = gid+".ffn"
         
         fn_path_faa_p = File.join(path_prokka, fname_faa)
+        puts "prokka faa path: #{fn_path_faa_p}"
         fn_path_fna_p = File.join(path_prokka, fname_fna)
         fn_path_ffn_p = File.join(path_prokka, fname_ffn)
         
