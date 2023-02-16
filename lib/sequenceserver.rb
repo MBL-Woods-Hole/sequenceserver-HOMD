@@ -59,7 +59,9 @@ module SequenceServer
     def makeblastdb
       @makeblastdb ||= MAKEBLASTDB.new(config[:database_dir])
     end
-
+    def makeblastdb2 (dir)
+      @makeblastdb ||= MAKEBLASTDB.new(dir)
+    end
     # SequenceServer initialisation routine.
     def init(config = {})
       # Use default config file if caller didn't specify one.
@@ -172,25 +174,32 @@ module SequenceServer
       require 'irb/ext/multi-irb'
       IRB.irb nil, self
     end
+    
+    def init_database2 (path, db, mol_type)
+     
+      #puts "p0, #{path}, #{db}, #{mol_type}"
+      logger.debug("Will look for BLAST+ databases in: #{path}")
 
-    private
+      makeblastdb.scan2 path, db, mol_type
+      fail NO_BLAST_DATABASE_FOUND, "#{path}" if !makeblastdb.any_formatted?
 
-    def init_binaries
-      if config[:bin]
-        config[:bin] = File.expand_path config[:bin]
-        unless File.exist?(config[:bin]) && File.directory?(config[:bin])
-          fail ENOENT.new('bin dir', config[:bin])
+      Database.collection = makeblastdb.formatted_fastas
+      Database.each do |database|
+        logger.debug "Found #{database.type} database '#{database.title}' at '#{database.path}'"
+        if database.non_parse_seqids?
+          logger.warn "Database '#{database.title}' was created without using the" \
+                      ' -parse_seqids option of makeblastdb. FASTA download will' \
+                      " not work correctly (path: '#{database.path}')."
+        elsif database.v4?
+          logger.warn "Database '#{database.title}' is of older format. Mixing" \
+                      ' old and new format databases can be problematic' \
+                      "(path: '#{database.path}')."
         end
-        logger.debug("Will use NCBI BLAST+ at: #{config[:bin]}")
-      else
-        logger.debug('Location of NCBI BLAST+ not provided. Assuming NCBI' \
-                     ' BLAST+ to be present in: $PATH')
       end
-
-      assert_blast_installed_and_compatible
     end
-
+    
     def init_database
+      # removed from private
       fail DATABASE_DIR_NOT_SET unless config[:database_dir]
 
       config[:database_dir] = File.expand_path(config[:database_dir])
@@ -218,6 +227,27 @@ module SequenceServer
         end
       end
     end
+    
+   
+    
+    private
+
+    def init_binaries
+      if config[:bin]
+        config[:bin] = File.expand_path config[:bin]
+        unless File.exist?(config[:bin]) && File.directory?(config[:bin])
+          fail ENOENT.new('bin dir', config[:bin])
+        end
+        logger.debug("Will use NCBI BLAST+ at: #{config[:bin]}")
+      else
+        logger.debug('Location of NCBI BLAST+ not provided. Assuming NCBI' \
+                     ' BLAST+ to be present in: $PATH')
+      end
+
+      assert_blast_installed_and_compatible
+    end
+
+    
 
     def check_num_threads
       num_threads = Integer(config[:num_threads])

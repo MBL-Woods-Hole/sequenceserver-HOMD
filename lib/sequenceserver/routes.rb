@@ -7,12 +7,16 @@ require 'sequenceserver/blast'
 require 'sequenceserver/report'
 require 'sequenceserver/database'
 require 'sequenceserver/sequence'
+require 'sequenceserver/makeblastdb'
 
 module SequenceServer
   # Controller.
   class Routes < Sinatra::Base
     # See
     # http://www.sinatrarb.com/configuration.html
+    extend Forwardable
+    def_delegators SequenceServer, :config, :sys
+    
     configure do
       # We don't need Rack::MethodOverride. Let's avoid the overhead.
       disable :method_override
@@ -69,15 +73,108 @@ module SequenceServer
     get '/' do
       erb :search, layout: true
     end
-
+    
+    # Borrowed from makeblastdb.rb
+    def multipart_database_name?(db_name)
+      !(db_name.match(%r{.+/\S+\.\d{2,3}$}).nil?)
+    end
+    def get_categories(path)
+      path
+        .gsub(config[:database_dir], '') # remove database_dir from path
+        .split('/')
+        .reject(&:empty?)[0..-2] # the first entry might be '' if database_dir does not end with /
+    end
+    def blastdbcmd (line)
+      cmd = "blastdbcmd -recursive -list #{line}" \
+            ' -list_outfmt "%f	%t	%p	%n	%l	%d	%v"'
+      out, err = sys(cmd, path: config[:bin])
+      errpat = /BLAST Database error/
+      fail BLAST_DATABASE_ERROR.new(cmd, err) if err.match(errpat)
+      return out
+    rescue CommandFailed => e
+      fail BLAST_DATABASE_ERROR.new(cmd, e.stderr)
+    end
+    
     # Returns data that is used to render the search form client side. These
     # include available databases and user-defined search options.
     get '/searchdata.json' do
-      searchdata = {
-        query: Database.retrieve(params[:query]),
-        database: Database.all,
-        options: SequenceServer.config[:options]
-      }
+      puts "in get '/searchdata.json' do"
+      puts 'gid',params[:gid]
+      
+      puts $DEV_HOST
+      if $DEV_HOST == 'AVhome'
+         path_prokka = '/Users/avoorhis/programming/blast-db-alt/'  #SEQF1595.fna*
+         path_ncbi = '/Users/avoorhis/programming/blast-db-alt_ncbi/'  #SEQF1595.fna*
+         #homdpath = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_ncbi/' #faa,ffn,fna
+      else
+         path_prokka = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_prokka/' #faa,ffn,fna
+         path_ncbi = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_ncbi/' #faa,ffn,fna
+      end
+      #puts 'dbs', dbs
+      if !params[:gid].nil?
+        puts  'has gid key and anno'
+        gid  = params[:gid]
+        
+        # if ext == 'faa'
+#            mol_type = 'Protein'
+#         elsif ext == 'ffn'
+#            mol_type = 'Nucleotide'
+#         else  # fna
+#            mol_type = 'Nucleotide'
+#         end
+        fname_faa = gid+".faa"
+        fname_fna = gid+".fna"
+        fname_ffn = gid+".ffn"
+        
+        fn_path_faa_p = File.join(path_prokka, fname_faa)
+        fn_path_fna_p = File.join(path_prokka, fname_fna)
+        fn_path_ffn_p = File.join(path_prokka, fname_ffn)
+        
+        fn_path_faa_n = File.join(path_ncbi, fname_faa)
+        fn_path_fna_n = File.join(path_ncbi, fname_fna)
+        fn_path_ffn_n = File.join(path_ncbi, fname_ffn)
+        
+        
+        Database.clear
+        
+        if !Dir.glob(fn_path_faa_p+'*').empty?
+           SequenceServer.init_database2 fn_path_faa_p, 'PROKKA::'+fname_faa, "Protein"
+        end
+        if !Dir.glob(fn_path_fna_p+'*').empty?
+           SequenceServer.init_database2 fn_path_fna_p, 'PROKKA::'+fname_fna, 'Nucleotide'
+        end
+        if !Dir.glob(fn_path_ffn_p+'*').empty?
+           SequenceServer.init_database2 fn_path_ffn_p, 'PROKKA::'+fname_ffn, 'Nucleotide'
+        end
+        
+        if !Dir.glob(fn_path_faa_n+'*').empty?
+           SequenceServer.init_database2 fn_path_faa_n, 'NCBI::'+fname_faa, 'Protein'
+        end
+        if !Dir.glob(fn_path_fna_n+'*').empty?
+           SequenceServer.init_database2 fn_path_fna_n, 'NCBI::'+fname_fna, 'Nucleotide'
+        end
+        if !Dir.glob(fn_path_ffn_n+'*').empty?
+           SequenceServer.init_database2 fn_path_ffn_n, 'NCBI::'+fname_ffn, 'Nucleotide'
+        end
+        searchdata = {
+            query: Database.retrieve(params[:query]),
+            database: Database.all,
+            options: SequenceServer.config[:options]
+        }
+     
+        
+     
+      else
+        puts  'Default all DBs'
+        
+        Database.clear  # gets rid of others
+        SequenceServer.init_database
+        searchdata = {
+            query: Database.retrieve(params[:query]),
+            database: Database.all,
+            options: SequenceServer.config[:options]
+        }
+      end
 
       if SequenceServer.config[:databases_widget] == 'tree'
         searchdata.update(tree: Database.tree)

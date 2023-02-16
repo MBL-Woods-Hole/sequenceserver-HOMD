@@ -29,7 +29,6 @@ module SequenceServer
       args[2].downcase!   # type
       args.each(&:freeze)
       super
-
       @id = Digest::MD5.hexdigest args.first
     end
 
@@ -124,7 +123,12 @@ module SequenceServer
       end
 
       private :collection
-
+      
+     #  def destroy id
+#         @sighting = Database.find(id)
+#         @sighting.destroy
+#       end
+      
       def [](ids)
         ids = Array ids
         collection.values_at(*ids)
