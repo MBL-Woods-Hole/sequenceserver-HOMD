@@ -83,8 +83,7 @@ export class Databases extends Component {
             <div className={columnClass} key={'DB_' + category}>
                 <div className="panel panel-default">
                     <div className="panel-heading">
-                        <h4 style={{ display: 'inline' }}>{panelTitle}</h4> &nbsp;&nbsp;
-                        
+                        <h4 style={{ display: 'inline' }}>{' '+panelTitle}</h4> &nbsp;&nbsp;
                     </div>
                     
                     <ul className={'list-group databases ' + category}>
@@ -95,7 +94,7 @@ export class Databases extends Component {
                                    
                                    return (
                                     <li className="list-group-item" key={'DB_' + category + index} >
-                                        {this.renderDatabase(database)}
+                                        {this.renderDatabase2(database)}
                                     </li>
                                    );
                                 }else{
@@ -118,6 +117,7 @@ export class Databases extends Component {
     renderDatabase(database) {
         //var disabled = this.state.type && this.state.type !== database.type;
         var disabled = false
+        
         return (
             <label className={'database'}>
                 <input
@@ -131,7 +131,28 @@ export class Databases extends Component {
                         this.handleClick(database);
                     }, this)}
                 />
-                {' ' + (database.title || database.name)}
+                  <span className='brown'>{' ' + (database.title || database.name)}</span>
+            </label>
+        );
+    }
+    renderDatabase2(database) {
+        //var disabled = this.state.type && this.state.type !== database.type;
+        var disabled = false
+        
+        return (
+            <label className={'database'}>
+                <input
+                    //type="checkbox"
+                    type="radio"
+                    name="databases[]"
+                    value={database.id}
+                    data-type={database.type}
+                    disabled={disabled}
+                    onChange={_.bind(function () {
+                        this.handleClick(database);
+                    }, this)}
+                />
+                  {' ' + (database.title || database.name)}
             </label>
         );
     }

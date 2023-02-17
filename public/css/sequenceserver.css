@@ -181,9 +181,11 @@ a.disabled:hover,
 }
 
 .panel .panel-heading {
-  padding: 0;
+  padding: 0 5px;
   background-color: inherit;
+  border: 1px solid lightgrey;
   border-bottom: 1px solid #c74f14;
+  
 }
 
 .panel .panel-heading h4 {
@@ -401,10 +403,11 @@ td.nowrap-ellipsis {
 }
 .databases {
   border: none;
-  padding: 0 5px;
+  
   background: white;
-  height:150px;
-  overflow:auto;
+  height: 150px;
+  overflow: auto;
+  border:1px solid lightgrey;
 }
 .list-group-item {
   border: none;
@@ -664,4 +667,13 @@ input[type=checkbox] {
   padding: 10px;
   cursor: pointer;
   letter-spacing: 1px;
+}
+.blue{
+   color:#0F52BA;
+}
+.orange{
+   color:#F4BB44;
+}
+.brown{
+   color:#800020;
 }
