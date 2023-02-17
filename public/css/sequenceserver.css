@@ -399,7 +399,14 @@ td.nowrap-ellipsis {
 .panel{
    
 }
-.databases .list-group-item {
+.databases {
+  border: none;
+  padding: 0 5px;
+  background: white;
+  height:150px;
+  overflow:auto;
+}
+.list-group-item {
   border: none;
   padding: 0 5px;
   background: white;

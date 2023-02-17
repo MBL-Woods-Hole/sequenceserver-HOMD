@@ -92,7 +92,7 @@ export class Databases extends Component {
                               _.bind(function (database, index) {
                               
                                 if(database.name.includes('SEQF')){
-                                   database.title = '<b>'+database.title+'</b>'
+                                   
                                    return (
                                     <li className="list-group-item" key={'DB_' + category + index} >
                                         {this.renderDatabase(database)}
