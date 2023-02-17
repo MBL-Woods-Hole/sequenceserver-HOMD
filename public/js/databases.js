@@ -10,8 +10,7 @@ export class Databases extends Component {
         this.nselected = this.nselected.bind(this);
         this.categories = this.categories.bind(this);
         this.handleClick = this.handleClick.bind(this);
-//this.handleToggle = this.handleToggle.bind(this);
-
+        this.handleToggle = this.handleToggle.bind(this);
         this.renderDatabases = this.renderDatabases.bind(this);
         this.renderDatabase = this.renderDatabase.bind(this);
     }
@@ -51,39 +50,39 @@ export class Databases extends Component {
         if (type != this.state.type) this.setState({ type: type });
     }
 
-    // handleToggle(toggleState, type) {
-//         switch (toggleState) {
-//         case '[Select all]':
-//             $(`.${type} .database input:not(:checked)`).click();
-//             break;
-//         case '[Deselect all]':
-//             $(`.${type} .database input:checked`).click();
-//             break;
-//         }
-//         this.forceUpdate();
-//     }
+    handleToggle(toggleState, type) {
+        switch (toggleState) {
+        case '[Select all]':
+            $(`.${type} .database input:not(:checked)`).click();
+            break;
+        case '[Deselect all]':
+            $(`.${type} .database input:checked`).click();
+            break;
+        }
+        this.forceUpdate();
+    }
     renderDatabases(category) {
     // Panel name and column width.
         var panelTitle = category[0].toUpperCase() + category.substring(1).toLowerCase() + ' Databases';
         var columnClass = this.categories().length === 1 ? 'col-md-12' : 'col-md-6';
 
         // Toggle button.
-        // var toggleState = '[Select all]';
-//         var toggleClass = 'btn-link';
-//         var toggleShown = this.databases(category).length > 1;
-//         var toggleDisabled = this.state.type && this.state.type !== category;
-//         if (toggleShown && toggleDisabled) toggleClass += ' disabled';
-//         if (!toggleShown) toggleClass += ' hidden';
-//         if (this.nselected() === this.databases(category).length) {
-//             toggleState = '[Deselect all]';
-//         }
+        var toggleState = '[Select all]';
+        var toggleClass = 'btn-link';
+        var toggleShown = this.databases(category).length > 1;
+        var toggleDisabled = this.state.type && this.state.type !== category;
+        if (toggleShown && toggleDisabled) toggleClass += ' disabled';
+        if (!toggleShown) toggleClass += ' hidden';
+        if (this.nselected() === this.databases(category).length) {
+            toggleState = '[Deselect all]';
+        }
 
         // JSX.
         return (
             <div className={columnClass} key={'DB_' + category}>
                 <div className="panel panel-default">
                     <div className="panel-heading">
-                        <h4 style={{ display: 'inline' }}>{' '+panelTitle}</h4> &nbsp;&nbsp;
+                        <h4 style={{ display: 'inline' }}>{' '+panelTitle}</h4>
                     </div>
                     
                     <ul className={'list-group databases ' + category}>
@@ -115,14 +114,14 @@ export class Databases extends Component {
     }
 
     renderDatabase(database) {
-        //var disabled = this.state.type && this.state.type !== database.type;
-        var disabled = false
+        var disabled = this.state.type && this.state.type !== database.type;
+        //var disabled = false
         
         return (
             <label className={'database'}>
                 <input
-                    //type="checkbox"
-                    type="radio"
+                    type="checkbox"
+                    //type="radio"
                     name="databases[]"
                     value={database.id}
                     data-type={database.type}
@@ -136,14 +135,14 @@ export class Databases extends Component {
         );
     }
     renderDatabase2(database) {
-        //var disabled = this.state.type && this.state.type !== database.type;
-        var disabled = false
+        var disabled = this.state.type && this.state.type !== database.type;
+        //var disabled = false
         
         return (
             <label className={'database'}>
                 <input
-                    //type="checkbox"
-                    type="radio"
+                    type="checkbox"
+                    //type="radio"
                     name="databases[]"
                     value={database.id}
                     data-type={database.type}
