@@ -11,7 +11,6 @@ export class Databases extends Component {
         this.categories = this.categories.bind(this);
         this.handleClick = this.handleClick.bind(this);
 //this.handleToggle = this.handleToggle.bind(this);
-
         this.renderDatabases = this.renderDatabases.bind(this);
         this.renderDatabase = this.renderDatabase.bind(this);
     }
@@ -86,30 +85,21 @@ export class Databases extends Component {
                         <h4 style={{ display: 'inline' }}>{panelTitle}</h4> &nbsp;&nbsp;
                         
                     </div>
-                    
                     <ul className={'list-group databases ' + category}>
-                        {_.map( this.databases(category),
-                              _.bind(function (database, index) {
-                              
-                                if(database.name.includes('SEQF')){
-                                   database.title = '<b>'+database.title+'</b>'
-                                   return (
-                                    <li className="list-group-item" key={'DB_' + category + index} >
+                        {_.map(
+                            this.databases(category),
+                            _.bind(function (database, index) {
+                                return (
+                                    <li
+                                        className="list-group-item"
+                                        key={'DB_' + category + index}
+                                    >
                                         {this.renderDatabase(database)}
                                     </li>
-                                   );
-                                }else{
-                                   return (
-                                    <li className="list-group-item" key={'DB_' + category + index} >
-                                        {this.renderDatabase(database)}
-                                    </li>
-                                   );
-                                }
+                                );
                             }, this)
                         )}
                     </ul>
-                    
-                    
                 </div>
             </div>
         );

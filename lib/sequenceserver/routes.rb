@@ -137,7 +137,7 @@ module SequenceServer
         fn_path_ffn_n = File.join(path_ncbi, 'ffn', fname_ffn)
         
         
-        Database.clear
+        #Database.clear
         
         if !Dir.glob(fn_path_faa_p+'*').empty?
            SequenceServer.init_database2 fn_path_faa_p, 'PROKKA::'+fname_faa, "Protein"
@@ -169,8 +169,8 @@ module SequenceServer
       else
         puts  'Default all DBs'
         
-        Database.clear  # gets rid of others
-        SequenceServer.init_database
+        #Database.clear  # gets rid of others
+        #SequenceServer.init_database
         searchdata = {
             query: Database.retrieve(params[:query]),
             database: Database.all,
