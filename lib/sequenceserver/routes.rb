@@ -98,21 +98,18 @@ module SequenceServer
     # Returns data that is used to render the search form client side. These
     # include available databases and user-defined search options.
     get '/searchdata.json' do
-      puts "in get '/searchdata.json' do"
-      puts 'gid',params[:gid]
+      puts "in EDIT get '/searchdata.json' do"
       
-      puts $DEV_HOST
       if $DEV_HOST == 'AVhome'
          path_prokka = '/Users/avoorhis/programming/blast-db-alt/'  #SEQF1595.fna*
          path_ncbi = '/Users/avoorhis/programming/blast-db-alt_ncbi/'  #SEQF1595.fna*
          #homdpath = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_ncbi/' #faa,ffn,fna
       else
          path_prokka = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_prokka/' #faa,ffn,fna
-         path_ncbi = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_ncbi/' #faa,ffn,fna
+         path_ncbi   = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_ncbi/' #faa,ffn,fna
       end
       #puts 'dbs', dbs
       if !params[:gid].nil?
-        puts  'has gid key'
         gid  = params[:gid]
         
         
@@ -128,7 +125,6 @@ module SequenceServer
         fname_ffn = gid+".ffn"
         
         fn_path_faa_p = File.join(path_prokka, 'faa', fname_faa)
-        puts "prokka faa path: #{fn_path_faa_p}"
         fn_path_fna_p = File.join(path_prokka, 'fna', fname_fna)
         fn_path_ffn_p = File.join(path_prokka, 'ffn', fname_ffn)
         
@@ -167,7 +163,6 @@ module SequenceServer
         
      
       else
-        puts  'Default all DBs'
         
         #Database.clear  # gets rid of others
         #SequenceServer.init_database

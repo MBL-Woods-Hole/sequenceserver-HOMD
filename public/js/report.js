@@ -12,6 +12,8 @@ import HSP from './hsp';
 import SequenceModal from './sequence_modal';
 import ErrorModal from './error_modal';
 
+
+
 /**
  * Base component of report page. This component is later rendered into page's
  * '#view' element.
@@ -105,6 +107,9 @@ class Report extends Component {
             params: [],
             stats: [],
         };
+        
+        this.endTime, this.timeDiff, this.seconds;
+        this.startTime = new Date();
     }
     /**
    * Fetch results.
@@ -303,6 +308,7 @@ class Report extends Component {
                     <h1>
                         <i className="fa fa-cog fa-spin"></i>&nbsp; BLAST-ing
                     </h1>
+                
                     <p>
                         <br />
             This can take some time depending on the size of your query and
@@ -321,6 +327,14 @@ class Report extends Component {
    * Return results JSX.
    */
     resultsJSX() {
+    
+        this.endTime = new Date();
+        this.timeDiff = this.endTime - this.startTime; //in ms
+        // strip the ms
+        this.timeDiff /= 1000;
+
+        
+        
         return (
             <div className="row">
                 <div className="col-md-3 hidden-sm hidden-xs">
@@ -343,6 +357,10 @@ class Report extends Component {
    * Renders report overview.
    */
     overviewJSX() {
+        // get seconds 
+        this.seconds = Math.round(this.timeDiff);
+        //console.log(seconds + " seconds");
+        
         return (
             <div className="overview">
                 <p>
@@ -351,6 +369,11 @@ class Report extends Component {
                     {this.state.submitted_at &&
             `, query submitted on ${this.state.submitted_at}`}
                 </p>
+                
+                <p>
+                <strong>Elapsed Time: { this.seconds } seconds</strong>
+                </p>
+                
                 <p>
                     <strong> Databases: </strong>
                     {this.state.querydb
