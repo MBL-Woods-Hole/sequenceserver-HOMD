@@ -99,6 +99,71 @@ module SequenceServer
     # include available databases and user-defined search options.
     get '/searchdata.json' do
       puts "in EDIT get '/searchdata.json' do"
+      
+      if $DEV_HOST == 'AVhome'
+         path_prokka = '/Users/avoorhis/programming/blast-db-alt/'  #SEQF1595.fna*
+         path_ncbi = '/Users/avoorhis/programming/blast-db-alt_ncbi/'  #SEQF1595.fna*
+         #homdpath = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_ncbi/' #faa,ffn,fna
+      else
+         path_prokka = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_prokka/' #faa,ffn,fna
+         path_ncbi   = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_ncbi/' #faa,ffn,fna
+      end
+      #puts 'dbs', dbs
+      if !params[:gid].nil?
+        gid  = params[:gid]
+        
+        
+        # if ext == 'faa'
+#            mol_type = 'Protein'
+#         elsif ext == 'ffn'
+#            mol_type = 'Nucleotide'
+#         else  # fna
+#            mol_type = 'Nucleotide'
+#         end
+        fname_faa = gid+".faa"
+        fname_fna = gid+".fna"
+        fname_ffn = gid+".ffn"
+        
+        fn_path_faa_p = File.join(path_prokka, 'faa', fname_faa)
+        fn_path_fna_p = File.join(path_prokka, 'fna', fname_fna)
+        fn_path_ffn_p = File.join(path_prokka, 'ffn', fname_ffn)
+        
+        fn_path_faa_n = File.join(path_ncbi, 'faa', fname_faa)
+        fn_path_fna_n = File.join(path_ncbi, 'fna', fname_fna)
+        fn_path_ffn_n = File.join(path_ncbi, 'ffn', fname_ffn)
+        
+        
+        #Database.clear
+        
+        if !Dir.glob(fn_path_faa_p+'*').empty?
+           SequenceServer.init_database2 fn_path_faa_p, 'PROKKA::'+fname_faa, "Protein"
+        end
+        if !Dir.glob(fn_path_fna_p+'*').empty?
+           SequenceServer.init_database2 fn_path_fna_p, 'PROKKA::'+fname_fna, 'Nucleotide'
+        end
+        if !Dir.glob(fn_path_ffn_p+'*').empty?
+           SequenceServer.init_database2 fn_path_ffn_p, 'PROKKA::'+fname_ffn, 'Nucleotide'
+        end
+        
+        if !Dir.glob(fn_path_faa_n+'*').empty?
+           SequenceServer.init_database2 fn_path_faa_n, 'NCBI::'+fname_faa, 'Protein'
+        end
+        if !Dir.glob(fn_path_fna_n+'*').empty?
+           SequenceServer.init_database2 fn_path_fna_n, 'NCBI::'+fname_fna, 'Nucleotide'
+        end
+        if !Dir.glob(fn_path_ffn_n+'*').empty?
+           SequenceServer.init_database2 fn_path_ffn_n, 'NCBI::'+fname_ffn, 'Nucleotide'
+        end
+        searchdata = {
+            query: Database.retrieve(params[:query]),
+            database: Database.all,
+            options: SequenceServer.config[:options]
+        }
+     
+        
+     
+      else
+        
         #Database.clear  # gets rid of others
         #SequenceServer.init_database
         searchdata = {
@@ -106,7 +171,7 @@ module SequenceServer
             database: Database.all,
             options: SequenceServer.config[:options]
         }
-     
+      end
 
       if SequenceServer.config[:databases_widget] == 'tree'
         searchdata.update(tree: Database.tree)

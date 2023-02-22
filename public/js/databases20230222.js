@@ -89,12 +89,20 @@ export class Databases extends Component {
                         {_.map( this.databases(category),
                               _.bind(function (database, index) {
                               
+                                if(database.name.includes('SEQF')){
+                                   
+                                   return (
+                                    <li className="list-group-item" key={'DB_' + category + index} >
+                                        {this.renderDatabase2(database)}
+                                    </li>
+                                   );
+                                }else{
                                    return (
                                     <li className="list-group-item" key={'DB_' + category + index} >
                                         {this.renderDatabase(database)}
                                     </li>
                                    );
-                        
+                                }
                             }, this)
                         )}
                     </ul>
@@ -106,14 +114,14 @@ export class Databases extends Component {
     }
 
     renderDatabase(database) {
-        //var disabled = this.state.type && this.state.type !== database.type;
-        var disabled = false
+        var disabled = this.state.type && this.state.type !== database.type;
+        //var disabled = false
         
         return (
             <label className={'database'}>
                 <input
-                    //type="checkbox"
-                    type="radio"
+                    type="checkbox"
+                    //type="radio"
                     name="databases[]"
                     value={database.id}
                     data-type={database.type}
@@ -126,7 +134,27 @@ export class Databases extends Component {
             </label>
         );
     }
-
+    renderDatabase2(database) {
+        var disabled = this.state.type && this.state.type !== database.type;
+        //var disabled = false
+        
+        return (
+            <label className={'database'}>
+                <input
+                    type="checkbox"
+                    //type="radio"
+                    name="databases[]"
+                    value={database.id}
+                    data-type={database.type}
+                    disabled={disabled}
+                    onChange={_.bind(function () {
+                        this.handleClick(database);
+                    }, this)}
+                />
+                  {' ' + (database.title || database.name)}
+            </label>
+        );
+    }
 
     render() {
         return (
