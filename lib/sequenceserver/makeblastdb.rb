@@ -45,23 +45,7 @@ module SequenceServer
       !@fastas_to_format.empty? || !@fastas_to_reformat.empty?
     end
     
-    def scan2 (path, db, mol_type)
-      puts "p10, #{path}, #{db}, #{mol_type}"
-      # We need to know the list of formatted FASTAs as reported by blastdbcmd
-      # first. This is required to determine both unformatted FASTAs and those
-      # that require reformatting.
-      @formatted_fastas = []
-      determine_formatted_fastas2 path, db, mol_type
-
-      # Now determine FASTA files that are unformatted or require reformatting.
-      @fastas_to_format = []
-      determine_unformatted_fastas
-      @fastas_to_reformat = []
-      determine_fastas_to_reformat
-
-      # Return true if there are files to be (re-)formatted or false otherwise.
-      !@fastas_to_format.empty? || !@fastas_to_reformat.empty?
-    end
+    
     
     # Returns true if at least one database in database directory is formatted.
     def any_formatted?
@@ -128,20 +112,7 @@ module SequenceServer
         @formatted_fastas << Database.new(path, *rest)
       end
     end
-    def determine_formatted_fastas2 (path, db, mol_type)
-          puts "p1, #{path}, #{db}, #{mol_type}"
-          #line = blastdbcmd2 path
-          #/Users/avoorhis/programming/blast-db-alt/SEQF1595.fna ftp/fna/SEQF1595.fna Nucleotide 4 2043439 Feb 7, 2022 11:47 PM 4
-          line = "#{path}\t#{db}\t#{mol_type}"
-          path, *rest = line.chomp.split("\t")
-          $next if multipart_database_name?(path)
-          rest << get_categories(path)
-      
-          puts "line, #{line}"
-          puts "rest, #{rest}"
-          @formatted_fastas << Database.new(path, *rest)
-     
-    end
+    
     # Determines which FASTA files in the database directory require
     # reformatting. Adds to @fastas_to_format.
     def determine_fastas_to_reformat
@@ -183,16 +154,7 @@ module SequenceServer
       fail BLAST_DATABASE_ERROR.new(cmd, e.stderr)
     end
     
-    def blastdbcmd2 (dir)
-      cmd = "blastdbcmd -recursive -list #{dir}" \
-            ' -list_outfmt "%f	%t	%p	%n	%l	%d	%v"'
-      out, err = sys(cmd, path: config[:bin])
-      errpat = /BLAST Database error/
-      fail BLAST_DATABASE_ERROR.new(cmd, err) if err.match(errpat)
-      return out
-      rescue CommandFailed => e
-      fail BLAST_DATABASE_ERROR.new(cmd, e.stderr)
-    end
+    
     # Create BLAST database, given FASTA file and sequence type in FASTA file.
     def make_blast_database(action, file, title, type, non_parse_seqids = false)
       return unless make_blast_database?(action, file, type)

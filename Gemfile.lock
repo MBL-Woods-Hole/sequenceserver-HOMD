@@ -96,6 +96,7 @@ GEM
     slop (3.6.0)
     tilt (2.0.11)
     unicode-display_width (1.8.0)
+    webrick (1.8.1)
     xpath (3.2.0)
       nokogiri (~> 1.8)
 
@@ -112,6 +113,7 @@ DEPENDENCIES
   selenium-webdriver (~> 3.142, >= 3.142.3)
   sequenceserver!
   simplecov (~> 0.17.0, >= 0.17.0)
+  webrick
 
 BUNDLED WITH
    2.3.20

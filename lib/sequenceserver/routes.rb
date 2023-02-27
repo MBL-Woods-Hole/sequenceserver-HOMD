@@ -131,9 +131,20 @@ module SequenceServer
       end
     end
 
+#     get '/single' do
+#        puts 'AAV IN SINGLE routes.rb'
+#        #erb :search_single, layout: true
+#        redirect to("/")
+#     end
     # Returns results for the given job id in JSON format.  Returns 202 with
     # an empty body if the job hasn't finished yet.
     get '/:jid.json' do |jid|
+      # if jid.length < 20
+#          # redirect to new search page of single genome databases
+#          puts "AAV Found short jobid: #{jid}"
+#          #redirect to("/")
+#          erb :search, layout: true
+#       end
       job = Job.fetch(jid)
       halt 202 unless job.done?
       Report.generate(job).to_json

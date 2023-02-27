@@ -4,7 +4,6 @@ require 'fileutils'
 require 'digest/md5'
 require 'forwardable'
 require 'securerandom'
-
 require 'sequenceserver/pool'
 require 'sequenceserver/api_errors'
 

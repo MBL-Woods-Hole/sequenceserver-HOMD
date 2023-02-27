@@ -405,7 +405,8 @@ td.nowrap-ellipsis {
   border: none;
   
   background: white;
-  height: 150px;
+  height: 100px;
+  max-height: 150px;
   overflow: auto;
   border:1px solid lightgrey;
 }
