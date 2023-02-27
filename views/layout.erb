@@ -20,12 +20,14 @@
     <link rel="stylesheet" media="screen,print" type="text/css" href="css/sequenceserver.css"/>
   <% end %>
 </head>
-
-<% if $DB_TYPE == 'refseq' %>
-
-    <body style='background:#BFD4DB;'>
+<% if $SINGLE %>
+   <body style='background:#E6B0AA;'>
 <% else %>
-    <body style='background:#E8F4EA;'>
+<%   if $DB_TYPE == 'refseq' %>
+      <body style='background:#BFD4DB;'>
+<%   else %>
+      <body style='background:#E8F4EA;'>
+<%   end %>
 <% end %>
 
   <div

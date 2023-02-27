@@ -175,28 +175,28 @@ module SequenceServer
       IRB.irb nil, self
     end
     
-#     def init_database2 (path, db, mol_type)
-#      
-#       #puts "p0, #{path}, #{db}, #{mol_type}"
-#       logger.debug("Will look for BLAST+ databases in: #{path}")
-# 
-#       makeblastdb.scan2 path, db, mol_type
-#       fail NO_BLAST_DATABASE_FOUND, "#{path}" if !makeblastdb.any_formatted?
-# 
-#       Database.collection = makeblastdb.formatted_fastas
-#       Database.each do |database|
-#         logger.debug "Found #{database.type} database '#{database.title}' at '#{database.path}'"
-#         if database.non_parse_seqids?
-#           logger.warn "Database '#{database.title}' was created without using the" \
-#                       ' -parse_seqids option of makeblastdb. FASTA download will' \
-#                       " not work correctly (path: '#{database.path}')."
-#         elsif database.v4?
-#           logger.warn "Database '#{database.title}' is of older format. Mixing" \
-#                       ' old and new format databases can be problematic' \
-#                       "(path: '#{database.path}')."
-#         end
-#       end
-#     end
+    def init_database2 (path, db, mol_type)
+     
+      #puts "p0, #{path}, #{db}, #{mol_type}"
+      logger.debug("Will look for BLAST+ databases in: #{path}")
+
+      makeblastdb.scan2 path, db, mol_type
+      fail NO_BLAST_DATABASE_FOUND, "#{path}" if !makeblastdb.any_formatted?
+
+      Database.collection = makeblastdb.formatted_fastas
+      Database.each do |database|
+        logger.debug "Found #{database.type} database '#{database.title}' at '#{database.path}'"
+        if database.non_parse_seqids?
+          logger.warn "Database '#{database.title}' was created without using the" \
+                      ' -parse_seqids option of makeblastdb. FASTA download will' \
+                      " not work correctly (path: '#{database.path}')."
+        elsif database.v4?
+          logger.warn "Database '#{database.title}' is of older format. Mixing" \
+                      ' old and new format databases can be problematic' \
+                      "(path: '#{database.path}')."
+        end
+      end
+    end
     
     def init_database
       # removed from private

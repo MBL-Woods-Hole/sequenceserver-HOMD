@@ -178,7 +178,7 @@ export class Form extends Component {
                             preSelectedDbs={this.state.preSelectedDbs}
                             onDatabaseTypeChanged={this.handleDatabaseTypeChanaged} />
                         :
-                        <Databases ref="databases" databases={this.state.databases}
+                        <Databases ref="databases" databases={this.state.databases || "No Databases "}
                             preSelectedDbs={this.state.preSelectedDbs}
                             onDatabaseTypeChanged={this.handleDatabaseTypeChanaged} />
                     }
