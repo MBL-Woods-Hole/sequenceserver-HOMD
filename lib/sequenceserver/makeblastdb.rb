@@ -212,7 +212,7 @@ module SequenceServer
 #         Volumes:
 #             /mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_prokka/faa/SEQF5383.1.faa
 
-      cmd = "blastdbcmd -db #{dbpath} -info"
+      cmd = "blastdbcmd -db #{fullpath} -info"
       out_pre, err = sys(cmd, path: config[:bin])
       errpat = /BLAST Database error/
       fail BLAST_DATABASE_ERROR.new(cmd, err) if err.match(errpat)
