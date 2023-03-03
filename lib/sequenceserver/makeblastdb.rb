@@ -232,17 +232,17 @@ module SequenceServer
       ver = ''
       str.each_line do |line|
          line = line.chomp
-         if line.include? 'sequences;'
-            tmp = line.split('sequences;')
+         if line.include? "sequences;"
+            tmp = line.split("sequences;")
             nseqs = tmp[0].gsub(/[\s,]/ ,"")
             tbases = tmp[1].split()[0].gsub(/[\s,]/ ,"")
          end
-         if line.include? 'Date:'
-            tmp = line.split('\t')
+         if line.include? "Date:"
+            tmp = line.split("\t")
             date = tmp[0]
          end 
-         if line.include? 'BLASTDB Version:'
-            tmp = line.split(':')
+         if line.include? "BLASTDB Version:"
+            tmp = line.split(":")
             ver = tmp[1].strip!
          end 
          
