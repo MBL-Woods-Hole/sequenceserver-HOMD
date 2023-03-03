@@ -132,7 +132,7 @@ module SequenceServer
     def determine_formatted_fastas2 (fullpath, db, mol_type)
           puts "p1, #{fullpath}, #{db}, #{mol_type}"
           
-        blastdbcmd2(fullpath).each_line do |line|
+        blastdbcmd2(fullpath, db, mol_type).each_line do |line|
         path, *rest = line.chomp.split("\t")
         next if multipart_database_name?(path)
         rest << get_categories(path)
@@ -183,6 +183,14 @@ module SequenceServer
     # directory. Returns the output of `blastdbcmd`. This method is called
     # by `determine_formatted_fastas`.
     def blastdbcmd
+#       	%f means the BLAST database absolute file name path
+#    		%t means the BLAST database title
+#    		%p means the BLAST database molecule type
+#    		%n means the number of sequences in the BLAST database
+#    		%l means the number of bases/residues in the BLAST database
+#    		%d means the date of last update of the BLAST database
+#    		%v means the BLAST database format version
+
       cmd = "blastdbcmd -recursive -list #{config[:database_dir]}" \
             ' -list_outfmt "%f	%t	%p	%n	%l	%d	%v"'
       out, err = sys(cmd, path: config[:bin])
@@ -193,16 +201,60 @@ module SequenceServer
       fail BLAST_DATABASE_ERROR.new(cmd, e.stderr)
     end
     
-    def blastdbcmd2 (dir)
-      cmd = "blastdbcmd -recursive -list #{dir}" \
-            ' -list_outfmt "%f	%t	%p	%n	%l	%d	%v"'
-      out, err = sys(cmd, path: config[:bin])
+    def blastdbcmd2 (fullpath, db, mol_type)
+        # Database: ftp_prokka/faa/SEQF5383.1.faa
+#             5,251 sequences; 1,747,771 total residues
+# 
+#         Date: Feb 2, 2023  7:19 PM	Longest sequence: 4,887 residues
+# 
+#         BLASTDB Version: 4
+# 
+#         Volumes:
+#             /mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_prokka/faa/SEQF5383.1.faa
+
+      cmd = "blastdbcmd -db #{dbpath} -info"
+      out_pre, err = sys(cmd, path: config[:bin])
       errpat = /BLAST Database error/
       fail BLAST_DATABASE_ERROR.new(cmd, err) if err.match(errpat)
+      out = get_out_format fullpath, db, mol_type, out_pre
+      puts 'out'
+      puts out
       return out
       rescue CommandFailed => e
       fail BLAST_DATABASE_ERROR.new(cmd, e.stderr)
     end
+    
+    def get_out_format(path, title, mol_type, str)
+      data = [path,title,mol_type]
+      nseqs = '0'
+      tbases = '0'
+      date = ''
+      ver = ''
+      str.each_line do |line|
+         line = line.chomp
+         if line.include? 'sequences;'
+            tmp = line.split('sequences;')
+            nseqs = tmp[0].gsub(/[\s,]/ ,"")
+            tbases = tmp[1].split()[0].gsub(/[\s,]/ ,"")
+         end
+         if line.include? 'Date:'
+            tmp = line.split('\t')
+            date = tmp[0]
+         end 
+         if line.include? 'BLASTDB Version:'
+            tmp = line.split(':')
+            ver = tmp[1].strip!
+         end 
+         
+         
+      end
+      
+      data.push(nseqs,tbases,date,ver)
+      return data.join('\t')
+    
+    end
+    
+    
     # Create BLAST database, given FASTA file and sequence type in FASTA file.
     def make_blast_database(action, file, title, type, non_parse_seqids = false)
       return unless make_blast_database?(action, file, type)
