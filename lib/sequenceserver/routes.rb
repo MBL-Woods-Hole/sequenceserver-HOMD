@@ -170,6 +170,15 @@ module SequenceServer
             options: SequenceServer.config[:options]
         }
         erb :search_single, layout: true
+        if SequenceServer.config[:databases_widget] == 'tree'
+            searchdata.update(tree: Database.tree)
+        end
+
+          # If a job_id is specified, update searchdata from job meta data (i.e.,
+          # query, pre-selected databases, advanced options used). Query is only
+          # updated if params[:query] is not specified.
+        update_searchdata_from_job2(searchdata) if params[:job_id]
+        
       else
         $SINGLE = false
         Database.clear  # gets rid of others
@@ -179,18 +188,20 @@ module SequenceServer
             database: Database.all,
             options: SequenceServer.config[:options]
         }
+        if SequenceServer.config[:databases_widget] == 'tree'
+            searchdata.update(tree: Database.tree)
+        end
+
+          # If a job_id is specified, update searchdata from job meta data (i.e.,
+          # query, pre-selected databases, advanced options used). Query is only
+          # updated if params[:query] is not specified.
+        update_searchdata_from_job(searchdata) if params[:job_id]
+        
       end
 
-      if SequenceServer.config[:databases_widget] == 'tree'
-        searchdata.update(tree: Database.tree)
-      end
-
-      # If a job_id is specified, update searchdata from job meta data (i.e.,
-      # query, pre-selected databases, advanced options used). Query is only
-      # updated if params[:query] is not specified.
-      update_searchdata_from_job(searchdata) if params[:job_id]
       
-       puts 'searchdata.to_json'
+      
+       puts 'searchdata.to_json-after:'
        puts searchdata.to_json
        
       searchdata.to_json
@@ -311,6 +322,31 @@ module SequenceServer
 
     # Get the query sequences, selected databases, and advanced params used.
     def update_searchdata_from_job(searchdata)
+      job = Job.fetch(params[:job_id])
+      return if job.imported_xml_file
+
+      # Only read job.qfile if we are not going to use Database.retrieve.
+      searchdata[:query] = File.read(job.qfile) if !params[:query]
+
+      # Which databases to pre-select.
+      searchdata[:preSelectedDbs] = job.databases
+
+      # job.advanced may be nil in case of old jobs. In this case, we do not
+      # override searchdata so that default advanced parameters can be applied.
+      # Note that, job.advanced will be an empty string if a user deletes the
+      # default advanced parameters from the advanced params input field. In
+      # this case, we do want the advanced params input field to be empty when
+      # the user hits the back button. Thus we do not test for empty string.
+      method = job.method.to_sym
+      if job.advanced && job.advanced !=
+           searchdata[:options][method][:default].join(' ')
+        searchdata[:options] = searchdata[:options].deep_copy
+        searchdata[:options][method]['last search'] = [job.advanced]
+      end
+    end
+    # Get the query sequences, selected databases, and advanced params used.
+    # SINGLE
+    def update_searchdata_from_job2(searchdata)
       job = Job.fetch(params[:job_id])
       return if job.imported_xml_file
 

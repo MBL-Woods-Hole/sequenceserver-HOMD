@@ -129,18 +129,27 @@ module SequenceServer
       end
     end
     
-    def determine_formatted_fastas2 (path, db, mol_type)
-          puts "p1, #{path}, #{db}, #{mol_type}"
-          #line = blastdbcmd2 path
-          #/Users/avoorhis/programming/blast-db-alt/SEQF1595.fna ftp/fna/SEQF1595.fna Nucleotide 4 2043439 Feb 7, 2022 11:47 PM 4
-          line = "#{path}\t#{db}\t#{mol_type}"
-          path, *rest = line.chomp.split("\t")
-          $next if multipart_database_name?(path)
-          rest << get_categories(path)
-      
-          puts "line, #{line}"
-          puts "rest, #{rest}"
-          @formatted_fastas << Database.new(path, *rest)
+    def determine_formatted_fastas2 (fullpath, db, mol_type)
+          puts "p1, #{fullpath}, #{db}, #{mol_type}"
+          
+        blastdbcmd2(fullpath).each_line do |line|
+        path, *rest = line.chomp.split("\t")
+        next if multipart_database_name?(path)
+        rest << get_categories(path)
+        
+        @formatted_fastas << Database.new(path, *rest)
+      end
+          
+        #   line = blastdbcmd2 path
+#           /Users/avoorhis/programming/blast-db-alt/SEQF1595.fna ftp/fna/SEQF1595.fna Nucleotide 4 2043439 Feb 7, 2022 11:47 PM 4
+#           line = "#{fullpath}\t#{db}\t#{mol_type}"
+#           path, *rest = line.chomp.split("\t")
+#           $next if multipart_database_name?(fullpath)
+#           rest << get_categories(fullpath)
+#       
+#           puts "line, #{line}"
+#           puts "rest, #{rest}"
+#           @formatted_fastas << Database.new(path, *rest)
      
     end
     # Determines which FASTA files in the database directory require
