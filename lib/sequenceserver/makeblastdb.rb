@@ -250,7 +250,7 @@ module SequenceServer
       end
       
       data.push(nseqs,tbases,date,ver)
-      return data.join('\t')
+      return data.join("\t")
     
     end
     
