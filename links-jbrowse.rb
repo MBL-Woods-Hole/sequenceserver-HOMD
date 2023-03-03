@@ -2,20 +2,12 @@ require 'json'
 
 require "mysql2"    # if needed
 
-#
-# This file location on the blast server:
-#      ~/.sequenceserver-bin/links-jbrowse.rb
-# 
-# It is read by the sequenceserver-jbrowse.conf  file on startup
-#
-
-# db_host is taken from .my.cnf_node file
 #$db_host  = "localhost"
-#$db_host  = "192.168.1.42"
+$db_host  = "192.168.1.42"
 
 
 #$conn = Mysql2::Client.new(:host => $db_host, :username => $db_user, :password => $db_pass)
-$conn = Mysql2::Client.new(:default_file => '/home/ubuntu/.my.cnf_node')
+$conn = Mysql2::Client.new(:host => $db_host, :default_file => '/home/ubuntu/.my.cnf_node', :reconnect => true)
 
 $url_base = "https://homd.org/jbrowse/index.html?data=homd_V10.1/"
 # mysqlconn.query(@db_query)
@@ -127,7 +119,7 @@ module SequenceServer
         stats = get_stats dbtype, id, title
         print stats,"\n"
        
-       
+        gc = "0.37"  # default -- This is wrong! but it is a start
 		url = $url_base+seq_id
 		
 		if stats[:seqtype]   # fna are always nil - no sql needed
@@ -135,8 +127,7 @@ module SequenceServer
 			  a = stats[:acc]
 			  first_hit_start = hsps.map(&:sstart).at(0)
 			  first_hit_end = hsps.map(&:send).at(0)
-			  gc = "0.37"  # default -- This is wrong!
-			
+			  
 			  url += "&loc=#{seq_id}|#{a}:#{first_hit_start-500}..#{first_hit_end+500}" 
 			  url += "&highlight=#{seq_id}|#{a}:#{first_hit_start}..#{first_hit_end}"
 			  url += "&tracks=" + ERB::Util.url_encode("DNA,prokka,prokka_ncrna,ncbi,ncbi_ncrna,GC Content (pivot at "+gc+"),GC Skew")
@@ -145,9 +136,8 @@ module SequenceServer
             
                 puts q2
                 rs = $conn.query(q2)
-            
-                #puts rs.first['start'].to_i
-                if rs
+                
+                if rs.count > 0
                     start = rs.first['start'].to_i
                     stop = rs.first['stop'].to_i
                     acc = rs.first['accession']
@@ -205,5 +195,56 @@ module SequenceServer
 		 :icon  => 'fa-external-link'
 		}
 	  end
+	  
+	
+	
+		
+## ORIGINAL
+#        def jbrowse
+#            qstart = hsps.map(&:qstart).min
+#            sstart = hsps.map(&:sstart).min
+#            qend = hsps.map(&:qend).max
+#            send = hsps.map(&:send).max
+#            split_id = id.split('_')
+#            seq_id = split_id[0]
+#            protein_id = split_id[1]
+#            first_hit_start = hsps.map(&:sstart).at(0)
+#            first_hit_end = hsps.map(&:send).at(0)
+#            my_features = ERB::Util.url_encode(JSON.generate([{
+#                :seq_id => accession,
+#                :start => sstart,
+#                :end => send,
+#                :type => "match",
+#                :subfeatures =>  hsps.map {
+#                  |hsp| {
+#                    :start => hsp.send < hsp.sstart ? hsp.send : hsp.sstart,
+#                    :end => hsp.send < hsp.sstart ? hsp.sstart : hsp.send,
+#                    :type => "match_part"
+#                  }
+#                }
+#            }]))
+#            my_track = ERB::Util.url_encode(JSON.generate([
+#                 {
+#                    :label => "BLAST",
+#                    :key => "BLAST hits",
+#                    :type => "JBrowse/View/Track/CanvasFeatures",
+#                    :store => "url",
+#                    :glyph => "JBrowse/View/FeatureGlyph/Segments"
+#                 }
+#            ]))
+#            tracks = ERB::Util.url_encode("DNA,prokka,prokka_ncrna,ncbi,ncbi_ncrna,GC Content,GC Skew")
+#            url = "https://homd.org/jbrowse/index.html" \
+#                         "?data=homd%2F#{seq_id}" \
+#                         "&tracks=#{tracks}" \
+#                         "&loc=#{seq_id}|#{protein_id}:#{first_hit_start-500}..#{first_hit_start+500}" \
+#                         "&highlight=#{seq_id}|#{seq_id}:#{first_hit_start}..#{first_hit_end}"
+# 
+#            {
+#              :order => 2,
+#              :title => 'JBrowse',
+#              :url   => url,
+#              :icon  => 'fa-external-link'
+#            }
+#        end
    end
 end

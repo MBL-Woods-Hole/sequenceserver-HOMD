@@ -22,7 +22,15 @@ module SequenceServer
   class Job
     class << self
       # Creates and queues a job. Returns created job object.
+      
       def create(params)
+        puts 'params'
+        puts params
+        # {"databases"=>["e17ac02845d0afc7c829031f011476d7"], <== database id
+        # "sequence"=>"CTGGGCCGTGTCTCAGTCCCAATGTGGCCGTTTACCCTCTCAGGCCGGCTACGCATCATCGCCTTGGTGGGCCGTT", 
+        # "advanced"=>"-task blastn -evalue 1e-5", 
+        # "method"=>"blastn"
+        # }
         job = BLAST::Job.new(params) # TODO: Dynamic dispatch.
         pool.queue { job.run }
         job

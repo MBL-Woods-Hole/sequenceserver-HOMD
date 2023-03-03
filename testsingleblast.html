@@ -99,13 +99,31 @@
 ><h4 style="display: inline;"> Protein Databases</h4></div><ul class="list-group databases protein"><li class="list-group-item"><label class="database">
 <input type="radio" name="databases[]" data-type="protein" value="a1ca7138e29af600ff1e377f259411de"><span class="brown"> NCBI::SEQF1595.2.faa</span></label></li>
 <li class="list-group-item"><label class="database">
-<input type="radio" name="databases[]" data-type="protein" value="fa91402f907804e2ff49a5f031e6bdb4"><span class="brown"> PROKKA::SEQF1595.2.faa</span></label></li></ul></div></div></div><div class="form-group query-container"><div class="col-md-12"><div class="sequence"><textarea id="sequence" class="form-control text-monospace" name="sequence" placeholder="Paste query sequence(s) or drag file containing query sequence(s) in FASTA format here ..." spellcheck="false">CTGGGCCGTGTCTCAGTCCCAATGTGGCCGTTTACCCTCTCAGGCCGGCTACGCATCATCGCCTTGGTGGGCCGTT</textarea></div><div class="" style="position: absolute; top: 4px; right: 19px;"><button type="button" class="btn btn-sm btn-default" id="btn-sequence-clear" title="Clear query sequence(s)."><span id="sequence-file"></span><i class="fa fa-times"></i></button></div></div></div><br><div class="form-group"><div class="col-md-7"><div class="form-group"><div class="col-md-12"><div class="input-group"><label class="control-label" for="advanced">Advanced parameters:<sup style="margin-left: 2px;"><a href="" data-toggle="modal" data-target="#help"><i class="fa fa-question-circle"></i></a></sup></label><input type="text" class="form-control yellow-background" id="advanced" name="advanced" placeholder="eg: -evalue 1.0e-5 -num_alignments 100" title="View, and enter advanced parameters." value="-task blastn -evalue 1e-5"><span class="input-group-btn dropdown"><button class="btn bnt-sm btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-down"></i></button><ul id="advanced-params-dropdown" class="dropdown-menu dropdown-menu-right"><li class="yellow-background"><strong>default:</strong>&nbsp;-task blastn -evalue 1e-5</li><li><strong>custom:</strong>&nbsp;-task blastn -evalue 1e-5 -num_descriptions 100 -num_alignments 100</li></ul></span></div></div></div></div><div class="col-md-2"><div class="form-group" style="text-align: center; padding: 7px 0px;"><label><input type="checkbox" id="toggleNewTab"> Open results in new tab</label></div></div><div class="col-md-3"><div class="form-group"><div class="col-md-12"><div class="input-group" id="methods" data-original-title="" title="" style="">
-<button type="submit" class="btn btn-primary form-control text-uppercase" id="method" name="method" data-original-title="" title="" value="blastn">blast<strong>n</strong></button><div class="input-group-btn"><button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu dropdown-menu-right"><li class="text-uppercase">tblastx</li></ul></div></div></div></div></div></div></form></div></div></div>
+<input type="radio" name="databases[]" data-type="protein" value="fa91402f907804e2ff49a5f031e6bdb4"><span class="brown"> PROKKA::SEQF1595.2.faa</span></label></li></ul></div></div></div><div class="form-group query-container"><div class="col-md-12"><div class="sequence"><textarea id="sequence" class="form-control text-monospace" name="sequence" placeholder="Paste query sequence(s) or drag file containing query sequence(s) in FASTA format here ..." spellcheck="false">CTGGGCCGTGTCTCAGTCCCAATGTGGCCGTTTACCCTCTCAGGCCGGCTACGCATCATCGCCTTGGTGGGCCGTT</textarea></div><div class="" style="position: absolute; top: 4px; right: 19px;"><button type="button" class="btn btn-sm btn-default" id="btn-sequence-clear" title="Clear query sequence(s)."><span id="sequence-file"></span><i class="fa fa-times"></i></button></div></div></div><br><div class="form-group"><div class="col-md-7"><div class="form-group"><div class="col-md-12"><div class="input-group"><label class="control-label" for="advanced">Advanced parameters:<sup style="margin-left: 2px;"><a href="" data-toggle="modal" data-target="#help"><i class="fa fa-question-circle"></i></a></sup></label><input type="text" class="form-control yellow-background" id="advanced" name="advanced" placeholder="eg: -evalue 1.0e-5 -num_alignments 100" title="View, and enter advanced parameters." value="-task blastn -evalue 1e-5"><span class="input-group-btn dropdown"><button class="btn bnt-sm btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-caret-down"></i></button><ul id="advanced-params-dropdown" class="dropdown-menu dropdown-menu-right"><li class="yellow-background"><strong>default:</strong>&nbsp;-task blastn -evalue 1e-5</li><li><strong>custom:</strong>&nbsp;-task blastn -evalue 1e-5 -num_descriptions 100 -num_alignments 100</li></ul></span></div></div></div></div><div class="col-md-2"><div class="form-group" style="text-align: center; padding: 7px 0px;"><label><input type="checkbox" id="toggleNewTab"> Open results in new tab</label></div></div><div class="col-md-3"><div class="form-group"><div class="col-md-12"><div class="input-group" id="methods" data-original-title="" title="" style=""><button type="submit" class="btn btn-primary form-control text-uppercase" id="method" name="method" data-original-title="" title="" value="blastn">blast<strong>n</strong></button><div class="input-group-btn"><button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button><ul class="dropdown-menu dropdown-menu-right"><li class="text-uppercase">tblastx</li></ul></div></div></div></div></div></div></form></div></div></div>
 
 <!-- JS -->
-  <script src="/sequenceserver-search.min.js?ver=2.0.0"></script>
+  <script src="sequenceserver-search.min.js?ver=2.0.0"></script>
 
+<!-- Markup for advanced options modal -->
+<div class="modal fade" id="help" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Advanced Options</h3>
+      </div>
+      <div class="modal-body">
+        
+
+
+ 
+
+  <div class="modal fade" id="help" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Advanced Options</h3>
+        </div>
+        <div class="modal-body">
           
-
 
 

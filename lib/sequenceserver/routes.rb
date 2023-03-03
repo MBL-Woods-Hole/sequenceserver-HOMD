@@ -202,7 +202,15 @@ module SequenceServer
         @input_sequence = params[:input_sequence]
         erb :search, layout: true
       else
+         # params:
+         # {"databases"=>["e17ac02845d0afc7c829031f011476d7"], 
+         # "sequence"=>"CTGGGCCGTGTCTCAGTCCCAATGTGGCCGTTTACCCTCTCAGGCCGGCTACGCATCATCGCCTTGGTGGGCCGTT", 
+         # "advanced"=>"-task blastn -evalue 1e-5", 
+         # "method"=>"blastn"
+         # }
         job = Job.create(params)
+        puts 'job.id'
+        puts job.id
         redirect to("/#{job.id}")
       end
     end
