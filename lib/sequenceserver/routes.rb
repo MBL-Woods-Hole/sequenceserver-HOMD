@@ -112,6 +112,7 @@ module SequenceServer
       if !params[:gid].nil?
         gid  = params[:gid]
         $SINGLE = true
+        $DB_TO_SHOW = gid
         fname_faa = gid+".faa"
         fname_fna = gid+".fna"
         fname_ffn = gid+".ffn"
@@ -128,42 +129,43 @@ module SequenceServer
         Database.clear
         puts ":search symbol"
         puts :search
-        if !Dir.glob(fn_path_faa_p+'*').empty?
+        #if !Dir.glob(fn_path_faa_p+'*').empty?
            SequenceServer.init_database2 fn_path_faa_p, 'PROKKA::'+fname_faa, "Protein"
-        else
-           puts "Not Found #{fn_path_faa_p}"
-        end
+        # else
+#            puts "Not Found #{fn_path_faa_p}"
+#         end
         
-        if !Dir.glob(fn_path_fna_p+'*').empty?
+        #if !Dir.glob(fn_path_fna_p+'*').empty?
            SequenceServer.init_database2 fn_path_fna_p, 'PROKKA::'+fname_fna, 'Nucleotide'
-        else
-           puts "Not Found #{fn_path_fna_p}"
-        end
+        # else
+#            puts "Not Found #{fn_path_fna_p}"
+#         end
         
-        if !Dir.glob(fn_path_ffn_p+'*').empty?
+        #if !Dir.glob(fn_path_ffn_p+'*').empty?
            SequenceServer.init_database2 fn_path_ffn_p, 'PROKKA::'+fname_ffn, 'Nucleotide'
-        else
-           puts "Not Found #{fn_path_ffn_p}"
-        end
+        # else
+#            puts "Not Found #{fn_path_ffn_p}"
+#         end
         
-        if !Dir.glob(fn_path_faa_n+'*').empty?
+        #if !Dir.glob(fn_path_faa_n+'*').empty?
            SequenceServer.init_database2 fn_path_faa_n, 'NCBI::'+fname_faa, 'Protein'
-        else
-           puts "Not Found #{fn_path_faa_n}"
-        end
+        #else
+        #   puts "Not Found #{fn_path_faa_n}"
+        #end
         
-        if !Dir.glob(fn_path_fna_n+'*').empty?
+        #if !Dir.glob(fn_path_fna_n+'*').empty?
            SequenceServer.init_database2 fn_path_fna_n, 'NCBI::'+fname_fna, 'Nucleotide'
-        else
-           puts "Not Found #{fn_path_fna_n}"
-        end
+        #else
+        #   puts "Not Found #{fn_path_fna_n}"
+        #end
         
-        if !Dir.glob(fn_path_ffn_n+'*').empty?
+        #if !Dir.glob(fn_path_ffn_n+'*').empty?
            SequenceServer.init_database2 fn_path_ffn_n, 'NCBI::'+fname_ffn, 'Nucleotide'
-        else
-           puts "Not Found #{fn_path_ffn_n}"
-        end
-        
+        # else
+#            puts "Not Found #{fn_path_ffn_n}"
+#         end
+        puts 'Database.first'
+        puts Database.first
         searchdata = {
             query: Database.retrieve(params[:query]),
             database: Database.all,

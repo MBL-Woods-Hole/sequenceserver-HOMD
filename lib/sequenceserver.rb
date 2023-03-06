@@ -181,8 +181,8 @@ module SequenceServer
       logger.debug("Will look for BLAST+ databases in: #{path}")
 
       makeblastdb.scan2 path, db, mol_type
-      fail NO_BLAST_DATABASE_FOUND, "#{path}" if !makeblastdb.any_formatted?
-
+      #fail NO_BLAST_DATABASE_FOUND, "#{path}" if !makeblastdb.any_formatted?
+      return nil if !makeblastdb.any_formatted?
       Database.collection = makeblastdb.formatted_fastas
       Database.each do |database|
         logger.debug "Found #{database.type} database '#{database.title}' at '#{database.path}'"

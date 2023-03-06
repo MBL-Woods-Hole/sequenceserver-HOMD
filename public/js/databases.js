@@ -108,7 +108,8 @@ export class Databases extends Component {
     renderDatabase(database) {
         //var disabled = this.state.type && this.state.type !== database.type;
         var disabled = false
-        
+        //var hidden = $DB_TO_SHOW
+        //console.log($DB_TO_SHOW)
         return (
             <label className={'database'}>
                 <input
@@ -118,6 +119,7 @@ export class Databases extends Component {
                     value={database.id}
                     data-type={database.type}
                     disabled={disabled}
+                    //hidden={hidden}
                     onChange={_.bind(function () {
                         this.handleClick(database);
                     }, this)}

@@ -73,6 +73,7 @@ export class Form extends Component {
 
         // show overlay to create visual feedback on button click 
         $('#method').on('click', () => {
+            console.log('button clicked')
             $('#overlay').css('display', 'block');
         });
     }
@@ -135,7 +136,7 @@ export class Form extends Component {
     }
 
     handleAlgoChanged(algo) {
-        console.log( 'algo ',algo);
+        
         if (this.state.preDefinedOpts.hasOwnProperty(algo)) {
             var preDefinedOpts = this.state.preDefinedOpts[algo];
             this.refs.opts.setState({

@@ -221,7 +221,8 @@ module SequenceServer
       puts out
       return out
       rescue CommandFailed => e
-      fail BLAST_DATABASE_ERROR.new(cmd, e.stderr)
+      #fail BLAST_DATABASE_ERROR.new(cmd, e.stderr)
+      return ''
     end
     
     def get_out_format(path, title, mol_type, str)
