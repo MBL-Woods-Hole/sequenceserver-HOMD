@@ -113,62 +113,20 @@ module SequenceServer
         gid  = params[:gid]
         $SINGLE = true
         $DB_TO_SHOW = gid
-        fname_faa = gid+".faa"
-        fname_fna = gid+".fna"
-        fname_ffn = gid+".ffn"
         
-        fn_path_faa_p = File.join(path_prokka, 'faa', fname_faa)
-        fn_path_fna_p = File.join(path_prokka, 'fna', fname_fna)
-        fn_path_ffn_p = File.join(path_prokka, 'ffn', fname_ffn)
+   #      "database":[
+#           {"name":"/Users/avoorhis/programming/blast-db-testing/HOMD_16S_rRNA_RefSeq_V15.22.fasta","title":"HOMD_16S_rRNA_RefSeq_V15.22.fasta","type":"nucleotide","nsequences":"1015","ncharacters":"1363402","updated_on":"Mar 4, 2023  11:00 AM","format":"5","categories":[],"id":"3ec27a6fd90c71054f68543e3d0ef624"},
+#           {"name":"/Users/avoorhis/programming/blast-db-testing/genomes_ncbi/faa/ALL_genomes.faa","title":"ftp_ncbi/faa/ALL_genomes.faa","type":"protein","nsequences":"4665857","ncharacters":"1437439366","updated_on":"Mar 4, 2023  11:07 AM","format":"5","categories":["genomes_ncbi","faa"],"id":"629eef5dd9b21f895b01feb4a9e58de8"},
+#           {"name":"/Users/avoorhis/programming/blast-db-testing/genomes_ncbi/fna/ALL_genomes.fna","title":"ftp_ncbi/fna/ALL_genomes.fna","type":"nucleotide","nsequences":"112918","ncharacters":"5541364068","updated_on":"Mar 4, 2023  12:14 PM","format":"5","categories":["genomes_ncbi","fna"],"id":"e17ac02845d0afc7c829031f011476d7"}
+#         ]
         
-        fn_path_faa_n = File.join(path_ncbi, 'faa', fname_faa)
-        fn_path_fna_n = File.join(path_ncbi, 'fna', fname_fna)
-        fn_path_ffn_n = File.join(path_ncbi, 'ffn', fname_ffn)
-        
-        
-        Database.clear
-        puts ":search symbol"
-        puts :search
-        #if !Dir.glob(fn_path_faa_p+'*').empty?
-           SequenceServer.init_database2 fn_path_faa_p, 'PROKKA::'+fname_faa, "Protein"
-        # else
-#            puts "Not Found #{fn_path_faa_p}"
-#         end
-        
-        #if !Dir.glob(fn_path_fna_p+'*').empty?
-           SequenceServer.init_database2 fn_path_fna_p, 'PROKKA::'+fname_fna, 'Nucleotide'
-        # else
-#            puts "Not Found #{fn_path_fna_p}"
-#         end
-        
-        #if !Dir.glob(fn_path_ffn_p+'*').empty?
-           SequenceServer.init_database2 fn_path_ffn_p, 'PROKKA::'+fname_ffn, 'Nucleotide'
-        # else
-#            puts "Not Found #{fn_path_ffn_p}"
-#         end
-        
-        #if !Dir.glob(fn_path_faa_n+'*').empty?
-           SequenceServer.init_database2 fn_path_faa_n, 'NCBI::'+fname_faa, 'Protein'
-        #else
-        #   puts "Not Found #{fn_path_faa_n}"
-        #end
-        
-        #if !Dir.glob(fn_path_fna_n+'*').empty?
-           SequenceServer.init_database2 fn_path_fna_n, 'NCBI::'+fname_fna, 'Nucleotide'
-        #else
-        #   puts "Not Found #{fn_path_fna_n}"
-        #end
-        
-        #if !Dir.glob(fn_path_ffn_n+'*').empty?
-           SequenceServer.init_database2 fn_path_ffn_n, 'NCBI::'+fname_ffn, 'Nucleotide'
-        # else
-#            puts "Not Found #{fn_path_ffn_n}"
-#         end
+        #my_array.filter { |obj| obj.attr == 'value' }
+        #Database.filter { |obj| obj.attr == 'value' }
         puts 'Database.first'
         puts Database.first
         searchdata = {
             query: Database.retrieve(params[:query]),
-            database: Database.all,
+            database: [Database.first],
             options: SequenceServer.config[:options]
         }
         erb :search_single, layout: true
@@ -183,8 +141,8 @@ module SequenceServer
         
       else
         $SINGLE = false
-        Database.clear  # gets rid of others
-        SequenceServer.init_database
+        #Database.clear  # gets rid of others
+        #SequenceServer.init_database
         searchdata = {
             query: Database.retrieve(params[:query]),
             database: Database.all,

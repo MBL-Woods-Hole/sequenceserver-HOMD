@@ -3,7 +3,7 @@ require 'digest/md5'
 require 'forwardable'
 
 require 'sequenceserver/sequence'
-
+$genome_database_ids = File.open("genome_database_ids.txt","a")
 # Define Database class.
 module SequenceServer
   # Captures a directory containing FASTA files and BLAST databases.
@@ -30,6 +30,7 @@ module SequenceServer
       args.each(&:freeze)
       super
       @id = Digest::MD5.hexdigest args.first
+      $genome_database_ids.write(args.first+"\t"+@id+"\n")
     end
 
     attr_reader :id
