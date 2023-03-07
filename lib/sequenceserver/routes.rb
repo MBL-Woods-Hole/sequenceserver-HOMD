@@ -142,11 +142,11 @@ module SequenceServer
           if mydataids.include? i.id
             #puts 'id',i.id
             if i.name.include? 'faa'
-              i.title = 'Annotated proteins (faa)'
+              i.title = "Annotated proteins (#{gid}.faa)"
             elsif i.name.include? 'ffn'
-              i.title = 'Nucleotide Sequences of annotated proteins (ffn)'
+              i.title = "Nucleotide Sequences of annotated proteins (#{gid}.ffn)"
             else
-              i.title = 'Genomic DNA sequences/contigs (fna)'
+              i.title = "Genomic DNA sequences/contigs (#{gid}.fna)"
             end
             newdbs.push(i)
           end
