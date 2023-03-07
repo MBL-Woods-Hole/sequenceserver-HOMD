@@ -99,7 +99,7 @@ module SequenceServer
     # include available databases and user-defined search options.
     get '/searchdata.json' do
       puts "in EDIT get '/searchdata.json' do"
-      
+      require 'csv'
       if $DEV_HOST == 'AVhome'
          path_prokka = '/Users/avoorhis/programming/blast-db-alt/'  #SEQF1595.fna*
          path_ncbi = '/Users/avoorhis/programming/blast-db-alt_ncbi/'  #SEQF1595.fna*
@@ -119,17 +119,58 @@ module SequenceServer
 #           {"name":"/Users/avoorhis/programming/blast-db-testing/genomes_ncbi/faa/ALL_genomes.faa","title":"ftp_ncbi/faa/ALL_genomes.faa","type":"protein","nsequences":"4665857","ncharacters":"1437439366","updated_on":"Mar 4, 2023  11:07 AM","format":"5","categories":["genomes_ncbi","faa"],"id":"629eef5dd9b21f895b01feb4a9e58de8"},
 #           {"name":"/Users/avoorhis/programming/blast-db-testing/genomes_ncbi/fna/ALL_genomes.fna","title":"ftp_ncbi/fna/ALL_genomes.fna","type":"nucleotide","nsequences":"112918","ncharacters":"5541364068","updated_on":"Mar 4, 2023  12:14 PM","format":"5","categories":["genomes_ncbi","fna"],"id":"e17ac02845d0afc7c829031f011476d7"}
 #         ]
+        filename = './genome_blastdbIds_prokkaHASH.csv'
         
-        #my_array.filter { |obj| obj.attr == 'value' }
-        #Database.filter { |obj| obj.attr == 'value' }
-        puts 'Database.first'
-        puts Database.first
+        #data = Hash[File.read(filename).split("\n").map{|i|i.split("\t")}]
+        #data = CSV.read(filename).split("\n")
+        data = CSV.parse(File.read(filename), headers: false)
+        mydataids = []
+        data.each do |i|
+           tmp = i[0].split("\t")
+           #puts "X",tmp,tmp[0],gid
+           if tmp[0] == gid
+             # ["SEQF1595.2\tfaa\t45fd1a168c938b04c2a30ec725c0acdd"]
+             tmp = i[0].split("\t")
+             #puts 'tmp[2]',tmp[2]
+             mydataids.push(tmp[2])
+           end
+        end
+        newdbs =[]
+        Database.each do |i|
+          #puts 'database inspect',i.inspect()
+          
+          if mydataids.include? i.id
+            #puts 'id',i.id
+            newdbs.push(i)
+          end
+          #<struct SequenceServer::Database 
+          #name="/Users/avoorhis/programming/blast-db-testing/HOMD_16S_rRNA_RefSeq_V15.22.fasta", 
+          #title="HOMD_16S_rRNA_RefSeq_V15.22.fasta", 
+          #type="nucleotide", 
+          #nsequences="1015", ncharacters="1363402", 
+          #updated_on="Mar 4, 2023  11:00 AM", 
+          #format="5", categories=[]>
+        end
+        #data.filter { |obj| obj.attr == 'value' }
+        # puts 'data'
+#         puts data
+        puts 'mydataids'
+        puts "inspect : #{mydataids.inspect()}\n\n"
+        #mydata.each do |i|
+        
+        #end
+        #Database.filter { |obj| obj.id == 'value' }
+        # puts 'Database.first'
+#         puts Database.first
+        puts 'newdbs'
+        puts "inspect : #{newdbs.inspect()}\n\n"
         searchdata = {
             query: Database.retrieve(params[:query]),
-            database: [Database.first],
+            database: newdbs,
             options: SequenceServer.config[:options]
         }
         erb :search_single, layout: true
+        
         if SequenceServer.config[:databases_widget] == 'tree'
             searchdata.update(tree: Database.tree)
         end
@@ -148,6 +189,7 @@ module SequenceServer
             database: Database.all,
             options: SequenceServer.config[:options]
         }
+        
         if SequenceServer.config[:databases_widget] == 'tree'
             searchdata.update(tree: Database.tree)
         end
