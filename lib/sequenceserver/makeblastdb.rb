@@ -130,7 +130,7 @@ module SequenceServer
     end
     
     def determine_formatted_fastas2 (fullpath, db, mol_type)
-          puts "p1, #{fullpath}, #{db}, #{mol_type}"
+          #puts "p1, #{fullpath}, #{db}, #{mol_type}"
           
         blastdbcmd2(fullpath, db, mol_type).each_line do |line|
         path, *rest = line.chomp.split("\t")
@@ -217,8 +217,8 @@ module SequenceServer
       errpat = /BLAST Database error/
       fail BLAST_DATABASE_ERROR.new(cmd, err) if err.match(errpat)
       out = get_out_format fullpath, db, mol_type, out_pre
-      puts 'out'
-      puts out
+      #puts 'out'
+      #puts out
       return out
       rescue CommandFailed => e
       #fail BLAST_DATABASE_ERROR.new(cmd, e.stderr)
@@ -270,10 +270,10 @@ module SequenceServer
     #
     # Returns true if the user entered anything but 'n' or 'N'.
     def make_blast_database?(action, file, type)
-      puts
-      puts
-      puts "FASTA file to #{action}: #{file}"
-      puts "FASTA type: #{type}"
+      # puts
+#       puts
+#       puts "FASTA file to #{action}: #{file}"
+#       puts "FASTA type: #{type}"
       print 'Proceed? [y/n] (Default: y): '
       response = STDIN.gets.to_s.strip
       !response.match(/n/i)

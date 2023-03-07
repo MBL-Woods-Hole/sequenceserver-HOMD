@@ -162,8 +162,8 @@ module SequenceServer
         #Database.filter { |obj| obj.id == 'value' }
         # puts 'Database.first'
 #         puts Database.first
-        puts 'newdbs'
-        puts "inspect : #{newdbs.inspect()}\n\n"
+        #puts 'newdbs'
+        #puts "inspect : #{newdbs.inspect()}\n\n"
         searchdata = {
             query: Database.retrieve(params[:query]),
             database: newdbs,
@@ -203,8 +203,8 @@ module SequenceServer
 
       
       
-       puts 'searchdata.to_json-after:'
-       puts searchdata.to_json
+       #puts 'searchdata.to_json-after:'
+       #puts searchdata.to_json
        
       searchdata.to_json
     end
@@ -222,8 +222,8 @@ module SequenceServer
          # "method"=>"blastn"
          # }
         job = Job.create(params)
-        puts 'job.id'
-        puts job.id
+        #puts 'job.id'
+        #puts job.id
         redirect to("/#{job.id}")
       end
     end
