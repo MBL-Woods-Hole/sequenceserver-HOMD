@@ -10,7 +10,8 @@ require 'sequenceserver/sequence'
 require 'sequenceserver/makeblastdb'
 require 'csv'
 $prokka_ids_fn = './genome_blastdbIds_prokkaHASH.csv'
-$prokka_data = CSV.parse(File.read($prokka_ids_fn), headers: false)
+$ncbi_ids_fn = './genome_blastdbIds_ncbiHASH.csv'
+$file_data = CSV.parse(File.read($prokka_ids_fn), headers: false)
         
 module SequenceServer
   # Controller.
@@ -124,7 +125,7 @@ module SequenceServer
 #         ]
         
         mydataids = []
-        prokka_data.each do |i|
+        file_data.each do |i|
            tmp = i[0].split("\t")
            #puts "X",tmp,tmp[0],gid
            if tmp[0] == gid
