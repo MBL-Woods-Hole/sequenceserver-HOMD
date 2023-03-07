@@ -125,7 +125,7 @@ module SequenceServer
 #         ]
         
         mydataids = []
-        file_data.each do |i|
+        $file_data.each do |i|
            tmp = i[0].split("\t")
            #puts "X",tmp,tmp[0],gid
            if tmp[0] == gid
