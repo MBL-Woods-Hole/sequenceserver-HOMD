@@ -3,7 +3,9 @@ require 'digest/md5'
 require 'forwardable'
 
 require 'sequenceserver/sequence'
+
 # $genome_database_ids = File.open("genome_database_ids.txt","a")
+
 # Define Database class.
 module SequenceServer
   # Captures a directory containing FASTA files and BLAST databases.

@@ -141,6 +141,13 @@ module SequenceServer
           
           if mydataids.include? i.id
             #puts 'id',i.id
+            if i.name.include? 'faa'
+              i.title = 'Annotated proteins (faa)'
+            elsif i.name.include? 'ffn'
+              i.title = 'Nucleotide Sequences of annotated proteins (ffn)'
+            else
+              i.title = 'Genomic DNA sequences/contigs (fna)'
+            end
             newdbs.push(i)
           end
           #<struct SequenceServer::Database 
