@@ -112,9 +112,9 @@ module SequenceServer
       end
       #puts 'dbs', dbs
       if !params[:gid].nil?
-        gid  = params[:gid]
+        $gid  = params[:gid]
         $SINGLE = true
-        $DB_TO_SHOW = gid
+        $DB_TO_SHOW = $gid
         if $ANNO == 'ncbi'
           $ids_fn = './genome_blastdbIds_ncbiHASH.csv'
           puts "Reading NCBI ID File"
@@ -132,8 +132,8 @@ module SequenceServer
         mydataids = []
         $file_data.each do |i|
            tmp = i[0].split("\t")
-           #puts "X",tmp,tmp[0],gid
-           if tmp[0] == gid
+           #puts "X",tmp,tmp[0],$gid
+           if tmp[0] == $gid
              # ["SEQF1595.2\tfaa\t45fd1a168c938b04c2a30ec725c0acdd"]
              tmp = i[0].split("\t")
              #puts 'tmp[2]',tmp[2]
@@ -147,11 +147,11 @@ module SequenceServer
           if mydataids.include? i.id
             #puts 'id',i.id
             if i.name.include? 'faa'
-              i.title = "Annotated proteins (#{gid}.faa)"
+              i.title = "Annotated proteins (#{$gid}.faa)"
             elsif i.name.include? 'ffn'
-              i.title = "Nucleotide Sequences of annotated proteins (#{gid}.ffn)"
+              i.title = "Nucleotide Sequences of annotated proteins (#{$gid}.ffn)"
             else
-              i.title = "Genomic DNA sequences/contigs (#{gid}.fna)"
+              i.title = "Genomic DNA sequences/contigs (#{$gid}.fna)"
             end
             newdbs.push(i)
           end
