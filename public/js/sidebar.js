@@ -175,6 +175,8 @@ export default class extends Component {
         // Deriving rootURL this way is required for subURI deployments
         // - we cannot just send to '/'.
         var rootURL = path.join('/');
+        var url = window.location.href;
+        console.log( 'url: '+url)
         return (
             <div className="sidebar-top-panel">
                 <div className="section-header-sidebar">
@@ -182,21 +184,21 @@ export default class extends Component {
                         {this.summaryString()}
                     </h4>
                 </div>
-                <div>
-                    <a href={`${rootURL}/?job_id=${job_id}`}>
-                        <i className="fa fa-pencil"></i> Edit search
-                    </a>
-                    <span className="line">|</span>
-                    <a href={`${rootURL}/`}
-                        onClick={this.clearSession}>
-                        <i className="fa fa-file-o"></i> New search
-                    </a>
-                </div>
+               
                 {this.props.shouldShowIndex && this.indexJSX()}
             </div>
         );
     }
-
+//                <div>
+//                     <a href={`${rootURL}/?job_id=${job_id}`}>
+//                         <i className="fa fa-pencil"></i> Edit search
+//                     </a>
+//                     <span className="line">|</span>
+//                     <a href={`${rootURL}/`}
+//                         onClick={this.clearSession}>
+//                         <i className="fa fa-file-o"></i> New search
+//                     </a>
+//                 </div>
     summaryString() {
         var program = this.props.data.program;
         var numqueries = this.props.data.queries.length;

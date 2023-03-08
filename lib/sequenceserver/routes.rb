@@ -194,8 +194,7 @@ module SequenceServer
         
       else
         $SINGLE = false
-        #Database.clear  # gets rid of others
-        #SequenceServer.init_database
+        
         searchdata = {
             query: Database.retrieve(params[:query]),
             database: Database.all,
