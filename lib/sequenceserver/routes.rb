@@ -9,12 +9,7 @@ require 'sequenceserver/database'
 require 'sequenceserver/sequence'
 require 'sequenceserver/makeblastdb'
 require 'csv'
-if $ANNO == 'ncbi'
-  $ids_fn = './genome_blastdbIds_ncbiHASH.csv'
-else
-  $ids_fn = './genome_blastdbIds_prokkaHASH.csv'
-end
-$file_data = CSV.parse(File.read($ids_fn), headers: false)
+
         
 module SequenceServer
   # Controller.
@@ -120,7 +115,14 @@ module SequenceServer
         gid  = params[:gid]
         $SINGLE = true
         $DB_TO_SHOW = gid
-        
+        if $ANNO == 'ncbi'
+          $ids_fn = './genome_blastdbIds_ncbiHASH.csv'
+          puts "Reading NCBI ID File"
+        else
+          $ids_fn = './genome_blastdbIds_prokkaHASH.csv'
+          puts "Reading PROKKA ID File"
+        end
+        $file_data = CSV.parse(File.read($ids_fn), headers: false)
    #      "database":[
 #           {"name":"/Users/avoorhis/programming/blast-db-testing/HOMD_16S_rRNA_RefSeq_V15.22.fasta","title":"HOMD_16S_rRNA_RefSeq_V15.22.fasta","type":"nucleotide","nsequences":"1015","ncharacters":"1363402","updated_on":"Mar 4, 2023  11:00 AM","format":"5","categories":[],"id":"3ec27a6fd90c71054f68543e3d0ef624"},
 #           {"name":"/Users/avoorhis/programming/blast-db-testing/genomes_ncbi/faa/ALL_genomes.faa","title":"ftp_ncbi/faa/ALL_genomes.faa","type":"protein","nsequences":"4665857","ncharacters":"1437439366","updated_on":"Mar 4, 2023  11:07 AM","format":"5","categories":["genomes_ncbi","faa"],"id":"629eef5dd9b21f895b01feb4a9e58de8"},
