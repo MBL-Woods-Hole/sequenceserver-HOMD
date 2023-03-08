@@ -9,8 +9,12 @@ require 'sequenceserver/database'
 require 'sequenceserver/sequence'
 require 'sequenceserver/makeblastdb'
 require 'csv'
-$prokka_ids_fn = './genome_blastdbIds_prokkaHASH.csv'
-$prokka_data = CSV.parse(File.read($prokka_ids_fn), headers: false)
+if $ANNO == 'ncbi'
+  $ids_fn = './genome_blastdbIds_ncbiHASH.csv'
+else
+  $ids_fn = './genome_blastdbIds_prokkaHASH.csv'
+end
+$file_data = CSV.parse(File.read($ids_fn), headers: false)
         
 module SequenceServer
   # Controller.
@@ -124,7 +128,7 @@ module SequenceServer
 #         ]
         
         mydataids = []
-        prokka_data.each do |i|
+        $file_data.each do |i|
            tmp = i[0].split("\t")
            #puts "X",tmp,tmp[0],gid
            if tmp[0] == gid
@@ -140,6 +144,13 @@ module SequenceServer
           
           if mydataids.include? i.id
             #puts 'id',i.id
+            if i.name.include? 'faa'
+              i.title = "Annotated proteins (#{gid}.faa)"
+            elsif i.name.include? 'ffn'
+              i.title = "Nucleotide Sequences of annotated proteins (#{gid}.ffn)"
+            else
+              i.title = "Genomic DNA sequences/contigs (#{gid}.fna)"
+            end
             newdbs.push(i)
           end
           #<struct SequenceServer::Database 
