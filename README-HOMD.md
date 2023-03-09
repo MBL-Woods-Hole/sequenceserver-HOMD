@@ -30,11 +30,9 @@ See /etc/systemd/system/SS-refseq.services SS-genome.service SS-allncbi and SS-a
 
 There are three directories that matter in /home/ubuntu/ on the BLAST-Server
 
-(BLAST-Server)`./sequenceserver-HOMD`  (uses conf files: ~/.sequenceserver-refseq.conf and ~/.sequenceserver-genome.conf)
-
-(BLAST-Server)`./sequenceserver-allncbi` (uses conf file ~/.sequenceserver-allncbi.conf)
-
-(BLAST-Server)`./sequenceserver-allprokka` (uses conf file ~/.sequenceserver-allprokka.conf)
+`/home/ubuntu/sequenceserver-HOMD`  (uses conf files: ~/.sequenceserver-refseq.conf and ~/.sequenceserver-genome.conf)
+`/home/ubuntu/sequenceserver-allncbi` (uses conf file ~/.sequenceserver-allncbi.conf)
+`/home/ubuntu/sequenceserver-allprokka` (uses conf file ~/.sequenceserver-allprokka.conf)
 
 These directories were downloaded as git repositories (NOT by 'gem install') from  https://github.com/wurmlab/sequenceserver
 
