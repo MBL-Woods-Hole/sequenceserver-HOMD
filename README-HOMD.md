@@ -9,13 +9,14 @@ http://wheat-expression.com/
 http://18.216.121.101/blast/
 http://brcwebportal.cos.ncsu.edu:4567/
 https://planmine.mpibpc.mpg.de/planmine/blast.do
- Setup:
+ Seting up:
 https://medium.com/coding-design/setting-up-sequenceserver-edf9d992998c
 https://support.sequenceserver.com/t/blast-against-between-two-sequence-database-sequence-path-is-variable-based-on-user-input-in-server/120/2
 ```
 
-### rsync push to *.42
+### helpful commands
 ```
+push to .42
 rsync -avzhe "ssh -i ~/.ssh/andy.pem" genome_database_ids.txt ubuntu@homd.info:genome_database_ids2.txt
 then pull to local
 rsync -avzhe "ssh -i ~/.ssh/andy.pem" ubuntu@homd.info:genome_database_ids2.txt genome_database_ids2.txt
@@ -29,14 +30,14 @@ rsync -avzhe "ssh -i ~/.ssh/andy.pem" ubuntu@homd.info:genome_database_ids2.txt 
 ### On 192.168.1.60 (the BLAST-Server)
 SequenceServer is setup on 192.168.1.60 (the BLAST-Server) on which I use systemd to stop/start the SS services.
 
-See /etc/systemd/system/SS-refseq.services SS-genome.service SS-allncbi and SS-allprokka
+See /etc/systemd/system/SS-refseq.service, SS-genome.service SS-allncbi.service and SS-allprokka.service
 
-There are three directories that matter in /home/ubuntu/ on the BLAST-Server
+There are three directories that matter in /home/ubuntu/ on the BLAST-Server:
 
-`/home/ubuntu/sequenceserver-HOMD`  (uses conf files: ~/.sequenceserver-refseq.conf and ~/.sequenceserver-genome.conf)
-`/home/ubuntu/sequenceserver-allncbi` (uses conf file ~/.sequenceserver-allncbi.conf)
-`/home/ubuntu/sequenceserver-allprokka` (uses conf file ~/.sequenceserver-allprokka.conf)
-
+```/home/ubuntu/sequenceserver-HOMD  (uses config files: ~/.sequenceserver-refseq.conf and ~/.sequenceserver-genome.conf)
+/home/ubuntu/sequenceserver-allncbi (uses config file ~/.sequenceserver-allncbi.conf)
+/home/ubuntu/sequenceserver-allprokka (uses config file ~/.sequenceserver-allprokka.conf)
+```
 These directories were installed as git repositories (NOT by 'gem install') from  https://github.com/wurmlab/sequenceserver
 
 The important parts from a systemd configuration file:
