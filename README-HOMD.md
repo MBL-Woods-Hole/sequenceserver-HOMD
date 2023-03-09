@@ -9,12 +9,12 @@ http://wheat-expression.com/
 http://18.216.121.101/blast/
 http://brcwebportal.cos.ncsu.edu:4567/
 https://planmine.mpibpc.mpg.de/planmine/blast.do
- Seting up:
+ Setting up:
 https://medium.com/coding-design/setting-up-sequenceserver-edf9d992998c
 https://support.sequenceserver.com/t/blast-against-between-two-sequence-database-sequence-path-is-variable-based-on-user-input-in-server/120/2
 ```
 
-### helpful commands
+### Helpful commands
 ```
 push to .42
 rsync -avzhe "ssh -i ~/.ssh/andy.pem" genome_database_ids.txt ubuntu@homd.info:genome_database_ids2.txt
@@ -22,7 +22,12 @@ then pull to local
 rsync -avzhe "ssh -i ~/.ssh/andy.pem" ubuntu@homd.info:genome_database_ids2.txt genome_database_ids2.txt
 
 -To re-write the *.min.js files and run webpack (compiles sequenceserver-search.min.js and sequenceserver-report.min.js):
--npm run build
+"npm run build" in the SS directory
+
+For debugging each SS instance:
+cd ~/sequenceserver-XXX
+sudo systemcmd stop SS-XXX; 
+bundle exec bin/sequenceserver -D -c ~/.sequenceserver-XXX.conf (you may need to 'npm run build' if edited recently)
 ```
 
 ---
@@ -56,29 +61,36 @@ ExecStart=/usr/bin/bash -lc '/home/ubuntu/.rbenv/versions/3.0.5/bin/bundle exec 
 
 ### On 192.168.0.42 (the WebServer)
 > The SS webpages are made visible on the web using nginx on the 
-> homd development webserver (currently 192.168.0.42)
+> HOMD development webserver (currently 192.168.0.42)
 > See /etc/nginx.conf.d/homd.conf and ehomd.conf
 > Each has locations stanza's similar to:
 ```
-*location /genome_blast_all_ncbi/ {
-*    proxy_pass http://192.168.1.60:4570/;
-*}
+       location /genome_blast_all_ncbi/ {
+         proxy_pass http://192.168.1.60:4570/;
+       }
 ```
-> Which points the url to the port on the BLAST-Server
+> Which points the url to the port on the BLAST-Server.
+> The port number is here and in the SS.conf file on the SS Server.
 
-### On GitHub MBL-Woods-Hole  https://github.com/MBL-Woods-Hole/sequenceserver-HOMD
-On my laptop I use one branch 'main' for the RefSeq and ALLGENOMES (both NCBI and PROKKA) databases.
+### On GitHub MBL-Woods-Hole  
+   URL: https://github.com/MBL-Woods-Hole/sequenceserver-HOMD
+   
+On my laptop I have just one directory ```~/sequenceserver/``` for editing and debugging and I switch git branches  
+back and forth depending on which interface I want to edit (main or allgenomes). 
 
-And another branch 'allgenomes' for the individual selection genomes interface.
-So on my laptop I switch back and forth depending on which interface I want to edit.
 
-I edit them on my laptop and push them to github using different github branches to affect the code.
+##### use one branch 'main' for the RefSeq and ALLGENOMES (both NCBI and PROKKA) databases.
+```
+(BLAST-Server)./sequenceserver-HOMD (RefSeq and ALLGenomes DB) uses the 'main' git branch. 
+```
 
-(BLAST-Server)./sequenceserver-HOMD uses the 'main' git branch.
 
-(BLAST-Server)./sequenceserver-allncbi (individual ncbi genomes) uses the 'allgenomes' git branch.
-
+##### And another branch 'allgenomes' for the individual selection genomes interface.  
+```
+(BLAST-Server)./sequenceserver-allncbi (individual ncbi genomes) uses the 'allgenomes' git branch.  
 (BLAST-Server)./sequenceserver-allprokka (individual prokka genomes) uses the 'allgenomes' git branch.
+```
+
 
    
    
