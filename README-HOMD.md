@@ -15,3 +15,8 @@ https://planmine.mpibpc.mpg.de/planmine/blast.do?db=uc_Smed_v2&seq=ttacgacgtgtca
 //Setup
 https://medium.com/coding-design/setting-up-sequenceserver-edf9d992998c
 https://support.sequenceserver.com/t/blast-against-between-two-sequence-database-sequence-path-is-variable-based-on-user-input-in-server/120/2
+
+Push to 42
+rsync -avzhe "ssh -i ~/.ssh/andy.pem" genome_database_ids.txt ubuntu@homd.info:genome_database_ids2.txt
+the pull to local
+rsync -avzhe "ssh -i ~/.ssh/andy.pem" ubuntu@homd.info:genome_database_ids2.txt genome_database_ids2.txt
