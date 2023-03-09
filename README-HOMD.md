@@ -79,18 +79,26 @@ On my laptop I have just one directory ```~/sequenceserver/``` for editing and d
 back and forth depending on which interface I want to edit (main or allgenomes). 
 
 
-##### use one branch 'main' for the RefSeq and ALLGENOMES (both NCBI and PROKKA) databases.
+#### Use one git branch 'main' for the RefSeq and ALLGENOMES (both NCBI and PROKKA) databases.
 ```
 (BLAST-Server)./sequenceserver-HOMD (RefSeq and ALLGenomes DB) uses the 'main' git branch. 
 ```
+To differentiate between RefSeq and ALLGENOMES in the code I added a variable $DB_TYPE ("genome" or "refseq")  
+which is introduced through the SS.conf file for each type (db_type-refseq.rb or db_type-genome.rb)   
+located in the SS bin directory ```/home/ubuntu/.sequenceserver-bin/``` on the BLAST-Server
 
 
-##### And another branch 'allgenomes' for the individual selection genomes interface.  
+#### And another git branch 'allgenomes' for the individual selection genomes interface (ncbi and prokka).  
 ```
 (BLAST-Server)./sequenceserver-allncbi (individual ncbi genomes) uses the 'allgenomes' git branch.  
 (BLAST-Server)./sequenceserver-allprokka (individual prokka genomes) uses the 'allgenomes' git branch.
 ```
+To differentiate between ncbi and prokka I added a variable $ANNO in the links-jbrowse files  
+(links-jbrowse-prokka.rb and links-jbrowse-ncbi.rb) which is introduced through the SS.conf file for each type  
+located in the SS bin directory ```/home/ubuntu/.sequenceserver-bin/``` on the BLAST-Server
 
+For both $ANNO and $DB_TYPE it's purpose is to simple change the background color and titles for each interface.  
+The actual databases loaded are in the .conf file themselves.
 
    
    
