@@ -9,9 +9,7 @@ http://wheat-expression.com/
 http://18.216.121.101/blast/
 http://brcwebportal.cos.ncsu.edu:4567/
 https://planmine.mpibpc.mpg.de/planmine/blast.do
-```
-### Setup
-```
+ Setup:
 https://medium.com/coding-design/setting-up-sequenceserver-edf9d992998c
 https://support.sequenceserver.com/t/blast-against-between-two-sequence-database-sequence-path-is-variable-based-on-user-input-in-server/120/2
 ```
