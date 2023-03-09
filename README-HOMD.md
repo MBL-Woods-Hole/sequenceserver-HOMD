@@ -1,6 +1,6 @@
 # sequenceserver-HOMD
 
-###Examples around the web:
+### Examples around the web:
 ```
 http://spottedwingflybase.org/blast
 https://lotus.au.dk/blast/
@@ -10,13 +10,13 @@ http://18.216.121.101/blast/
 http://brcwebportal.cos.ncsu.edu:4567/
 https://planmine.mpibpc.mpg.de/planmine/blast.do
 ```
-###Setup
+### Setup
 ```
 https://medium.com/coding-design/setting-up-sequenceserver-edf9d992998c
 https://support.sequenceserver.com/t/blast-against-between-two-sequence-database-sequence-path-is-variable-based-on-user-input-in-server/120/2
 ```
 
-###rsync push to *.42
+### rsync push to *.42
 ```
 rsync -avzhe "ssh -i ~/.ssh/andy.pem" genome_database_ids.txt ubuntu@homd.info:genome_database_ids2.txt
 then pull to local
@@ -27,8 +27,8 @@ rsync -avzhe "ssh -i ~/.ssh/andy.pem" ubuntu@homd.info:genome_database_ids2.txt 
 ```
 
 ---
-##HOMD Setup and Administration:
-### on 192.168.1.60 (the BLAST-Server)
+## HOMD Setup and Administration:
+### On 192.168.1.60 (the BLAST-Server)
 SequenceServer is setup on 192.168.1.60 (the BLAST-Server) on which I use systemd to stop/start the SS services.
 
 See /etc/systemd/system/SS-refseq.services SS-genome.service SS-allncbi and SS-allprokka
@@ -55,7 +55,7 @@ Environment=BUNDLE_GEMFILE=/home/ubuntu/sequenceserver-HOMD/Gemfile
 ExecStart=/usr/bin/bash -lc '/home/ubuntu/.rbenv/versions/3.0.5/bin/bundle exec /home/ubuntu/sequenceserver-HOMD/bin/sequenceserver -c /home/ubuntu/.sequenceserver-genome.conf'
 ```
 
-### on 192.168.0.42 (the WebServer)
+### On 192.168.0.42 (the WebServer)
 > The SS webpages are made visible on the web using nginx on the 
 > homd development webserver (currently 192.168.0.42)
 > See /etc/nginx.conf.d/homd.conf and ehomd.conf
@@ -67,7 +67,7 @@ ExecStart=/usr/bin/bash -lc '/home/ubuntu/.rbenv/versions/3.0.5/bin/bundle exec 
 ```
 > Which points the url to the port on the BLAST-Server
 
-### on GitHub MBL-Woods-Hole  https://github.com/MBL-Woods-Hole/sequenceserver-HOMD
+### On GitHub MBL-Woods-Hole  https://github.com/MBL-Woods-Hole/sequenceserver-HOMD
 On my laptop I use one branch 'main' for the RefSeq and ALLGENOMES (both NCBI and PROKKA) databases.
 
 And another branch 'allgenomes' for the individual selection genomes interface.
