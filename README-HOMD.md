@@ -59,6 +59,19 @@ Environment=BUNDLE_GEMFILE=/home/ubuntu/sequenceserver-HOMD/Gemfile
 ExecStart=/usr/bin/bash -lc '/home/ubuntu/.rbenv/versions/3.0.5/bin/bundle exec /home/ubuntu/sequenceserver-HOMD/bin/sequenceserver -c /home/ubuntu/.sequenceserver-genome.conf'
 ```
 
+#### Single db versions -allncbi and -allprokka descripion
+The logic to show only one database (for the single db versions -allncbi and -allprokka) is located  
+in the /lib/sequenceserver/routes.rb file:  ```get '/searchdata.json' do```  
+Its important to note that SS must load ALL the databases on startup. (for homd: 3x8600 DBs)  
+That is why it is split into prokka and ncbi versions: so that each only loads only half the number.  
+To find the one database that is called for in the URL (ie ?gid=SEQF1595.2) I have recorded all the database IDs  
+into files (one prokka and one ncbi) which is loaded at runtime and searched to display the (usually) three  
+genome databases. The Database ID is derived from the full path name to the BLAST database (using MD5-hash).  
+If the path changes in the future we will need to re-create the ID files. There is a script in homd-scripts  
+that will re-create the ID data files: ```(blast_get_SS_databaseIDs.py)```
+
+
+
 ### On 192.168.0.42 (the WebServer)
 > The SS webpages are made visible on the web using nginx on the 
 > HOMD development webserver (currently 192.168.0.42)
