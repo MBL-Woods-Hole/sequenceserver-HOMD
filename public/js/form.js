@@ -168,7 +168,7 @@ export class Form extends Component {
    <ol>
    <li>Select the type of sequences to search for by selecting the correct database.</li>
    <li>Paste your sequence(s) into the box below (up to 100 sequences in FASTA format with unique ids).</li>
-   <li>Optionally adjust the parameters (in Advanced parameters)</li>
+   <li>Optionally adjust the parameters (in Advanced parameters below)</li>
    </ol>
    </small>
     
