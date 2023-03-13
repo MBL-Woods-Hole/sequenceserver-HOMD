@@ -116,12 +116,12 @@ module SequenceServer
         $SINGLE = true
         $DB_TO_SHOW = $gid
         if $ANNO == 'ncbi'
-          #$ids_fn = './genome_blastdbIds_ncbiHASH.csv'
-          $ids_fn = './ncbi_BlastIDsV10.1a.csv'
+          $ids_fn = './genome_blastdbIds_ncbiHASH.csv'
+          #$ids_fn = './ncbi_BlastIDsV10.1a.csv'
           puts "Reading NCBI ID File"
         else
-          #$ids_fn = './genome_blastdbIds_prokkaHASH.csv'
-          $ids_fn = './prokka_BlastIDsV10.1a.csv'
+          $ids_fn = './genome_blastdbIds_prokkaHASH.csv'
+          #$ids_fn = './prokka_BlastIDsV10.1a.csv'
           puts "Reading PROKKA ID File"
         end
         $file_data = CSV.parse(File.read($ids_fn), headers: false)
