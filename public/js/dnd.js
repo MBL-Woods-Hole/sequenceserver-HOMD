@@ -24,7 +24,7 @@ export class DnD extends Component {
 
             $(document)
                 .on('dragenter', function (evt) {
-                    console.log(evt)
+                    console.log('evt',evt)
                     // Do not activate DnD if a modal is active.
                     if ($.modalActive()) return;
 
@@ -62,6 +62,7 @@ export class DnD extends Component {
                     evt.preventDefault();
                 })
                 .on('drop', '.dnd-overlay', function (evt) {
+                    
                     evt.preventDefault();
                     evt.stopPropagation();
 
