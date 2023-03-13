@@ -25,6 +25,7 @@ export class DnD extends Component {
             $(document)
                 .on('dragenter', function (evt) {
                     // Do not activate DnD if a modal is active.
+                    console.log(evt)
                     if ($.modalActive()) return;
 
                     // Based on http://stackoverflow.com/a/8494918/1205465.
