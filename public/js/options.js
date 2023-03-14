@@ -42,6 +42,8 @@ export class Options extends Component {
         var classNames = 'form-control';
         if (this.state.value.trim()) {
             classNames += ' yellow-background';
+        }else{
+            classNames += ' ltgray-background';
         }
         return (
             <div className="col-md-7">

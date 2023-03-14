@@ -39,14 +39,16 @@ label:hover {
 .yellow-background {
   background-color: #e2d382;
 }
-
+.ltgray-background {
+  background-color: #FAF8F6;
+}
 /**
  * Disable resize grabber on textarea.
  */
-textarea {
+textarea, .textarea {
   resize: vertical;
   min-height: 214px;
-  
+  background-color: #FAF8F6;
 }
 
 hr {
@@ -182,7 +184,8 @@ a.disabled:hover,
 
 .panel .panel-heading {
   padding: 0 5px;
-  background-color: inherit;
+  /* background-color: inherit; */
+  background-color: #FAF8F6;
   border: 1px solid lightgrey;
   border-bottom: 1px solid #c74f14;
   
@@ -404,7 +407,7 @@ td.nowrap-ellipsis {
 .databases {
   border: none;
   
-  background: white;
+  background: #FAF8F6;
   height: 100px;
   max-height: 150px;
   overflow: auto;
@@ -413,7 +416,7 @@ td.nowrap-ellipsis {
 .list-group-item {
   border: none;
   padding: 0 5px;
-  background: white;
+  background: #FAF8F6;
 }
 
 .list-group-item label{
@@ -682,4 +685,5 @@ input[type=checkbox] {
   border:1px solid black;
   padding:2px;
   margin:2px;
+  background: #FAF8F6;
 }
