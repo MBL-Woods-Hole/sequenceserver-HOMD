@@ -9,6 +9,9 @@
 @import url('grapher.css');
 @import url('fonts.css');
 
+:root {
+  --box-bg:#FAF8F6;
+}
 /**
  * For scrollspy, etc.
  */
@@ -40,17 +43,22 @@ label:hover {
   background-color: #e2d382;
 }
 .ltgray-background {
-  background-color: #FAF8F6;
+  background-color: var(--box-bg);
 }
 /**
  * Disable resize grabber on textarea.
  */
-textarea, .textarea{
+textarea {
   resize: vertical;
   min-height: 214px;
-  background: #FAF8F6;
+  background-color: var(--box-bg);
 }
-
+.textarea {
+  background: var(--box-bg);
+}
+.sequence,#sequence {
+  background: var(--box-bg);
+}
 hr {
   border-top: transparent;
 }
@@ -185,8 +193,8 @@ a.disabled:hover,
 .panel .panel-heading {
   padding: 0 5px;
   /* background-color: inherit; */
-  background-color: #f8f8f8;
-  border: 1px solid lightgrey;
+  background-color: var(--box-bg);
+  border: 1px solid grey;
   border-bottom: 1px solid #c74f14;
   
 }
@@ -369,7 +377,6 @@ td.nowrap-ellipsis {
 .query-container {
   margin-top: 35px;
   margin-bottom: 0;
-  
 }
 
 .notifications {
@@ -406,18 +413,16 @@ td.nowrap-ellipsis {
    
 }
 .databases {
-  border: none;
-  
-  background: #f8f8f8;
+  background: var(--box-bg);
   height: 100px;
   max-height: 150px;
   overflow: auto;
-  border:1px solid lightgrey;
+  border:1px solid grey;
 }
 .list-group-item {
   border: none;
   padding: 0 5px;
-  background: #f8f8f8;
+  background: var(--box-bg);
 }
 
 .list-group-item label{
@@ -684,7 +689,7 @@ input[type=checkbox] {
 }
 #instructions{
   border:1px solid grey;
-  background: #FAF8F6;
   padding:2px;
   margin:2px;
+  background: var(--box-bg);  /* #FAF8F6; */
 }
