@@ -100,7 +100,7 @@ module SequenceServer
     # Returns data that is used to render the search form client side. These
     # include available databases and user-defined search options.
     get '/searchdata.json' do
-      puts "in EDIT get '/searchdata.json' do"
+      #puts "in EDIT get '/searchdata.json' do"
       
       if $DEV_HOST == 'AVhome'
          path_prokka = '/Users/avoorhis/programming/blast-db-alt/'  #SEQF1595.fna*
@@ -168,8 +168,8 @@ module SequenceServer
         #data.filter { |obj| obj.attr == 'value' }
         # puts 'data'
 #         puts data
-        puts 'mydataids'
-        puts "inspect : #{mydataids.inspect()}\n\n"
+        #puts 'mydataids'
+        #puts "inspect : #{mydataids.inspect()}\n\n"
         #mydata.each do |i|
         
         #end
