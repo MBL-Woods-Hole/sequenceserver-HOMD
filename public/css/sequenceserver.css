@@ -39,14 +39,16 @@ label:hover {
 .yellow-background {
   background-color: #e2d382;
 }
-
+.ltgray-background {
+  background-color: #FAF8F6;
+}
 /**
  * Disable resize grabber on textarea.
  */
-textarea {
+textarea, .textarea{
   resize: vertical;
   min-height: 214px;
-  
+  background: #FAF8F6;
 }
 
 hr {
@@ -182,7 +184,8 @@ a.disabled:hover,
 
 .panel .panel-heading {
   padding: 0 5px;
-  background-color: inherit;
+  /* background-color: inherit; */
+  background-color: #f8f8f8;
   border: 1px solid lightgrey;
   border-bottom: 1px solid #c74f14;
   
@@ -366,6 +369,7 @@ td.nowrap-ellipsis {
 .query-container {
   margin-top: 35px;
   margin-bottom: 0;
+  
 }
 
 .notifications {
@@ -404,7 +408,7 @@ td.nowrap-ellipsis {
 .databases {
   border: none;
   
-  background: white;
+  background: #f8f8f8;
   height: 100px;
   max-height: 150px;
   overflow: auto;
@@ -413,7 +417,7 @@ td.nowrap-ellipsis {
 .list-group-item {
   border: none;
   padding: 0 5px;
-  background: white;
+  background: #f8f8f8;
 }
 
 .list-group-item label{
@@ -680,6 +684,7 @@ input[type=checkbox] {
 }
 #instructions{
   border:1px solid grey;
+  background: #FAF8F6;
   padding:2px;
   margin:2px;
 }

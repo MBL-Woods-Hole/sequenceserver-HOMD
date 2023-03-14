@@ -48,6 +48,8 @@ These directories were installed as git repositories (NOT by 'gem install') from
 The important parts from a systemd configuration file:
 ```
 WorkingDirectory=/home/ubuntu/sequenceserver-HOMD
+StandardOutput=file:/home/ubuntu/logs/genome-blast_stdout.log
+StandardError=file:/home/ubuntu/logs/genome-blast_stderr.log
 Type=simple
 User=ubuntu
 Environment=PATH=/home/ubuntu/.rbenv/shims:/home/ubuntu/.rbenv/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -61,8 +63,8 @@ ExecStart=/usr/bin/bash -lc '/home/ubuntu/.rbenv/versions/3.0.5/bin/bundle exec 
 
 #### Single DB versions (-allncbi and -allprokka) descripion
 The logic to show only one database (for the single db versions -allncbi and -allprokka) is located  
-in the /lib/sequenceserver/routes.rb file:  ```get '/searchdata.json' do```  
-Its important to note that SS must load ALL the databases on startup. (for homd: 3x8600 DBs)  
+in the /lib/sequenceserver/routes.rb file:  ```get '/searchdata.json' do```  about line 100.
+Its important to note that SS must load ALL the databases on startup. (for homd thats: 3x8600 DBs)  
 That is why it is split into prokka and ncbi versions: so that each only loads only half the number.  
 To find the one database that is called for in the URL (ie ?gid=SEQF1595.2) I have recorded all the database IDs  
 into files (one prokka and one ncbi) which is loaded at runtime and searched to display the (usually) three  
