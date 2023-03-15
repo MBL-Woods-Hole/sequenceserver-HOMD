@@ -102,20 +102,23 @@ module SequenceServer
     get '/searchdata.json' do
       #puts "in EDIT get '/searchdata.json' do"
       
-      if $DEV_HOST == 'AVhome'
-         path_prokka = '/Users/avoorhis/programming/blast-db-alt/'  #SEQF1595.fna*
-         path_ncbi = '/Users/avoorhis/programming/blast-db-alt_ncbi/'  #SEQF1595.fna*
-         #homdpath = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_ncbi/' #faa,ffn,fna
-      else
-         path_prokka = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_prokka/' #faa,ffn,fna
-         path_ncbi   = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_ncbi/' #faa,ffn,fna
-      end
+      # if $DEV_HOST == 'AVhome'
+#          path_prokka = '/Users/avoorhis/programming/blast-db-alt/'  #SEQF1595.fna*
+#          path_ncbi = '/Users/avoorhis/programming/blast-db-alt_ncbi/'  #SEQF1595.fna*
+#          #homdpath = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_ncbi/' #faa,ffn,fna
+#       else
+#          path_prokka = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_prokka/' #faa,ffn,fna
+#          path_ncbi   = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_ncbi/' #faa,ffn,fna
+#       end
       #puts 'dbs', dbs
       if !params[:gid].nil?
         $gid  = params[:gid]
         $SINGLE = true
         $DB_TO_SHOW = $gid
-        if $ANNO == 'ncbi'
+        if $DEV_HOST == 'AVhome'
+          $ids_fn = './LOCAL-IDs.csv'
+          puts "Reading LOCAL ID File"
+        elsif $ANNO == 'ncbi'
           #$ids_fn = './genome_blastdbIds_ncbiHASH.csv'
           $ids_fn = './NCBI-IDs.csv'
           puts "Reading NCBI ID File"
@@ -125,33 +128,39 @@ module SequenceServer
           puts "Reading PROKKA ID File"
         end
         $file_data = CSV.parse(File.read($ids_fn), headers: false)
+        #puts 'ANNO',$ANNO
    #      "database":[
 #           {"name":"/Users/avoorhis/programming/blast-db-testing/HOMD_16S_rRNA_RefSeq_V15.22.fasta","title":"HOMD_16S_rRNA_RefSeq_V15.22.fasta","type":"nucleotide","nsequences":"1015","ncharacters":"1363402","updated_on":"Mar 4, 2023  11:00 AM","format":"5","categories":[],"id":"3ec27a6fd90c71054f68543e3d0ef624"},
 #           {"name":"/Users/avoorhis/programming/blast-db-testing/genomes_ncbi/faa/ALL_genomes.faa","title":"ftp_ncbi/faa/ALL_genomes.faa","type":"protein","nsequences":"4665857","ncharacters":"1437439366","updated_on":"Mar 4, 2023  11:07 AM","format":"5","categories":["genomes_ncbi","faa"],"id":"629eef5dd9b21f895b01feb4a9e58de8"},
 #           {"name":"/Users/avoorhis/programming/blast-db-testing/genomes_ncbi/fna/ALL_genomes.fna","title":"ftp_ncbi/fna/ALL_genomes.fna","type":"nucleotide","nsequences":"112918","ncharacters":"5541364068","updated_on":"Mar 4, 2023  12:14 PM","format":"5","categories":["genomes_ncbi","fna"],"id":"e17ac02845d0afc7c829031f011476d7"}
 #         ]
-        
+        $ORGANISM = 'o-r-g'
         mydataids = []
         lookup = {}
         $file_data.each do |i|
            tmp = i[0].split("\t")
            #puts "X",tmp,tmp[0],$gid
            if tmp[0] == $gid
+             #puts 'Match'
              # ["SEQF1595.2\tfaa\t45fd1a168c938b04c2a30ec725c0acdd"]
              # ["SEQF1595.2\tfaa\t45fd1a168c938b04c2a30ec725c0acdd\torganism"]
              tmp = i[0].split("\t")
              #puts 'tmp[2]',tmp[2]
              mydataids.push(tmp[2])
-             lookup[tmp[2]] = tmp[3]
+             if tmp.length >3
+               lookup[tmp[2]] = tmp[3]
+             end
            end
         end
         newdbs =[]
+        #puts 'mydataids',mydataids
         Database.each do |i|
           #puts 'database inspect',i.inspect()
-          
+          #puts 'i.id',i.id
           if mydataids.include? i.id
-            #puts 'id',i.id
-            $ORGANISM = lookup[i.id]
+            if lookup.include? i.id
+               $ORGANISM = lookup[i.id]
+            end
             if i.name.include? 'faa'
               i.title = "#{$ANNO.upcase} Annotated proteins (#{$gid}.faa)"
             elsif i.name.include? 'ffn'
