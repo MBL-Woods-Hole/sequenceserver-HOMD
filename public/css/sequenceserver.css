@@ -693,3 +693,14 @@ input[type=checkbox] {
   margin:2px;
   background: var(--box-bg);  /* #FAF8F6; */
 }
+#header{
+   width:100%;
+   background: #013366;
+}
+#header img{
+   
+   
+   height:50px;
+   padding:0;
+   margin:0;
+}

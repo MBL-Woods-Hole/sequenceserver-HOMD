@@ -14,29 +14,34 @@
   <meta name="description" content="Custom BLAST server provided by SequenceServer (https://www.sequenceserver.com)"/>
 
   <!-- CSS -->
-  
-    <link rel="stylesheet" media="screen,print" type="text/css" href="css/sequenceserver.css"/>
- 
-</head>
-  <% if $ANNO == "ncbi" %>
-    <body style='background:#C0E4F1;'>
-    <!-- <body style='background:#C0E4F1;'> -->
+  <% if settings.production? || settings.test? %>
+    <link rel="stylesheet" media="screen,print" type="text/css" href="css/sequenceserver.min.css?ver=<%= SequenceServer::VERSION %>"/>
   <% else %>
-    <body style='background:#ACD0C0;'>
-    <!-- <body style='background:#ACD0C0;'> -->
+    <link rel="stylesheet" media="screen,print" type="text/css" href="css/sequenceserver.css"/>
   <% end %>
+</head>
 
+<% if $DB_TYPE == 'refseq' %>
+
+    <body style='background:#BFD4DB;'>
+<% else %>
+    <body style='background:#E8F4EA;'>
+<% end %>
+  <div id='header'><center>
+    <span id='homd_banner'><a href="https://www.homd.org"><img id='homd_logo_img' src='homd_new_banner_14.png' alt='HOMD Banner'  \></a></span>
+  </center>
+  </div>
   <div
     class="navbar">
     
     <div
       class="container">
-      <% if $ANNO == "ncbi" %>
-        <span class="homd-label">HOMD Genome BLAST Server (NCBI)</span>
+      <% if $DB_TYPE == 'refseq' %>
+        <span class="homd-label">HOMD RefSeq BLAST Server</span>
       <% else %>
-        <span class="homd-label">HOMD Genome BLAST Server (PROKKA)</span>
+        <span class="homd-label">HOMD Genomic BLAST Server</span>
+
       <% end %>
-      
       <a
         class="navbar-brand"
         href="https://sequenceserver.com" target="_blank">
@@ -73,7 +78,7 @@
       </div>
     </noscript>
   </div>
-  
+
   <%= yield %>
 
   <div
