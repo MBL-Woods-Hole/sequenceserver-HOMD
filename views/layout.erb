@@ -37,9 +37,9 @@
     <div
       class="container">
       <% if $DB_TYPE == 'refseq' %>
-        <span class="homd-label">HOMD RefSeq BLAST Server</span>
+        <span class="homd-label">HOMD RefSeq BLAST Server <%= $ORGANISM %></span>
       <% else %>
-        <span class="homd-label">HOMD Genomic BLAST Server</span>
+        <span class="homd-label">HOMD Genomic BLAST Server <%= $ORGANISM %></span>
 
       <% end %>
       <a

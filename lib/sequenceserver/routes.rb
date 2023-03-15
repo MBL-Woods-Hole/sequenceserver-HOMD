@@ -116,12 +116,12 @@ module SequenceServer
         $SINGLE = true
         $DB_TO_SHOW = $gid
         if $ANNO == 'ncbi'
-          $ids_fn = './genome_blastdbIds_ncbiHASH.csv'
-          #$ids_fn = './ncbi_BlastIDsV10.1a.csv'
+          #$ids_fn = './genome_blastdbIds_ncbiHASH.csv'
+          $ids_fn = './NCBI-IDs.csv'
           puts "Reading NCBI ID File"
         else
-          $ids_fn = './genome_blastdbIds_prokkaHASH.csv'
-          #$ids_fn = './prokka_BlastIDsV10.1a.csv'
+          #$ids_fn = './genome_blastdbIds_prokkaHASH.csv'
+          $ids_fn = './PROKKA-IDs.csv'
           puts "Reading PROKKA ID File"
         end
         $file_data = CSV.parse(File.read($ids_fn), headers: false)
@@ -132,14 +132,17 @@ module SequenceServer
 #         ]
         
         mydataids = []
+        lookup = {}
         $file_data.each do |i|
            tmp = i[0].split("\t")
            #puts "X",tmp,tmp[0],$gid
            if tmp[0] == $gid
              # ["SEQF1595.2\tfaa\t45fd1a168c938b04c2a30ec725c0acdd"]
+             # ["SEQF1595.2\tfaa\t45fd1a168c938b04c2a30ec725c0acdd\torganism"]
              tmp = i[0].split("\t")
              #puts 'tmp[2]',tmp[2]
              mydataids.push(tmp[2])
+             lookup[tmp[2]] = tmp[3]
            end
         end
         newdbs =[]
@@ -148,12 +151,13 @@ module SequenceServer
           
           if mydataids.include? i.id
             #puts 'id',i.id
+            $ORGANISM = lookup[i.id]
             if i.name.include? 'faa'
-              i.title = "Annotated proteins (#{$gid}.faa)"
+              i.title = "#{$ANNO.upcase} Annotated proteins (#{$gid}.faa)"
             elsif i.name.include? 'ffn'
-              i.title = "Nucleotide Sequences of annotated proteins (#{$gid}.ffn)"
+              i.title = "#{$ANNO.upcase} Nucleotide Sequences of annotated proteins (#{$gid}.ffn)"
             else
-              i.title = "Genomic DNA sequences/contigs (#{$gid}.fna)"
+              i.title = "#{$ANNO.upcase} Genomic DNA sequences/contigs (#{$gid}.fna)"
             end
             newdbs.push(i)
           end
