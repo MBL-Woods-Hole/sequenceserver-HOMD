@@ -21,15 +21,11 @@
   <% end %>
 </head>
 
-<% if $DB_TYPE == 'refseq' %>
 
-    <body style='background:#BFD4DB;'>
-<% else %>
-    <body style='background:#E8F4EA;'>
-<% end %>
-  <div id='header'><center>
+  <body style='background:#E8F4EA;'>
+
+  <div id='header'>
     <span id='homd_banner'><a href="https://www.homd.org"><img id='homd_logo_img' src='homd_new_banner_14.png' alt='HOMD Banner'  \></a></span>
-  </center>
   </div>
   <div
     class="navbar">
@@ -37,7 +33,7 @@
     <div
       class="container">
       
-      <span class="homd-label">HOMD Genomic BLAST Server <small>(<%= $ORGANISM %>)</small></span>
+      <span class="homd-label">HOMD Genomic BLAST Server <small><%= $ORGANISM %> ($gid)</small></span>
 
       
       <a
@@ -48,17 +44,17 @@
           <%= SequenceServer::VERSION %>
         </small>
       </a>
-      <ul class="nav navbar-nav navbar-right hover-reset focus-reset">
-        <li>
+      <div class="nav navbar-nav navbar-right hover-reset focus-reset homdlink" >
+        
           <a
             target="_blank"
             href="http://www.sequenceserver.com/#license-and-support">
             <i class="fa fa-comment-o"></i>
-            &nbsp;Help &amp; Support
+            SequenceServer Help &amp; Support
           </a>
-        </li>
-      </ul>
-
+        <br><a href='https://www.homd.org/genome_blast'>BLAST Against All HOMD Genomes Instead.</a>&nbsp;|&nbsp;<a href='https://www.homd.org'>HOMD Home</a>
+      </div>
+     
     </div>
   </div>
 

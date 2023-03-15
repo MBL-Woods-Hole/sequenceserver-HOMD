@@ -139,7 +139,7 @@ module SequenceServer
         lookup = {}
         $file_data.each do |i|
            tmp = i[0].split("\t")
-           puts "X",tmp,tmp[0],$gid
+           #puts "X",tmp,tmp[0],$gid
            if tmp[0] == $gid
              #puts 'Match'
              # ["SEQF1595.2\tfaa\t45fd1a168c938b04c2a30ec725c0acdd"]
