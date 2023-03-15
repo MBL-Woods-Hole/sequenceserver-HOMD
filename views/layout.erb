@@ -36,12 +36,10 @@
     
     <div
       class="container">
-      <% if $DB_TYPE == 'refseq' %>
-        <span class="homd-label">HOMD RefSeq BLAST Server <%= $ORGANISM %></span>
-      <% else %>
-        <span class="homd-label">HOMD Genomic BLAST Server <%= $ORGANISM %></span>
+      
+      <span class="homd-label">HOMD Genomic BLAST Server <small>(<%= $ORGANISM %>)</small></span>
 
-      <% end %>
+      
       <a
         class="navbar-brand"
         href="https://sequenceserver.com" target="_blank">

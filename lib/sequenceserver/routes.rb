@@ -139,37 +139,48 @@ module SequenceServer
         lookup = {}
         $file_data.each do |i|
            tmp = i[0].split("\t")
-           #puts "X",tmp,tmp[0],$gid
+           puts "X",tmp,tmp[0],$gid
            if tmp[0] == $gid
              #puts 'Match'
              # ["SEQF1595.2\tfaa\t45fd1a168c938b04c2a30ec725c0acdd"]
              # ["SEQF1595.2\tfaa\t45fd1a168c938b04c2a30ec725c0acdd\torganism"]
              tmp = i[0].split("\t")
              #puts 'tmp[2]',tmp[2]
-             mydataids.push(tmp[2])
+             mydataids.push(tmp[2].strip())
              if tmp.length >3
-               lookup[tmp[2]] = tmp[3]
+               lookup[tmp[2].strip()] = tmp[3].strip()
              end
            end
         end
         newdbs =[]
         #puts 'mydataids',mydataids
+        #mydataids.each do |i|
+        #  puts "'"+i+"'"
+        #end
+        annoup = $ANNO.upcase
+        #puts 'anno',$ANNO
+        #puts 'annoup',annoup
         Database.each do |i|
-          #puts 'database inspect',i.inspect()
-          #puts 'i.id',i.id
+          # puts 'database inspect',i.inspect()
+#           puts 'i.id',"'"+i.id+"'"
+#           puts '1i.name',i.name
           if mydataids.include? i.id
-            if lookup.include? i.id
+            if lookup.has_key?(i.id)
                $ORGANISM = lookup[i.id]
             end
+            #puts '2i.name',i.name
+            #puts '$ORGANISM',$ORGANISM
             if i.name.include? 'faa'
-              i.title = "#{$ANNO.upcase} Annotated proteins (#{$gid}.faa)"
+              i.title = "#{annoup} Annotated proteins (#{$gid}.faa)"
             elsif i.name.include? 'ffn'
-              i.title = "#{$ANNO.upcase} Nucleotide Sequences of annotated proteins (#{$gid}.ffn)"
+              i.title = "#{annoup} Nucleotide Sequences of annotated proteins (#{$gid}.ffn)"
             else
-              i.title = "#{$ANNO.upcase} Genomic DNA sequences/contigs (#{$gid}.fna)"
+              i.title = "#{annoup} Genomic DNA sequences/contigs (#{$gid}.fna)"
             end
+            
             newdbs.push(i)
           end
+          #puts 'newdbs',newdbs
           #<struct SequenceServer::Database 
           #name="/Users/avoorhis/programming/blast-db-testing/HOMD_16S_rRNA_RefSeq_V15.22.fasta", 
           #title="HOMD_16S_rRNA_RefSeq_V15.22.fasta", 
