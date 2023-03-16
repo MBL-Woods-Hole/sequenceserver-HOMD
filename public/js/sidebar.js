@@ -159,7 +159,7 @@ export default class extends Component {
 
         The link will work if you have access to that particular SequenceServer instance.
 
-        Thank you for using SequenceServer, and please remember to cite our paper.
+        Thank you for using the HOMD BLAST server (SequenceServer), and please remember to cite our paper.
 
         Best regards,
             
