@@ -151,20 +151,19 @@ export default class extends Component {
         var db_parts = dbsArr[0].split('::') // NCBI::Genomic DNA sequences/contigs (fna)::Organism  always three parts
         var mailto = `mailto:?subject=HOMD ${this.props.data.program.toUpperCase()} analysis results: ${db_parts[2]} &body=Hello,
 
-        Here is a link to my recent ${this.props.data.program.toUpperCase()} analysis of ${this.props.data.queries.length} sequences.
+        Here is a link to my recent ${this.props.data.program.toUpperCase()} analysis.
             ${window.location.href}
         
-        The following database was used:
+        This link will be valid for 30 days.
+        
+        This search was done against the:
             ${dbsArr[0]}
 
-        The link will work if you have access to that particular SequenceServer instance.
+        Thank you for using HOMD SequenceServer. 
+        Please cite eHOMD V3.1 (https://journals.asm.org/doi/10.1128/msystems.00187-18)
+        www.homd.org
 
-        Thank you for using the HOMD BLAST server (SequenceServer), and please remember to cite our paper.
-
-        Best regards,
-            
-        HOMD Team
-        https://www.homd.org`;
+        Best regards,`;
 
         var message = encodeURI(mailto).replace(/(%20){2,}/g, '');
         return message;
