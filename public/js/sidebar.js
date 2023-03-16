@@ -153,7 +153,7 @@ export default class extends Component {
 
         Here is a link to my recent ${this.props.data.program.toUpperCase()} analysis of ${this.props.data.queries.length} sequences.
             ${window.location.href}
-        // we only use one db at a time
+        
         The following database was used:
             ${dbsArr[0]}
 
