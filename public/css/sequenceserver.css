@@ -708,5 +708,8 @@ input[type=checkbox] {
   color:black;
 }
 .homdlink a{
-  color:black;
+  color:darkslateblue;
+}
+.homdlink a:hover{
+  color:brown;
 }
