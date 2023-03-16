@@ -148,21 +148,23 @@ export default class extends Component {
         }
 
         // returns the mailto message
-        var mailto = `mailto:?subject=SequenceServer ${this.props.data.program.toUpperCase()} analysis results &body=Hello,
+        var db_parts = dbsArr[0].split('::') // NCBI::Genomic DNA sequences/contigs (fna)::Organism  always three parts
+        var mailto = `mailto:?subject=HOMD ${this.props.data.program.toUpperCase()} analysis results: ${db_parts[2]} &body=Hello,
 
         Here is a link to my recent ${this.props.data.program.toUpperCase()} analysis of ${this.props.data.queries.length} sequences.
             ${window.location.href}
-
-        The following databases were used (up to 15 are shown):
-            ${dbsArr}
+        // we only use one db at a time
+        The following database was used:
+            ${dbsArr[0]}
 
         The link will work if you have access to that particular SequenceServer instance.
 
         Thank you for using SequenceServer, and please remember to cite our paper.
 
         Best regards,
-
-        https://sequenceserver.com`;
+            
+        HOMD Team
+        https://www.homd.org`;
 
         var message = encodeURI(mailto).replace(/(%20){2,}/g, '');
         return message;

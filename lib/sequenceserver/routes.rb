@@ -171,13 +171,13 @@ module SequenceServer
             #puts '2i.name',i.name
             #puts '$ORGANISM',$ORGANISM
             if i.name.include? 'faa'
-              i.title = "#{annoup} Annotated proteins (faa)"
+              i.title = "#{annoup}::Annotated proteins (faa)"
             elsif i.name.include? 'ffn'
-              i.title = "#{annoup} Nucleotide Sequences of annotated proteins (ffn)"
+              i.title = "#{annoup}::Nucleotide Sequences of annotated proteins (ffn)"
             else
-              i.title = "#{annoup} Genomic DNA sequences/contigs (fna)"
+              i.title = "#{annoup}::Genomic DNA sequences/contigs (fna)"
             end
-            i.title.concat("\n\r#{$ORGANISM} (#{$gid})") 
+            i.title.concat("\n::#{$ORGANISM} (#{$gid})") 
             #i.organism = $ORGANISM
             newdbs.push(i)
           end
