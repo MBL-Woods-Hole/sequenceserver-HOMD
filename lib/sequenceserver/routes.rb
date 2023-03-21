@@ -263,7 +263,7 @@ module SequenceServer
         job = Job.create(params)
         #puts 'job.id'
         #puts job.id
-        redirect to("/#{job.id}")
+        redirect to("/#{$HOMD_URL}/#{job.id}")
       end
     end
 
