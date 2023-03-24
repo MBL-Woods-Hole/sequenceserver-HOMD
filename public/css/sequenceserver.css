@@ -699,9 +699,9 @@ input[type=checkbox] {
 }
 #header img{
    
-   padding-left:50px;
-   height:25px;
-   padding-left:50px;
+   /* padding-left:50px; */
+   height:50px;
+   padding:0;
    margin:0;
 }
 .homdlink{
