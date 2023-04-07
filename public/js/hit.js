@@ -120,7 +120,7 @@ export default class extends Component {
             <span className="label label-reset pos-label">{meta}</span>
         </div>;
     }
-
+// GRAPH collapsed={this.props.veryBig}
     contentJSX() {
         return <div className="section-content" data-parent-hit={this.domID()}>
             {this.hitLinks()}

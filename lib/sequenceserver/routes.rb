@@ -127,7 +127,12 @@ module SequenceServer
         erb :search, layout: true
       else
         job = Job.create(params)
-        redirect to("/#{job.id}")
+        puts "Looking for HOMD_URL: #{$HOMD_URL}"
+        if $HOMD_URL == 'localhost' || $HOMD_URL == ''
+           redirect to("/#{job.id}")
+        else
+           redirect to("/#{$HOMD_URL}/#{job.id}")
+        end
       end
     end
 

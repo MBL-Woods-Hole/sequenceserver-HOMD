@@ -348,7 +348,7 @@ require = (function e(t, n, r) { function s(o, u) { if (!n[o]) { if (!t[o]) { va
                 _requestSequence: function (accession) {
                     var self = this;
 
-                    console.log('Requesting sequence for: ' + accession);
+                    //console.log('Requesting sequence for: ' + accession);
 
                     jQuery.ajax({
                         url: self.opt.sequenceUrl,

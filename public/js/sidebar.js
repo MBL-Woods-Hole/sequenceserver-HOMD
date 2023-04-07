@@ -1,4 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
+
+//import Select from "react-select";
+
 import _ from 'underscore';
 
 import downloadFASTA from './download_fasta';
@@ -24,6 +27,12 @@ export default class extends Component {
         this.mailtoLink = this.mailtoLink.bind(this);
         this.sharingPanelJSX = this.sharingPanelJSX.bind(this);
 
+
+        this.state = {
+         query: "banana",
+        };
+
+        this.handleChange = this.handleChange.bind(this);
 
     }
     /**
@@ -89,7 +98,7 @@ export default class extends Component {
         }).get();
         var hsps_arr = [];
         var aln_exporter = new AlignmentExporter();
-        console.log('check ' + sequence_ids.toString());
+        //console.log('check ' + sequence_ids.toString());
         _.each(this.props.data.queries, _.bind(function (query) {
             _.each(query.hits, function (hit) {
                 if (_.indexOf(sequence_ids, hit.id) != -1) {
@@ -148,21 +157,22 @@ export default class extends Component {
         }
 
         // returns the mailto message
-        var mailto = `mailto:?subject=SequenceServer ${this.props.data.program.toUpperCase()} analysis results &body=Hello,
+        var mailto = `mailto:?subject=HOMD ${this.props.data.program.toUpperCase()} analysis results &body=Hello,
 
-        Here is a link to my recent ${this.props.data.program.toUpperCase()} analysis of ${this.props.data.queries.length} sequences.
+        Here is a link to my recent ${this.props.data.program.toUpperCase()} analysis.
             ${window.location.href}
+        
+        This link will be valid for 30 days.
+        
+        This search was done against the:
+            ${dbsArr[0]}
 
-        The following databases were used (up to 15 are shown):
-            ${dbsArr}
+        Thank you for using HOMD SequenceServer. 
+        Please cite eHOMD V3.1 (https://journals.asm.org/doi/10.1128/msystems.00187-18)
+        www.homd.org
 
-        The link will work if you have access to that particular SequenceServer instance.
-
-        Thank you for using SequenceServer, and please remember to cite our paper.
-
-        Best regards,
-
-        https://sequenceserver.com`;
+        Best regards,`;
+        
 
         var message = encodeURI(mailto).replace(/(%20){2,}/g, '');
         return message;
@@ -209,9 +219,39 @@ export default class extends Component {
         );
     }
 
+//     XXindexJSX() {
+//         return <ul className="nav hover-reset active-bold"> {
+//             _.map(this.props.data.queries, (query) => {
+//                 console.log('Query= ' + query.id + ' ' + query.title)
+//                 return <li key={'Side_bar_' + query.id}>
+//                     <a className="btn-link nowrap-ellipsis hover-bold"
+//                         title={'Query= ' + query.id + ' ' + query.title}
+//                         href={'#Query_' + query.number}>
+//                         {'Query= ' + query.id}
+//                     </a>
+//                 </li>;
+//             })
+//         }
+//         </ul>;
+//     }
+    // getInitialState() {
+//      return {
+//          value: 'select'
+//      }
+//     }
+    handleChange(e) {
+		console.log("Query Selected!! "+e.target.value);
+
+        var url = window.location.href.split('#')[0]
+        window.open(url+e.target.value, "_self");
+		this.setState({ query: e.target.value });
+	  }
     indexJSX() {
+      
+      if(this.props.data.queries.length == 1){
         return <ul className="nav hover-reset active-bold"> {
             _.map(this.props.data.queries, (query) => {
+                console.log('Query= ' + query.id + ' ' + query.title)
                 return <li key={'Side_bar_' + query.id}>
                     <a className="btn-link nowrap-ellipsis hover-bold"
                         title={'Query= ' + query.id + ' ' + query.title}
@@ -222,8 +262,27 @@ export default class extends Component {
             })
         }
         </ul>;
+      }else{
+		  const options = _.map(this.props.data.queries, (q) => {
+			 return {key:q.number, value: '#Query_' + q.number, label: 'Query= ' + q.id + ' ' + q.title }
+		  })
+		  //const [selected, setSelected] = useState(options[0].value);
+	  
+	  
+		  return <div className="container">
+			  <div className="mt-5 m-auto w-50">
+				<select value={this.state.query} onChange={this.handleChange}>
+					{options.map((option) => (
+					  <option value={option.value}>{option.label}</option>
+					))}
+				  </select>
+	  
+			  </div>
+			</div>
+      }
+       
+    
     }
-
     downloadsPanelJSX() {
         return (
             <div className="downloads">

@@ -135,7 +135,7 @@ export class Form extends Component {
     }
 
     handleAlgoChanged(algo) {
-        console.log( 'algo ',algo);
+
         if (this.state.preDefinedOpts.hasOwnProperty(algo)) {
             var preDefinedOpts = this.state.preDefinedOpts[algo];
             this.refs.opts.setState({

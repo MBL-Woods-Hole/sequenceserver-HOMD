@@ -16,7 +16,8 @@ export default function Grapher(Graph) {
   return class extends React.Component {
     constructor(props) {
       super(props);
-      this.state = { collapsed: this.props.collapsed };
+      this.state = { collapsed: "true" };
+      //this.state = { collapsed: this.props.collapsed };
       this.svgContainerRef = createRef();
     }
 

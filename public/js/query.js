@@ -37,6 +37,7 @@ export class ReportQuery extends Component {
 
     /**
      * Returns number of hits.
+AV Save:     <HitsOverview key={'GO_' + this.props.query.number} query={this.props.query} program={this.props.program} collapsed={this.props.veryBig} />
      */
     numhits() {
         return this.props.query.hits.length;
@@ -47,8 +48,9 @@ export class ReportQuery extends Component {
             meta = `query ${this.props.query.number}, ` + meta;
         }
         return <div className="section-header">
+            
             <h3>
-                <strong>Query=&nbsp;{this.props.query.id}</strong>&nbsp;
+                <strong>=> QueryID=&nbsp;{this.props.query.id}</strong>&nbsp;
                 {this.props.query.title}
             </h3>
             <span className="label label-reset pos-label">{meta}</span>
