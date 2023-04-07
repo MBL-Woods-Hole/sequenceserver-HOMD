@@ -117,15 +117,15 @@ module SequenceServer
         $DB_TO_SHOW = $gid
         if $DEV_HOST == 'AVhome'
           $ids_fn = './LOCAL-IDs.csv'
-          puts "Reading LOCAL ID File"
+          puts "Reading LOCAL ID File #{$ids_fn}"
         elsif $ANNO == 'ncbi'
           #$ids_fn = './genome_blastdbIds_ncbiHASH.csv'
           $ids_fn = './NCBI-IDs.csv'
-          puts "Reading NCBI ID File"
+          puts "Reading NCBI ID File #{$ids_fn}"
         else
           #$ids_fn = './genome_blastdbIds_prokkaHASH.csv'
           $ids_fn = './PROKKA-IDs.csv'
-          puts "Reading PROKKA ID File"
+          puts "Reading PROKKA ID File #{$ids_fn}"
         end
         $file_data = CSV.parse(File.read($ids_fn), headers: false)
         #puts 'ANNO',$ANNO
@@ -148,6 +148,7 @@ module SequenceServer
              #puts 'tmp[2]',tmp[2]
              mydataids.push(tmp[2].strip())
              if tmp.length >3
+               puts "Found #{tmp}"
                lookup[tmp[2].strip()] = tmp[3].strip()
              end
            end
@@ -161,9 +162,9 @@ module SequenceServer
         #puts 'anno',$ANNO
         #puts 'annoup',annoup
         Database.each do |i|
-          # puts 'database inspect',i.inspect()
-#           puts 'i.id',"'"+i.id+"'"
-#           puts '1i.name',i.name
+          puts 'database inspect',i.inspect()
+          puts 'i.id',"'"+i.id+"'"
+          puts '1i.name',i.name
           if mydataids.include? i.id
             if lookup.has_key?(i.id)
                $ORGANISM = lookup[i.id]
@@ -263,7 +264,13 @@ module SequenceServer
         job = Job.create(params)
         #puts 'job.id'
         #puts job.id
-        redirect to("/#{$HOMD_URL}/#{job.id}")
+        if $HOMD_URL == 'localhost' || $HOMD_URL == ''
+           redirect to("/#{job.id}")
+        else
+           redirect to("/#{$HOMD_URL}/#{job.id}")
+        end
+                
+        
       end
     end
 

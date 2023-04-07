@@ -88,10 +88,10 @@ class Graph {
 
     setupResponsiveness() {
         var currentWidth = $(window).width();
-        console.log('cureent '+currentWidth);
+        //console.log('cureent '+currentWidth);
         var debounced_draw = _.debounce(_.bind(function () {
             if (currentWidth != $(window).width()) {
-                console.log('redraw initiated '+this._height);
+                //console.log('redraw initiated '+this._height);
                 this.draw();
                 currentWidth = $(window).width();
             }

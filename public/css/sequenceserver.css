@@ -519,7 +519,7 @@ input[type=checkbox] {
 }
 
 .resultn {
-  margin-top: 6px;
+  margin-top: 16px;
 }
 
 .graphical-overview {
@@ -552,6 +552,7 @@ input[type=checkbox] {
 
 .hsp {
   padding: 1px 0 20px 2px;
+  /* display: none; */
 }
 
 .hsp-stats {

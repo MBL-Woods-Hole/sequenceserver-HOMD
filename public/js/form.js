@@ -73,7 +73,6 @@ export class Form extends Component {
 
         // show overlay to create visual feedback on button click 
         $('#method').on('click', () => {
-            console.log('button clicked')
             $('#overlay').css('display', 'block');
         });
     }
@@ -136,7 +135,7 @@ export class Form extends Component {
     }
 
     handleAlgoChanged(algo) {
-        
+
         if (this.state.preDefinedOpts.hasOwnProperty(algo)) {
             var preDefinedOpts = this.state.preDefinedOpts[algo];
             this.refs.opts.setState({
@@ -164,9 +163,7 @@ export class Form extends Component {
         return (
             <div className="container">
                 <div id="overlay" style={{ position: 'absolute', top: 0, left: 0, width: '100vw', height: '100vw', background: 'rgba(0, 0, 0, 0.2)', display: 'none', zIndex: 99 }} />
-                
-
-  <div id='instructions'>
+<div id='instructions'>
    <small><strong>Instructions</strong>: 
    <ol>
    <li>Select the type of sequences to search for by selecting the correct database.</li>
@@ -175,8 +172,8 @@ export class Form extends Component {
    </ol>
    </small>
     
-  </div>
-
+</div>
+                
                 <form id="blast" method="post" className="form-horizontal">
                     
 

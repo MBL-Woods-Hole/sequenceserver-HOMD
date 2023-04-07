@@ -218,9 +218,13 @@ class Report extends Component {
 
             while (this.nextHit < query.hits.length) {
                 var hit = query.hits[this.nextHit];
+                
                 // We may see a hit multiple times during rendering because only
                 // 10 hsps are rendered in each cycle, but we want to create the
                 // corresponding Hit component only the first time we see it.
+                
+                //console.log(this.state)
+                //console.log(this.props)
                 if (this.nextHSP == 0) {
                     results.push(
                         <Hit
@@ -234,7 +238,9 @@ class Report extends Component {
                             non_parse_seqids={this.state.non_parse_seqids}
                             showQueryCrumbs={this.state.queries.length > 1}
                             showHitCrumbs={query.hits.length > 1}
+                            //collapsed="true"
                             veryBig={this.state.veryBig}
+                            // veryBig={this.state.veryBig}
                             {...this.props}
                         />
                     );
@@ -451,13 +457,15 @@ class Report extends Component {
    */
     shouldShowIndex() {
         var num_queries = this.state.queries.length;
-        return num_queries >= 2 && num_queries <= 12;
+        //return num_queries >= 2 && num_queries <= 12;
+        return num_queries >= 2;
     }
 
     /**
    * Prevents folding of hits during text-selection.
    */
     preventCollapseOnSelection() {
+        // $(`div[data-parent-hit=${hitID}]`).toggle(false);
         $('body').on('mousedown', '.hit > .section-header > h4', function (event) {
             var $this = $(this);
             $this.on('mouseup mousemove', function handler(event) {

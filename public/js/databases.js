@@ -108,8 +108,11 @@ export class Databases extends Component {
     renderDatabase(database) {
         //var disabled = this.state.type && this.state.type !== database.type;
         var disabled = false
-        //var hidden = $DB_TO_SHOW
-        //console.log($DB_TO_SHOW)
+        // var checked = ''
+//         if(database.title == 'HOMD_16S_rRNA_RefSeq_V15.22.fasta'){
+//            checked = 'true'
+//            this.handleClick(database);
+//         }
         return (
             <label className={'database'}>
                 <input
@@ -119,7 +122,7 @@ export class Databases extends Component {
                     value={database.id}
                     data-type={database.type}
                     disabled={disabled}
-                    //hidden={hidden}
+                    //checked={checked}
                     onChange={_.bind(function () {
                         this.handleClick(database);
                     }, this)}
