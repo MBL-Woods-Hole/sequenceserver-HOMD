@@ -534,6 +534,10 @@ input[type=checkbox] {
 
 .hit {
   margin-top: 4px;
+  border-top:2px dashed black;
+  border-bottom:2px dashed black;
+  padding:2px;
+  background:#F5DEB3;  /* Wheat */
 }
 
 .hit .section-header h4 {
@@ -552,6 +556,7 @@ input[type=checkbox] {
 
 .hsp {
   padding: 1px 0 20px 2px;
+  background:#EADDCA;  /* almond */
   /* display: none; */
 }
 
@@ -718,3 +723,4 @@ input[type=checkbox] {
    width:100%;
    max-width:100px;
 }
+
