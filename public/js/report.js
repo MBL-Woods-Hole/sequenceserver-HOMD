@@ -452,7 +452,7 @@ class Report extends Component {
 
     /**
    * Returns true if index should be shown in the sidebar. Index is shown
-   * only for 2 and 8 queries.
+   * only for 2 and 8 queries. with new select index >=2
    */
     shouldShowIndex() {
         var num_queries = this.state.queries.length;

@@ -263,13 +263,12 @@ export default class extends Component {
       
           return <div className="container">
               <div className="mt-5 m-auto w-50">Queries:&nbsp;&nbsp;
-                <select className='qselect' value={this.state.query} onChange={this.handleChange}>
+                 <select className='qselect' value={this.state.query} onChange={this.handleChange}>
                     <option value='top'>Top</option>
                     {options.map((option) => (
                       <option value={option.value}>{option.label}</option>
                     ))}
                   </select>
-      
               </div>
             </div>
       }
