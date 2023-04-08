@@ -219,36 +219,27 @@ export default class extends Component {
         );
     }
 
-//     XXindexJSX() {
-//         return <ul className="nav hover-reset active-bold"> {
-//             _.map(this.props.data.queries, (query) => {
-//                 console.log('Query= ' + query.id + ' ' + query.title)
-//                 return <li key={'Side_bar_' + query.id}>
-//                     <a className="btn-link nowrap-ellipsis hover-bold"
-//                         title={'Query= ' + query.id + ' ' + query.title}
-//                         href={'#Query_' + query.number}>
-//                         {'Query= ' + query.id}
-//                     </a>
-//                 </li>;
-//             })
-//         }
-//         </ul>;
-//     }
-    // getInitialState() {
-//      return {
-//          value: 'select'
-//      }
-//     }
-    handleChange(e) {
-		console.log("Query Selected!! "+e.target.value);
 
-        var url = window.location.href.split('#')[0]
-        window.open(url+e.target.value, "_self");
-		this.setState({ query: e.target.value });
-	  }
+    scrollToAnchor(divid){
+       var aTag = $("div[id='"+ divid +"']");
+       //var aTag = $("div[id='Query_3']");
+       $('html,body').animate({scrollTop: aTag.offset().top - 50},'slow');
+    }
+    handleChange(e) {
+        var anchor = e.target.value.replace('#','')  // remove '#'
+        if(anchor === 'top'){
+           window.scrollTo(0,0)
+        }else{
+           this.scrollToAnchor(anchor)
+        }
+       
+        this.setState({ query: e.target.value });
+    }
+    
     indexJSX() {
       
       if(this.props.data.queries.length == 1){
+      
         return <ul className="nav hover-reset active-bold"> {
             _.map(this.props.data.queries, (query) => {
                 console.log('Query= ' + query.id + ' ' + query.title)
@@ -260,25 +251,26 @@ export default class extends Component {
                     </a>
                 </li>;
             })
-        }
-        </ul>;
+          }
+          </ul>;
+          
       }else{
-		  const options = _.map(this.props.data.queries, (q) => {
-			 return {key:q.number, value: '#Query_' + q.number, label: 'Query= ' + q.id + ' ' + q.title }
-		  })
-		  //const [selected, setSelected] = useState(options[0].value);
-	  
-	  
-		  return <div className="container">
-			  <div className="mt-5 m-auto w-50">
-				<select value={this.state.query} onChange={this.handleChange}>
-					{options.map((option) => (
-					  <option value={option.value}>{option.label}</option>
-					))}
-				  </select>
-	  
-			  </div>
-			</div>
+          const options = _.map(this.props.data.queries, (q) => {
+             return {key:q.number, value: '#Query_' + q.number, label: 'Query= ' + q.id + ' ' + q.title }
+          })
+          //const [selected, setSelected] = useState(options[0].value);
+      
+      
+          return <div className="container">
+              <div className="mt-5 m-auto w-50">Queries:&nbsp;&nbsp;
+                 <select className='qselect' value={this.state.query} onChange={this.handleChange}>
+                    <option value='top'>Top</option>
+                    {options.map((option) => (
+                      <option value={option.value}>{option.label}</option>
+                    ))}
+                  </select>
+              </div>
+            </div>
       }
        
     
