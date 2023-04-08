@@ -230,6 +230,7 @@ class Report extends Component {
                             key={'Query_' + query.number + '_Hit_' + hit.number}
                             query={query}
                             hit={hit}
+                            className='fullhit'
                             algorithm={this.state.program}
                             querydb={this.state.querydb}
                             selectHit={this.selectHit}
