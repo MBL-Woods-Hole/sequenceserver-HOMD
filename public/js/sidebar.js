@@ -223,7 +223,7 @@ export default class extends Component {
     scrollToAnchor(divid){
        var aTag = $("div[id='"+ divid +"']");
        //var aTag = $("div[id='Query_3']");
-       $('html,body').animate({scrollTop: aTag.offset().top - 30},'slow');
+       $('html,body').animate({scrollTop: aTag.offset().top - 50},'slow');
     }
     handleChange(e) {
         var anchor = e.target.value.replace('#','')  // remove '#'
@@ -262,8 +262,8 @@ export default class extends Component {
       
       
           return <div className="container">
-              <div className="mt-5 m-auto w-50">Queries:&nbsp;
-                <select value={this.state.query} onChange={this.handleChange}>
+              <div className="mt-5 m-auto w-50">Queries:&nbsp;&nbsp;
+                <select className='qselect' value={this.state.query} onChange={this.handleChange}>
                     <option value='top'>Top</option>
                     {options.map((option) => (
                       <option value={option.value}>{option.label}</option>
