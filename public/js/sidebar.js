@@ -202,7 +202,8 @@ export default class extends Component {
                         <i className="fa fa-file-o"></i> New search
                     </a>
                 </div>
-                {this.props.shouldShowIndex && this.indexJSX()}
+                
+                {this.indexJSX()}
             </div>
         );
     }
@@ -225,10 +226,13 @@ export default class extends Component {
        //var aTag = $("div[id='Query_3']");
        $('html,body').animate({scrollTop: aTag.offset().top - 50},'slow');
     }
+    scrollToTop(){
+       $("html, body").animate({ scrollTop: "0" },"slow");
+    }
     handleChange(e) {
         var anchor = e.target.value.replace('#','')  // remove '#'
         if(anchor === 'top'){
-           window.scrollTo(0,0)
+           $("html, body").animate({ scrollTop: "0" },"slow");
         }else{
            this.scrollToAnchor(anchor)
         }
@@ -239,34 +243,32 @@ export default class extends Component {
     indexJSX() {
       
       if(this.props.data.queries.length == 1){
-      
-        return <ul className="nav hover-reset active-bold"> {
-            _.map(this.props.data.queries, (query) => {
-                console.log('Query= ' + query.id + ' ' + query.title)
-                return <li key={'Side_bar_' + query.id}>
-                    <a className="btn-link nowrap-ellipsis hover-bold"
-                        title={'Query= ' + query.id + ' ' + query.title}
-                        href={'#Query_' + query.number}>
-                        {'Query= ' + query.id}
-                    </a>
-                </li>;
-            })
-          }
-          </ul>;
-          
+        return <a className='scroll'
+                  href='#'
+                  onClick={this.scrollToTop}>
+                  <i className="fa fa-angle-double-up"></i> Scroll to Top
+                 </a>
+                
       }else{
           const options = _.map(this.props.data.queries, (q) => {
              return {key:q.number, value: '#Query_' + q.number, label: 'Query= ' + q.id + ' ' + q.title }
           })
-          //const [selected, setSelected] = useState(options[0].value);
-      
-      
+
           return <div className="container">
+              <a className='scroll'
+                  href='#'
+                  onClick={this.scrollToTop}>
+                  <i className="fa fa-angle-double-up"></i> Scroll to Top
+                 </a>
               <div className="mt-5 m-auto w-50">Queries:&nbsp;&nbsp;
                  <select className='qselect' value={this.state.query} onChange={this.handleChange}>
-                    <option value='top'>Top</option>
                     {options.map((option) => (
-                      <option value={option.value}>{option.label}</option>
+                      <option 
+                         value={option.value}
+                         key={option.value}
+                         >
+                         {option.label}
+                         </option>
                     ))}
                   </select>
               </div>
