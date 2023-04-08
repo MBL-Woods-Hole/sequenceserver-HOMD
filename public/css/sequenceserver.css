@@ -477,6 +477,7 @@ input[type=checkbox] {
 .sidebar > div {
   /* To line up with the results on the right */
   margin-top: 0;
+  
 }
 
 .sidebar li a {
@@ -490,7 +491,7 @@ input[type=checkbox] {
 }
 
 .sidebar.affix {
-  margin-top: 0;
+  margin-top: 60px;
   top: 0;
 }
 
