@@ -717,4 +717,8 @@ input[type=checkbox] {
    width:100%;
    max-width:100px;
 }
+.scroll{
+    padding-left:20px;
+}
+
 
