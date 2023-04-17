@@ -37,6 +37,8 @@ GEM
     mustermann (2.0.2)
       ruby2_keywords (~> 0.0.1)
     mysql2 (0.5.5)
+    nokogiri (1.13.8-arm64-darwin)
+      racc (~> 1.4)
     nokogiri (1.13.8-x86_64-darwin)
       racc (~> 1.4)
     ox (2.14.11)
@@ -101,6 +103,7 @@ GEM
       nokogiri (~> 1.8)
 
 PLATFORMS
+  arm64-darwin-22
   x86_64-darwin-17
 
 DEPENDENCIES
@@ -116,4 +119,4 @@ DEPENDENCIES
   webrick
 
 BUNDLED WITH
-   2.3.20
+   2.4.10

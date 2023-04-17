@@ -490,7 +490,7 @@ input[type=checkbox] {
 }
 
 .sidebar.affix {
-  margin-top: 0;
+  margin-top: 60px;
   top: 0;
 }
 
@@ -519,7 +519,7 @@ input[type=checkbox] {
 }
 
 .resultn {
-  margin-top: 6px;
+  margin-top: 16px;
 }
 
 .graphical-overview {
@@ -534,6 +534,10 @@ input[type=checkbox] {
 
 .hit {
   margin-top: 4px;
+  border-top:2px dashed black;
+  border-bottom:2px dashed black;
+  padding:2px;
+  background:#F5DEB3;  /* Wheat */
 }
 
 .hit .section-header h4 {
@@ -552,6 +556,8 @@ input[type=checkbox] {
 
 .hsp {
   padding: 1px 0 20px 2px;
+  background:#EADDCA;  /* almond */
+  /* display: none; */
 }
 
 .hsp-stats {
@@ -713,3 +719,11 @@ input[type=checkbox] {
 .homdlink a:hover{
   color:brown;
 }
+.qselect{
+   width:100%;
+   max-width:100px;
+}
+.scroll{
+    padding-left:20px;
+}
+

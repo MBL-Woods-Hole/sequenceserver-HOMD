@@ -1,4 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
+
+//import Select from "react-select";
+
 import _ from 'underscore';
 
 import downloadFASTA from './download_fasta';
@@ -24,6 +27,12 @@ export default class extends Component {
         this.mailtoLink = this.mailtoLink.bind(this);
         this.sharingPanelJSX = this.sharingPanelJSX.bind(this);
 
+
+        this.state = {
+         query: "banana",
+        };
+
+        this.handleChange = this.handleChange.bind(this);
 
     }
     /**
@@ -89,7 +98,7 @@ export default class extends Component {
         }).get();
         var hsps_arr = [];
         var aln_exporter = new AlignmentExporter();
-        console.log('check ' + sequence_ids.toString());
+        //console.log('check ' + sequence_ids.toString());
         _.each(this.props.data.queries, _.bind(function (query) {
             _.each(query.hits, function (hit) {
                 if (_.indexOf(sequence_ids, hit.id) != -1) {
@@ -148,8 +157,7 @@ export default class extends Component {
         }
 
         // returns the mailto message
-        var db_parts = dbsArr[0].split('::') // NCBI::Genomic DNA sequences/contigs (fna)::Organism  always three parts
-        var mailto = `mailto:?subject=HOMD ${this.props.data.program.toUpperCase()} analysis results: ${db_parts[2]} &body=Hello,
+        var mailto = `mailto:?subject=HOMD ${this.props.data.program.toUpperCase()} analysis results &body=Hello,
 
         Here is a link to my recent ${this.props.data.program.toUpperCase()} analysis.
             ${window.location.href}
@@ -164,6 +172,7 @@ export default class extends Component {
         www.homd.org
 
         Best regards,`;
+        
 
         var message = encodeURI(mailto).replace(/(%20){2,}/g, '');
         return message;
@@ -176,8 +185,6 @@ export default class extends Component {
         // Deriving rootURL this way is required for subURI deployments
         // - we cannot just send to '/'.
         var rootURL = path.join('/');
-        var url = window.location.href;
-        console.log( 'url: '+url)
         return (
             <div className="sidebar-top-panel">
                 <div className="section-header-sidebar">
@@ -185,21 +192,22 @@ export default class extends Component {
                         {this.summaryString()}
                     </h4>
                 </div>
-               
-                {this.props.shouldShowIndex && this.indexJSX()}
+                <div>
+                    <a href={`${rootURL}/?job_id=${job_id}`}>
+                        <i className="fa fa-pencil"></i> Edit search
+                    </a>
+                    <span className="line">|</span>
+                    <a href={`${rootURL}/`}
+                        onClick={this.clearSession}>
+                        <i className="fa fa-file-o"></i> New search
+                    </a>
+                </div>
+                
+                {this.indexJSX()}
             </div>
         );
     }
-//                <div>
-//                     <a href={`${rootURL}/?job_id=${job_id}`}>
-//                         <i className="fa fa-pencil"></i> Edit search
-//                     </a>
-//                     <span className="line">|</span>
-//                     <a href={`${rootURL}/`}
-//                         onClick={this.clearSession}>
-//                         <i className="fa fa-file-o"></i> New search
-//                     </a>
-//                 </div>
+
     summaryString() {
         var program = this.props.data.program;
         var numqueries = this.props.data.queries.length;
@@ -212,21 +220,63 @@ export default class extends Component {
         );
     }
 
-    indexJSX() {
-        return <ul className="nav hover-reset active-bold"> {
-            _.map(this.props.data.queries, (query) => {
-                return <li key={'Side_bar_' + query.id}>
-                    <a className="btn-link nowrap-ellipsis hover-bold"
-                        title={'Query= ' + query.id + ' ' + query.title}
-                        href={'#Query_' + query.number}>
-                        {'Query= ' + query.id}
-                    </a>
-                </li>;
-            })
-        }
-        </ul>;
-    }
 
+    scrollToAnchor(divid){
+       var aTag = $("div[id='"+ divid +"']");
+       //var aTag = $("div[id='Query_3']");
+       $('html,body').animate({scrollTop: aTag.offset().top - 50},'slow');
+    }
+    scrollToTop(){
+       $("html, body").animate({ scrollTop: "0" },"slow");
+    }
+    handleChange(e) {
+        var anchor = e.target.value.replace('#','')  // remove '#'
+        if(anchor === 'top'){
+           $("html, body").animate({ scrollTop: "0" },"slow");
+        }else{
+           this.scrollToAnchor(anchor)
+        }
+       
+        this.setState({ query: e.target.value });
+    }
+    
+    indexJSX() {
+      
+      if(this.props.data.queries.length == 1){
+        return <a className='scroll'
+                  href='#'
+                  onClick={this.scrollToTop}>
+                  <i className="fa fa-angle-double-up"></i> Scroll to Top
+                 </a>
+                
+      }else{
+          const options = _.map(this.props.data.queries, (q) => {
+             return {key:q.number, value: '#Query_' + q.number, label: 'Query= ' + q.id + ' ' + q.title }
+          })
+
+          return <div className="container">
+              <a className='scroll'
+                  href='#'
+                  onClick={this.scrollToTop}>
+                  <i className="fa fa-angle-double-up"></i> Scroll to Top
+                 </a>
+              <div className="mt-5 m-auto w-50">Queries:&nbsp;&nbsp;
+                 <select className='qselect' value={this.state.query} onChange={this.handleChange}>
+                    {options.map((option) => (
+                      <option 
+                         value={option.value}
+                         key={option.value}
+                         >
+                         {option.label}
+                         </option>
+                    ))}
+                  </select>
+              </div>
+            </div>
+      }
+       
+    
+    }
     downloadsPanelJSX() {
         return (
             <div className="downloads">
