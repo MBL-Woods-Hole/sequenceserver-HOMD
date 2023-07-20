@@ -54,7 +54,7 @@ pkg
 .gems/*
 bundler: command not foundGemfile.lock
 node_modules
-
+Gemfile.lock
 public/sequenceserver-report.min.js
 public/sequenceserver-search.min.js
 public/css/sequenceserver.min.css
