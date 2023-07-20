@@ -58,4 +58,4 @@ node_modules
 
 public/sequenceserver-report.min.js
 public/sequenceserver-search.min.js
-public/css/sequenceserver.min.js
+public/css/sequenceserver.min.css
