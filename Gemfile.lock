@@ -34,9 +34,13 @@ GEM
       addressable (~> 2.7)
     matrix (0.4.2)
     mini_mime (1.1.2)
+    mini_portile2 (2.8.4)
     mustermann (2.0.2)
       ruby2_keywords (~> 0.0.1)
     mysql2 (0.5.5)
+    nokogiri (1.13.8)
+      mini_portile2 (~> 2.8.0)
+      racc (~> 1.4)
     nokogiri (1.13.8-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.13.8-x86_64-darwin)
@@ -104,6 +108,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  ruby
   x86_64-darwin-17
 
 DEPENDENCIES

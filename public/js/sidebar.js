@@ -347,6 +347,16 @@ export default class extends Component {
                             </a>
                         </li>
                     }
+                    {
+                      <li>
+                            <a className="btn-link download" data-toggle="tooltip"
+                                title="Link to HOMD - View Tree of this BLAST Result."
+                                href={'https://devel.homd.org/blastdir=' + this.props.data.search_id }
+                                target='_blank'>
+                                View Phylogenetic Tree
+                            </a>
+                      </li>
+                    }
                 </ul>
             </div>
         );
