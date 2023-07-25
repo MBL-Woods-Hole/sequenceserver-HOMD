@@ -90,32 +90,7 @@
         class="text-center">
 	Please cite data sources and <a style='vertical-align: baseline' href="https://doi.org/10.1093/molbev/msz185">the paper</a> describing <a href="https://wurmlab.com">our</a> <a href="https://sequenceserver.com">SequenceServer BLAST interface</a>.
         <a style='vertical-align: baseline'
-          href='https://sequenceserver.com'><em>
-          <%=
-            quote = [
-	      "Visualize BLAST results.",
-              "Run BLAST on local computer.",
-	      "BLAST on Mac.",
-	      "BLAST on Windows.",
-	      "Run blast on mac.",
-	      "Blast analysis software.",
-	      "Sequence Search on local computer.",
-	      "Blast DNA sequence search.",
-              "Custom BLAST search.",
-              "Install blast on Mac.",
-              "Perform BLAST analyses.",
-              "Custom BLAST web interface.",
-              "SequenceServer: Local BLAST with bespoke html interface.",
-              "Set up custom BLAST interface with SequenceServer.",
-              "Easy BLASTing with SequenceServer.",
-              "Run BLAST locally with Sequenceserver.",
-              "BLAST against a custom, local database with SequenceServer.",
-              "Run BLAST locally on Mac OSX with SequenceServer.",
-              "Run BLAST locally on Ubuntu with SequenceServer.",
-              "Run BLAST locally on Linux with SequenceServer."
-            ][rand(19)]
-          %>
-        </em></a>
+          href='https://sequenceserver.com'></a>
       </p>
       <%= File.read(File.join(settings.root, '../website-extras/footer.html')) if File.exists?(File.join(settings.root, '../website-extras/footer.html')) %>
     </div> <!-- /container -->
