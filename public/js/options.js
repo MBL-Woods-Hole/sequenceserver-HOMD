@@ -62,7 +62,7 @@ export class Options extends Component {
                             <input type="text" className={classNames}
                                 onChange={e => this.updateBox(e.target.value)}
                                 id="advanced" name="advanced" value={this.state.value}
-                                placeholder="eg: -evalue 1.0e-5 -num_alignments 100"
+                                placeholder="eg: -evalue 1.0e-5 -max_target_seqs 100"
                                 title="View, and enter advanced parameters."
                             />
                             {Object.keys(this.state.preOpts).length > 1 && this.optionsJSX()}
