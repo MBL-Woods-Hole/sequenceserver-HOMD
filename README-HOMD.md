@@ -60,8 +60,20 @@ Environment=BUNDLE_BIN_PATH=/home/ubuntu/.rbenv/versions/3.0.5/lib/ruby/gems/3.0
 Environment=BUNDLE_GEMFILE=/home/ubuntu/sequenceserver-HOMD/Gemfile
 ExecStart=/usr/bin/bash -lc '/home/ubuntu/.rbenv/versions/3.0.5/bin/bundle exec /home/ubuntu/sequenceserver-HOMD/bin/sequenceserver -c /home/ubuntu/.sequenceserver-genome.conf'
 ```
-
-#### Single DB versions (-allncbi and -allprokka) descripion
+#### Search ALL Databases  (Genomes or RefSeq)
+    ***nginx conf files are on development and production servers
+--genome  PORT:4567  confFile:  .sequenceserver-genome.conf
+   systemd:  sudo systemctl restart SS-genome.service
+--refseq  PORT:4568  confFile: .sequenceserver-refseq.conf
+   systemd:  sudo systemctl restart SS-refseq.service
+   
+#### Single Genome DB versions (-allncbi and -allprokka) descripion
+    ***nginx conf files are on development and production servers
+    *** Takes a long tme to restart => reading db loactions
+--allprokka PORT:4571   confFile:  ~/.sequenceserver-allprokka.conf 
+    systemd:  sudo systemctl restart SS-allprokka.service
+--allncbi   PORT:4570   confFile:  ~/.sequenceserver-allncbi.conf
+    systemd:  sudo systemctl restart SS-allncbi.service
 The logic to show only one database (for the single db versions -allncbi and -allprokka) is located  
 in the /lib/sequenceserver/routes.rb file:  ```get '/searchdata.json' do```  about line 100.
 Its important to note that SS must load ALL the databases on startup. (for homd thats: 3x8600 DBs)  
