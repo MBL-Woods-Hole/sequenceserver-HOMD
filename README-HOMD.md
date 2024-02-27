@@ -35,13 +35,13 @@ bundle exec bin/sequenceserver -D -c ~/.sequenceserver-XXX.conf (you may need to
 ### On 192.168.1.60 (the BLAST-Server)
 SequenceServer is setup on 192.168.1.60 (the BLAST-Server) on which I use systemd to stop/start the SS services.
 
-See /etc/systemd/system/SS-refseq.service, SS-genome.service SS-allncbi.service and SS-allprokka.service
+See /etc/systemd/system/SS-refseq.service, SS-genome.service SS-single_ncbi.service and SS-single_prokka.service
 
 There are three directories that matter in /home/ubuntu/ on the BLAST-Server:
 
 ```/home/ubuntu/sequenceserver-HOMD  (uses config files: ~/.sequenceserver-refseq.conf and ~/.sequenceserver-genome.conf)
-/home/ubuntu/sequenceserver-allncbi (uses config file ~/.sequenceserver-allncbi.conf)
-/home/ubuntu/sequenceserver-allprokka (uses config file ~/.sequenceserver-allprokka.conf)
+/home/ubuntu/sequenceserver-single_ncbi (uses config file ~/.sequenceserver-single_ncbi.conf)
+/home/ubuntu/sequenceserver-single_prokka (uses config file ~/.sequenceserver-single_prokka.conf)
 ```
 These directories were installed as git repositories (NOT by 'gem install') from  https://github.com/wurmlab/sequenceserver
 
@@ -70,11 +70,11 @@ ExecStart=/usr/bin/bash -lc '/home/ubuntu/.rbenv/versions/3.0.5/bin/bundle exec 
 #### Single Genome DB versions (-allncbi and -allprokka) descripion
     ***nginx conf files are on development and production servers
     *** Takes a long tme to restart => reading db loactions
---allprokka PORT:4571   confFile:  ~/.sequenceserver-allprokka.conf 
-    systemd:  sudo systemctl restart SS-allprokka.service
---allncbi   PORT:4570   confFile:  ~/.sequenceserver-allncbi.conf
-    systemd:  sudo systemctl restart SS-allncbi.service
-The logic to show only one database (for the single db versions -allncbi and -allprokka) is located  
+--single_prokka PORT:4571   confFile:  ~/.sequenceserver-single_prokka.conf 
+    systemd:  sudo systemctl restart SS-single_prokka.service
+--single_ncbi   PORT:4570   confFile:  ~/.sequenceserver-single_ncbi.conf
+    systemd:  sudo systemctl restart SS-single_ncbi.service
+The logic to show only one database (for the single db versions -single_ncbi and -single_prokka) is located  
 in the /lib/sequenceserver/routes.rb file:  ```get '/searchdata.json' do```  about line 100.
 Its important to note that SS must load ALL the databases on startup. (for homd thats: 3x8600 DBs)  
 That is why it is split into prokka and ncbi versions: so that each only loads only half the number.  
@@ -92,7 +92,7 @@ that will re-create the ID data files: ```blast_get_SS_databaseIDs.py```
 > See /etc/nginx.conf.d/homd.conf and ehomd.conf
 > Each has locations stanza's similar to:
 ```
-       location /genome_blast_all_ncbi/ {
+       location /genome_blast_single_ncbi/ {
          proxy_pass http://192.168.1.60:4570/;
        }
 ```
@@ -103,7 +103,7 @@ that will re-create the ID data files: ```blast_get_SS_databaseIDs.py```
    URL: https://github.com/MBL-Woods-Hole/sequenceserver-HOMD
    
 On my laptop I have just one directory ```~/sequenceserver/``` for editing and debugging and I switch git branches  
-back and forth depending on which interface I want to edit (main or allgenomes). 
+back and forth depending on which interface I want to edit (main or single_genomes). 
 
 
 #### Use one git branch 'main' for the RefSeq and ALLGENOMES (both NCBI and PROKKA) databases.
@@ -115,10 +115,10 @@ which is introduced through the SS.conf file for each type (db_type-refseq.rb or
 located in the SS bin directory ```/home/ubuntu/.sequenceserver-bin/``` on the BLAST-Server
 
 
-#### And another git branch 'allgenomes' for the individual selection genomes interface (ncbi and prokka).  
+#### And another git branch 'single_genomes' for the individual selection genomes interface (ncbi and prokka).  
 ```
-(BLAST-Server)./sequenceserver-allncbi (individual ncbi genomes) uses the 'allgenomes' git branch.  
-(BLAST-Server)./sequenceserver-allprokka (individual prokka genomes) uses the 'allgenomes' git branch.
+(BLAST-Server)./sequenceserver-single_ncbi (individual ncbi genomes) uses the 'single_genomes' git branch.  
+(BLAST-Server)./sequenceserver-single_prokka (individual prokka genomes) uses the 'single_genomes' git branch.
 ```
 To differentiate between ncbi and prokka I added a variable $ANNO in the links-jbrowse files  
 (links-jbrowse-prokka.rb and links-jbrowse-ncbi.rb) which is introduced through the SS.conf file for each type  

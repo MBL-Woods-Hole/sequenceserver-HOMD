@@ -1,24 +1,19 @@
 require 'json'
 require 'tilt/erb'
 require 'sinatra/base'
+#require 'rest-client'
 
 require 'sequenceserver/job'
 require 'sequenceserver/blast'
 require 'sequenceserver/report'
 require 'sequenceserver/database'
 require 'sequenceserver/sequence'
-require 'sequenceserver/makeblastdb'
-require 'csv'
 
-        
 module SequenceServer
   # Controller.
   class Routes < Sinatra::Base
     # See
     # http://www.sinatrarb.com/configuration.html
-    extend Forwardable
-    def_delegators SequenceServer, :config, :sys
-    
     configure do
       # We don't need Rack::MethodOverride. Let's avoid the overhead.
       disable :method_override
@@ -33,6 +28,10 @@ module SequenceServer
 
       # We don't want Sinatra do setup any loggers for us. We will use our own.
       set :logging, nil
+
+      # Override in config.ru if the instance is served under a subpath
+      # e.g. for example.org/our-sequenceserver set to '/our-sequenceserver'
+      set :root_path_prefix, ''
     end
 
     # See
@@ -56,7 +55,9 @@ module SequenceServer
         frame_options = SequenceServer.config[:frame_options]
         frame_options && { frame_options: frame_options }
       }
+    end
 
+    unless ENV['SEQUENCE_SERVER_COMPRESS_RESPONSES'] == 'false'
       # Serve compressed responses.
       use Rack::Deflater
     end
@@ -75,177 +76,23 @@ module SequenceServer
     get '/' do
       erb :search, layout: true
     end
-    
-    # Borrowed from makeblastdb.rb
-    def multipart_database_name?(db_name)
-      !(db_name.match(%r{.+/\S+\.\d{2,3}$}).nil?)
-    end
-    def get_categories(path)
-      path
-        .gsub(config[:database_dir], '') # remove database_dir from path
-        .split('/')
-        .reject(&:empty?)[0..-2] # the first entry might be '' if database_dir does not end with /
-    end
-    def blastdbcmd (line)
-      cmd = "blastdbcmd -recursive -list #{line}" \
-            ' -list_outfmt "%f	%t	%p	%n	%l	%d	%v"'
-      out, err = sys(cmd, path: config[:bin])
-      errpat = /BLAST Database error/
-      fail BLAST_DATABASE_ERROR.new(cmd, err) if err.match(errpat)
-      return out
-    rescue CommandFailed => e
-      fail BLAST_DATABASE_ERROR.new(cmd, e.stderr)
-    end
-    
+
     # Returns data that is used to render the search form client side. These
     # include available databases and user-defined search options.
     get '/searchdata.json' do
-      #puts "in EDIT get '/searchdata.json' do"
-      
-      # if $DEV_HOST == 'AVhome'
-#          path_prokka = '/Users/avoorhis/programming/blast-db-alt/'  #SEQF1595.fna*
-#          path_ncbi = '/Users/avoorhis/programming/blast-db-alt_ncbi/'  #SEQF1595.fna*
-#          #homdpath = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_ncbi/' #faa,ffn,fna
-#       else
-#          path_prokka = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_prokka/' #faa,ffn,fna
-#          path_ncbi   = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1_all/add_blast/blastdb_ncbi/' #faa,ffn,fna
-#       end
-      #puts 'dbs', dbs
-      if !params[:gid].nil?
-        $gid  = params[:gid]
-        $SINGLE = true
-        $DB_TO_SHOW = $gid
-        if $DEV_HOST == 'AVhome'
-          $ids_fn = './LOCAL-IDs.csv'
-          puts "Reading LOCAL ID File #{$ids_fn}"
-        elsif $ANNO == 'ncbi'
-          #$ids_fn = './genome_blastdbIds_ncbiHASH.csv'
-          $ids_fn = './NCBI-IDs.csv'
-          puts "Reading NCBI ID File #{$ids_fn}"
-        else
-          #$ids_fn = './genome_blastdbIds_prokkaHASH.csv'
-          $ids_fn = './PROKKA-IDs.csv'
-          puts "Reading PROKKA ID File #{$ids_fn}"
-        end
-        $file_data = CSV.parse(File.read($ids_fn), headers: false)
-        #puts 'ANNO',$ANNO
-   #      "database":[
-#           {"name":"/Users/avoorhis/programming/blast-db-testing/HOMD_16S_rRNA_RefSeq_V15.22.fasta","title":"HOMD_16S_rRNA_RefSeq_V15.22.fasta","type":"nucleotide","nsequences":"1015","ncharacters":"1363402","updated_on":"Mar 4, 2023  11:00 AM","format":"5","categories":[],"id":"3ec27a6fd90c71054f68543e3d0ef624"},
-#           {"name":"/Users/avoorhis/programming/blast-db-testing/genomes_ncbi/faa/ALL_genomes.faa","title":"ftp_ncbi/faa/ALL_genomes.faa","type":"protein","nsequences":"4665857","ncharacters":"1437439366","updated_on":"Mar 4, 2023  11:07 AM","format":"5","categories":["genomes_ncbi","faa"],"id":"629eef5dd9b21f895b01feb4a9e58de8"},
-#           {"name":"/Users/avoorhis/programming/blast-db-testing/genomes_ncbi/fna/ALL_genomes.fna","title":"ftp_ncbi/fna/ALL_genomes.fna","type":"nucleotide","nsequences":"112918","ncharacters":"5541364068","updated_on":"Mar 4, 2023  12:14 PM","format":"5","categories":["genomes_ncbi","fna"],"id":"e17ac02845d0afc7c829031f011476d7"}
-#         ]
-        $ORGANISM = 'o-r-g'
-        mydataids = []
-        lookup = {}
-        $file_data.each do |i|
-           tmp = i[0].split("\t")
-           #puts "X",tmp,tmp[0],$gid
-           if tmp[0] == $gid
-             #puts 'Match'
-             # ["SEQF1595.2\tfaa\t45fd1a168c938b04c2a30ec725c0acdd"]
-             # ["SEQF1595.2\tfaa\t45fd1a168c938b04c2a30ec725c0acdd\torganism"]
-             tmp = i[0].split("\t")
-             #puts 'tmp[2]',tmp[2]
-             mydataids.push(tmp[2].strip())
-             if tmp.length >3
-               puts "Found #{tmp}"
-               lookup[tmp[2].strip()] = tmp[3].strip()
-             end
-           end
-        end
-        newdbs =[]
-        #puts 'mydataids',mydataids
-        #mydataids.each do |i|
-        #  puts "'"+i+"'"
-        #end
-        annoup = $ANNO.upcase
-        #puts 'anno',$ANNO
-        #puts 'annoup',annoup
-        Database.each do |i|
-          puts 'database inspect',i.inspect()
-          puts 'i.id',"'"+i.id+"'"
-          puts '1i.name',i.name
-          if mydataids.include? i.id
-            if lookup.has_key?(i.id)
-               $ORGANISM = lookup[i.id]
-            end
-            #puts '2i.name',i.name
-            #puts '$ORGANISM',$ORGANISM
-            if i.name.include? 'faa'
-              i.title = "#{annoup}::Annotated proteins (faa)"
-            elsif i.name.include? 'ffn'
-              i.title = "#{annoup}::Nucleotide Sequences of annotated proteins (ffn)"
-            else
-              i.title = "#{annoup}::Genomic DNA sequences/contigs (fna)"
-            end
-            i.title.concat("\n::#{$ORGANISM} (#{$gid})") 
-            #i.organism = $ORGANISM
-            newdbs.push(i)
-          end
-          #puts 'newdbs',newdbs
-          #<struct SequenceServer::Database 
-          #name="/Users/avoorhis/programming/blast-db-testing/HOMD_16S_rRNA_RefSeq_V15.22.fasta", 
-          #title="HOMD_16S_rRNA_RefSeq_V15.22.fasta", 
-          #type="nucleotide", 
-          #nsequences="1015", ncharacters="1363402", 
-          #updated_on="Mar 4, 2023  11:00 AM", 
-          #format="5", categories=[]>
-        end
-        #data.filter { |obj| obj.attr == 'value' }
-        # puts 'data'
-#         puts data
-        #puts 'mydataids'
-        #puts "inspect : #{mydataids.inspect()}\n\n"
-        #mydata.each do |i|
-        
-        #end
-        #Database.filter { |obj| obj.id == 'value' }
-        # puts 'Database.first'
-#         puts Database.first
-        #puts 'newdbs'
-        #puts "inspect : #{newdbs.inspect()}\n\n"
-        searchdata = {
-            query: Database.retrieve(params[:query]),
-            database: newdbs,
-            options: SequenceServer.config[:options]
-        }
-        erb :search_single, layout: true
-        
-        if SequenceServer.config[:databases_widget] == 'tree'
-            searchdata.update(tree: Database.tree)
-        end
+      searchdata = {
+        query: Database.retrieve(params[:query]),
+        database: Database.all,
+        options: SequenceServer.config[:options]
+      }
 
-          # If a job_id is specified, update searchdata from job meta data (i.e.,
-          # query, pre-selected databases, advanced options used). Query is only
-          # updated if params[:query] is not specified.
-        update_searchdata_from_job2(searchdata) if params[:job_id]
-        
-      else
-        $SINGLE = false
-        
-        searchdata = {
-            query: Database.retrieve(params[:query]),
-            #database: Database.all,
-            database: [],
-            options: SequenceServer.config[:options]
-        }
-        
-        if SequenceServer.config[:databases_widget] == 'tree'
-            searchdata.update(tree: Database.tree)
-        end
+      searchdata.update(tree: Database.tree) if SequenceServer.config[:databases_widget] == 'tree'
 
-          # If a job_id is specified, update searchdata from job meta data (i.e.,
-          # query, pre-selected databases, advanced options used). Query is only
-          # updated if params[:query] is not specified.
-        update_searchdata_from_job(searchdata) if params[:job_id]
-        
-      end
+      # If a job_id is specified, update searchdata from job meta data (i.e.,
+      # query, pre-selected databases, advanced options used). Query is only
+      # updated if params[:query] is not specified.
+      update_searchdata_from_job(searchdata) if params[:job_id]
 
-      
-      
-       #puts 'searchdata.to_json-after:'
-       #puts searchdata.to_json
-       
       searchdata.to_json
     end
 
@@ -255,22 +102,8 @@ module SequenceServer
         @input_sequence = params[:input_sequence]
         erb :search, layout: true
       else
-         # params:
-         # {"databases"=>["e17ac02845d0afc7c829031f011476d7"], 
-         # "sequence"=>"CTGGGCCGTGTCTCAGTCCCAATGTGGCCGTTTACCCTCTCAGGCCGGCTACGCATCATCGCCTTGGTGGGCCGTT", 
-         # "advanced"=>"-task blastn -evalue 1e-5", 
-         # "method"=>"blastn"
-         # }
         job = Job.create(params)
-        #puts 'job.id'
-        #puts job.id
-        if $HOMD_URL == 'localhost' || $HOMD_URL == ''
-           redirect to("/#{job.id}")
-        else
-           redirect to("/#{$HOMD_URL}/#{job.id}")
-        end
-                
-        
+        redirect to("/#{job.id}")
       end
     end
 
@@ -278,16 +111,40 @@ module SequenceServer
     # an empty body if the job hasn't finished yet.
     get '/:jid.json' do |jid|
       job = Job.fetch(jid)
+      halt 404, { error: 'Job not found' }.to_json if job.nil?
       halt 202 unless job.done?
-      Report.generate(job).to_json
+
+      report = Report.generate(job)
+      halt 202 unless report.done?
+
+      display_large_result_warning =
+        SequenceServer.config[:large_result_warning_threshold].to_i.positive? &&
+        params[:bypass_file_size_warning] != 'true' &&
+        report.xml_file_size > SequenceServer.config[:large_result_warning_threshold]
+
+      if display_large_result_warning
+        halt 200,
+             {
+               user_warning: 'LARGE_RESULT',
+               download_links: [
+                 { name: 'Standard Tabular Report', url: "download/#{jid}.std_tsv" },
+                 { name: 'Full Tabular Report', url: "/download/#{jid}.full_tsv" },
+                 { name: 'Results in XML', url: "/download/#{jid}.xml" }
+               ]
+             }.to_json
+      end
+
+      report.to_json
     end
 
     # Returns base HTML. Rest happens client-side: polling for and rendering
     # the results.
-    get '/:jid' do
+    get '/:jid' do |jid|
+      job = Job.fetch(jid)
+      halt 404, File.read(File.join(settings.root, 'public/404.html')) if job.nil?
+
       erb :report, layout: true
     end
-
     # @params sequence_ids: whitespace separated list of sequence ids to
     # retrieve
     # @params database_ids: whitespace separated list of database ids to
@@ -310,15 +167,69 @@ module SequenceServer
       database_ids = params['database_ids'].split(',')
       sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
       send_file(sequences.file.path,
-                type:     sequences.mime,
+                type: sequences.mime,
                 filename: sequences.filename)
     end
 
     # Download BLAST report in various formats.
     get '/download/:jid.:type' do |jid, type|
       job = Job.fetch(jid)
+      halt 404, { error: 'Job not found' }.to_json if job.nil?
       out = BLAST::Formatter.new(job, type)
-      send_file out.file, filename: out.filename, type: out.mime
+      halt 404, { error: 'File not found"' }.to_json unless File.exist?(out.filepath)
+      send_file out.filepath, filename: out.filename, type: out.mime
+    end
+
+    post '/cloud_share' do
+      content_type :json
+      request_params = JSON.parse(request.body.read)
+      job = Job.fetch(request_params['job_id'])
+      halt 404, { error: 'Job not found' }.to_json if job.nil?
+
+      unless job.done?
+        status 422
+        { errors: ["Job #{request_params['job_id']} is not finished yet."] }.to_json
+      end
+
+      unless SequenceServer.config[:cloud_share_url]
+        status 503
+        { errors: ['Sorry, cloud sharing is not enabled on this server.'] }.to_json
+      end
+
+      begin
+        job.as_archived_file do |archived_job_file|
+          cloud_share_response = RestClient.post(
+            SequenceServer.config[:cloud_share_url],
+            {
+              shared_job: {
+                sender: {
+                  email: request_params['sender_email']
+                },
+                archived_job_file: archived_job_file,
+                original_job_id: job.id
+              }
+            }
+          )
+
+          return cloud_share_response.body
+        end
+      rescue RestClient::ExceptionWithResponse => e
+        cloud_share_response = e.response
+
+        case cloud_share_response.code
+        when 413
+          halt 413,
+               { errors: ['Sorry, the results are too large to share, please consider \
+                  using https://sequenceserver.com/cloud'] }.to_json
+        when 422
+          halt 422, JSON.parse(cloud_share_response.body).to_json
+        else
+          error cloud_share_response.code,
+                { errors: ["Unexpected Cloudshare response: #{cloud_share_response.code}"] }.to_json
+        end
+      rescue Errno::ECONNREFUSED
+        error 503, { errors: ['Sorry, the cloud sharing server may not be running. Try again later.'] }.to_json
+      end
     end
 
     # Catches any exception raised within the app and returns JSON
@@ -345,6 +256,7 @@ module SequenceServer
     # more_info.
     error 400..500 do
       error = env['sinatra.error']
+      return unless error
 
       # All errors will have a message.
       error_data = { message: error.message }
@@ -365,16 +277,24 @@ module SequenceServer
         error_data[:more_info] = error.backtrace.join("\n")
       end
 
-      error_data.to_json
+      if request.env['HTTP_ACCEPT'].to_s.include?('application/json')
+        status 422
+        content_type :json
+        error_data.to_json
+      else
+        content_type :html
+        erb :error, locals: { error_data: error_data }, layout: true
+      end
     end
 
     # Get the query sequences, selected databases, and advanced params used.
     def update_searchdata_from_job(searchdata)
-      job = Job.fetch(params[:job_id])
+      job = fetch_job(params[:job_id])
+      return { error: 'Job not found' }.to_json if job.nil?
       return if job.imported_xml_file
 
       # Only read job.qfile if we are not going to use Database.retrieve.
-      searchdata[:query] = File.read(job.qfile) if !params[:query]
+      searchdata[:query] = File.read(job.qfile) unless params[:query]
 
       # Which databases to pre-select.
       searchdata[:preSelectedDbs] = job.databases
@@ -387,35 +307,22 @@ module SequenceServer
       # the user hits the back button. Thus we do not test for empty string.
       method = job.method.to_sym
       if job.advanced && job.advanced !=
-           searchdata[:options][method][:default].join(' ')
+                         searchdata[:options][method][:default].join(' ')
         searchdata[:options] = searchdata[:options].deep_copy
         searchdata[:options][method]['last search'] = [job.advanced]
       end
     end
-    # Get the query sequences, selected databases, and advanced params used.
-    # SINGLE
-    def update_searchdata_from_job2(searchdata)
-      job = Job.fetch(params[:job_id])
-      return if job.imported_xml_file
 
-      # Only read job.qfile if we are not going to use Database.retrieve.
-      searchdata[:query] = File.read(job.qfile) if !params[:query]
-
-      # Which databases to pre-select.
-      searchdata[:preSelectedDbs] = job.databases
-
-      # job.advanced may be nil in case of old jobs. In this case, we do not
-      # override searchdata so that default advanced parameters can be applied.
-      # Note that, job.advanced will be an empty string if a user deletes the
-      # default advanced parameters from the advanced params input field. In
-      # this case, we do want the advanced params input field to be empty when
-      # the user hits the back button. Thus we do not test for empty string.
-      method = job.method.to_sym
-      if job.advanced && job.advanced !=
-           searchdata[:options][method][:default].join(' ')
-        searchdata[:options] = searchdata[:options].deep_copy
-        searchdata[:options][method]['last search'] = [job.advanced]
+    helpers do
+      def root_path_prefix
+        settings.root_path_prefix.to_s
       end
+    end
+
+    private
+
+    def fetch_job(job_id)
+      Job.fetch(job_id)
     end
   end
 end

@@ -1,3 +1,13 @@
+-rw-r--r--  1 root   root        5697 Feb 12 15:32 genome-blast-alldb_stderr.log
+-rw-r--r--  1 root   root      267142 Feb 14 15:51 genome-blast-alldb_stdout.log
+-rw-r--r--  1 root   root    16258026 Feb 14 14:04 genome-blast-ncbi_stderr.log
+-rw-r--r--  1 root   root   137435121 Feb 15 06:45 genome-blast-ncbi_stdout.log
+-rw-r--r--  1 root   root    18985348 Feb 14 12:06 genome-blast-prokka_stderr.log
+-rw-r--r--  1 root   root   241089128 Feb 15 06:44 genome-blast-prokka_stdout.log
+-rw-r--r--  1 root   root        7494 Feb 12 15:32 refseq-blast_stderr.log
+-rw-r--r--  1 root   root        2818 Feb 15 06:17 refseq-blast_stdout.log
+
+
 see macbook 'notes' pgm
 
 sequenceserver
