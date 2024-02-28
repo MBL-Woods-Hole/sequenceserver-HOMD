@@ -3,13 +3,13 @@ require 'socket'
 require 'resolv'
 
 #localhost
-ENV['LOGFILE'] = '/Users/avoorhis/programming/SS.log'
+#ENV['LOGFILE'] = '/Users/avoorhis/programming/SS.log'
 
 #production
 #ENV['LOGFILE'] = '/mnt/efs/homd/sequenceserver.log'
 
 # development
-#ENV['LOGFILE'] = '/mnt/efs/homd-dev/sequenceserver.log'
+ENV['LOGFILE'] = '/mnt/efs/homd-dev/sequenceserver-access.log'
 # Top level module / namespace.
 module SequenceServer
   # The default version of BLAST that will be downloaded and configured for use.
