@@ -130,7 +130,7 @@ module SequenceServer
 
     # Queues a search job and redirects to `/:jid`.
     post '/' do
-      logger.info "Type: #{$DB_TYPE} #{request.ip} requested #{request.path_info}"
+      logger.info "Type: #{$HOMD_URL} #{request.ip} requested #{request.path_info}"
       #puts 'REMOTE_ADDR: '+request.env['REMOTE_ADDR']
       #puts 'params: ',params
       params['REMOTE_ADDR'] = request.env['REMOTE_ADDR']
