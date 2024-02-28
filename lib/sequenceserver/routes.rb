@@ -82,7 +82,8 @@ module SequenceServer
     get '/searchdata.json' do
       searchdata = {
         query: Database.retrieve(params[:query]),
-        database: Database.all,
+        #database: Database.all,
+        database: [],
         options: SequenceServer.config[:options]
       }
 
