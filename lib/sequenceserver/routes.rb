@@ -98,6 +98,7 @@ module SequenceServer
 
     # Queues a search job and redirects to `/:jid`.
     post '/' do
+      logger.info "Type: #{$HOMD_URL} #{request.ip} requested #{request.path_info}"
       if params[:input_sequence]
         @input_sequence = params[:input_sequence]
         erb :search, layout: true
