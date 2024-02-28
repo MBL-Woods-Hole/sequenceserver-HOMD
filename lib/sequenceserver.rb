@@ -6,10 +6,10 @@ require 'resolv'
 ENV['LOGFILE'] = '/Users/avoorhis/programming/SS.log'
 
 #production
-#ENV['LOGFILE'] = '/mnt/efs/homd/sequenceserver.log'
+#ENV['LOGFILE'] = '/mnt/efs/homd/sequenceserver-access.log'
 
 # development
-#ENV['LOGFILE'] = '/mnt/efs/homd-dev/sequenceserver.log'
+#ENV['LOGFILE'] = '/mnt/efs/homd-dev/sequenceserver-access.log'
 
 # Top level module / namespace.
 module SequenceServer
