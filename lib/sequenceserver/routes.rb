@@ -134,7 +134,7 @@ module SequenceServer
 #           {"name":"/Users/avoorhis/programming/blast-db-testing/genomes_ncbi/faa/ALL_genomes.faa","title":"ftp_ncbi/faa/ALL_genomes.faa","type":"protein","nsequences":"4665857","ncharacters":"1437439366","updated_on":"Mar 4, 2023  11:07 AM","format":"5","categories":["genomes_ncbi","faa"],"id":"629eef5dd9b21f895b01feb4a9e58de8"},
 #           {"name":"/Users/avoorhis/programming/blast-db-testing/genomes_ncbi/fna/ALL_genomes.fna","title":"ftp_ncbi/fna/ALL_genomes.fna","type":"nucleotide","nsequences":"112918","ncharacters":"5541364068","updated_on":"Mar 4, 2023  12:14 PM","format":"5","categories":["genomes_ncbi","fna"],"id":"e17ac02845d0afc7c829031f011476d7"}
 #         ]
-        $ORGANISM = 'o-r-g'
+        $ORGANISM = ''
         mydataids = []
         lookup = {}
         $file_data.each do |i|
