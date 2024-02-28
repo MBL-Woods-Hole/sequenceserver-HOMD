@@ -9,6 +9,7 @@ require 'sequenceserver/database'
 require 'sequenceserver/sequence'
 require 'sequenceserver/makeblastdb'
 
+
 module SequenceServer
   # Controller.
   class Routes < Sinatra::Base
@@ -61,6 +62,8 @@ module SequenceServer
 
     # For any request that hits the app,  log incoming params at debug level.
     before do
+      #username = env[‘REMOTE_USER’]}
+      
       logger.debug params
     end
 
@@ -98,7 +101,12 @@ module SequenceServer
     # Returns data that is used to render the search form client side. These
     # include available databases and user-defined search options.
     get '/searchdata.json' do
-      puts "in EDIT get '/searchdata.json' do"
+      #puts "in EDIT get '/searchdata.json' do"
+      #puts request
+      #puts 'HTTP_X_FORWARDED_FOR',request.env["HTTP_X_FORWARDED_FOR"]
+      #puts request.remote_addr
+      
+      #puts 'REMOTE_ADDR1: '+request.env['REMOTE_ADDR']
         #Database.clear  # gets rid of others
         #SequenceServer.init_database
         searchdata = {
@@ -122,12 +130,16 @@ module SequenceServer
 
     # Queues a search job and redirects to `/:jid`.
     post '/' do
+      logger.info "Type: #{$DB_TYPE} #{request.ip} requested #{request.path_info}"
+      #puts 'REMOTE_ADDR: '+request.env['REMOTE_ADDR']
+      #puts 'params: ',params
+      params['REMOTE_ADDR'] = request.env['REMOTE_ADDR']
       if params[:input_sequence]
         @input_sequence = params[:input_sequence]
         erb :search, layout: true
       else
         job = Job.create(params)
-        puts "Looking for HOMD_URL: #{$HOMD_URL}"
+        #puts "Looking for HOMD_URL: #{$HOMD_URL}"
         if $HOMD_URL == 'localhost' || $HOMD_URL == ''
            redirect to("/#{job.id}")
         else
