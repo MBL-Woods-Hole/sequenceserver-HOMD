@@ -124,8 +124,8 @@ module SequenceServer
     post '/' do
       
       logger.info "IP:#{request.ip}: URL:#{$HOMD_URL}"
-      logger.info "seq1:"+params[:input_sequence].to_s[0,20]
-      puts 'seq2',params[:input_sequence].to_s
+      logger.info "seq1:"+params.to_s
+      
       if params[:input_sequence]
         @input_sequence = params[:input_sequence]
         logger.info "IP:#{request.ip}: URL:#{$HOMD_URL}: Sequence20-1:"+@input_sequence.to_s[0,20]
