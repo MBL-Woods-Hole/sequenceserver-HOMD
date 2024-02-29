@@ -191,19 +191,7 @@ module SequenceServer
           #updated_on="Mar 4, 2023  11:00 AM", 
           #format="5", categories=[]>
         end
-        #data.filter { |obj| obj.attr == 'value' }
-        # puts 'data'
-#         puts data
-        #puts 'mydataids'
-        #puts "inspect : #{mydataids.inspect()}\n\n"
-        #mydata.each do |i|
-        
-        #end
-        #Database.filter { |obj| obj.id == 'value' }
-        # puts 'Database.first'
-#         puts Database.first
-        #puts 'newdbs'
-        #puts "inspect : #{newdbs.inspect()}\n\n"
+ 
         searchdata = {
             query: Database.retrieve(params[:query]),
             database: newdbs,
@@ -251,16 +239,18 @@ module SequenceServer
 
     # Queues a search job and redirects to `/:jid`.
     post '/' do
+        # params:
+        # {"databases"=>["e17ac02845d0afc7c829031f011476d7"], 
+        # "sequence"=>"CTGGGCCGTGTCTCAGTCCCAATGTGGCCGTTTACCCTCTCAGGCCGGCTACGCATCATCGCCTTGGTGGGCCGTT", 
+        # "advanced"=>"-task blastn -evalue 1e-5", 
+        # "method"=>"blastn"
+        # }}
+      logger.info "IP:#{request.ip}: URL:#{$HOMD_URL}: Sequence20:#{params[:input_sequence][0,20]}"
       if params[:input_sequence]
         @input_sequence = params[:input_sequence]
         erb :search, layout: true
       else
-         # params:
-         # {"databases"=>["e17ac02845d0afc7c829031f011476d7"], 
-         # "sequence"=>"CTGGGCCGTGTCTCAGTCCCAATGTGGCCGTTTACCCTCTCAGGCCGGCTACGCATCATCGCCTTGGTGGGCCGTT", 
-         # "advanced"=>"-task blastn -evalue 1e-5", 
-         # "method"=>"blastn"
-         # }
+         
         job = Job.create(params)
         #puts 'job.id'
         #puts job.id

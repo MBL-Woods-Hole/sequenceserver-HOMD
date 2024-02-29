@@ -12,8 +12,10 @@ import argparse
 import csv,re
 import hashlib
 #from Bio import SeqIO
-sys.path.append('../homd-data/')
-sys.path.append('../../homd-data/')
+
+sys.path.append('/Users/avoorhis/programming/homd-scripts/')
+sys.path.append('/home/ubuntu/homd-work')
+
 from connect import MyConnection,mysql
 import datetime
 def md5(args):
@@ -35,9 +37,11 @@ def md5(args):
     print("The hexadecimal equivalent of hash is : ", end ="")
     print(result.hexdigest())
 
-def get_org(g):
+def get_organism(g):
     q = "SELECT organism from genomes where seq_id='%s'"  % (g)
-    
+    print(q)
+    result = myconn.execute_fetch_one(q)
+    return result[0]
 def run(args):
     collector = {}
     
@@ -49,7 +53,7 @@ def run(args):
              ext = file_pts[2]
              genome = file_pts[0]+'.'+file_pts[1]
              org = get_organism(genome)
-             console.log('org',org)
+             print('org',org)
              path = root+'/'+genome+'.'+ext
              #print(root,ext,genome,path)
              id = result = hashlib.md5(path.encode())
