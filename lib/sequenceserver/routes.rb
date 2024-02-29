@@ -126,9 +126,10 @@ module SequenceServer
       logger.info "IP:#{request.ip}: URL:#{$HOMD_URL}"
       if params[:input_sequence]
         @input_sequence = params[:input_sequence]
-        logger.info "IP:#{request.ip}: URL:#{$HOMD_URL}: Sequence20:#{@input_sequence[0,20]}"
+        logger.info "IP:#{request.ip}: URL:#{$HOMD_URL}: Sequence20-1:#{@input_sequence[0,20]}"
         erb :search, layout: true
       else
+        logger.info "IP:#{request.ip}: URL:#{$HOMD_URL}: Sequence20-2:#{@input_sequence[0,20]}"
         job = Job.create(params)
         #puts "Looking for HOMD_URL: #{$HOMD_URL}"
         if $HOMD_URL == 'localhost' || $HOMD_URL == ''
