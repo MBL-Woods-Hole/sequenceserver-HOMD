@@ -124,10 +124,10 @@ module SequenceServer
     post '/' do
       
       logger.info "IP:#{request.ip}: URL:#{$HOMD_URL}"
-      logger.info "seq:"+params[:input_sequence][0,20]
+      logger.info "seq:"+params[:input_sequence].to_s[0,20]
       if params[:input_sequence]
         @input_sequence = params[:input_sequence]
-        logger.info "IP:#{request.ip}: URL:#{$HOMD_URL}: Sequence20-1:"+@input_sequence[0,20]
+        logger.info "IP:#{request.ip}: URL:#{$HOMD_URL}: Sequence20-1:"+@input_sequence.to_s[0,20]
         erb :search, layout: true
       else
         #logger.info "IP:#{request.ip}: URL:#{$HOMD_URL}: Sequence20-2:#{@input_sequence[0,20]}"
