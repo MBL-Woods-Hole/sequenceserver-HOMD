@@ -122,10 +122,11 @@ module SequenceServer
 
     # Queues a search job and redirects to `/:jid`.
     post '/' do
-      logger.info "IP:#{request.ip}: URL:#{$HOMD_URL}: Sequence20:#{params[:input_sequence][0,20]}"
+      
       
       if params[:input_sequence]
         @input_sequence = params[:input_sequence]
+        logger.info "IP:#{request.ip}: URL:#{$HOMD_URL}: Sequence20:#{@input_sequence[0,20]}"
         erb :search, layout: true
       else
         job = Job.create(params)
