@@ -245,7 +245,7 @@ module SequenceServer
         # "advanced"=>"-task blastn -evalue 1e-5", 
         # "method"=>"blastn"
         # }}
-      logger.info "IP:#{request.ip}: URL:#{$HOMD_URL}: Sequence20:#{params[:input_sequence][0,20]}"
+      logger.info "IP:#{request.ip}: URL:#{$HOMD_URL} Sequence20:"+params.fetch(:sequence)[0,20]
       if params[:input_sequence]
         @input_sequence = params[:input_sequence]
         erb :search, layout: true
