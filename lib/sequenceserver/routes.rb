@@ -123,7 +123,7 @@ module SequenceServer
     # Queues a search job and redirects to `/:jid`.
     post '/' do
       
-      logger.info "IP:#{request.ip}: URL:#{$HOMD_URL} sequence20:"+params.fetch(:sequence)[0,20]
+      logger.info "IP:#{request.ip}: URL:#{$HOMD_URL} Sequence20:"+params.fetch(:sequence)[0,20]
       
       if params[:input_sequence]
         @input_sequence = params[:input_sequence]
