@@ -63,7 +63,6 @@ module SequenceServer
     # For any request that hits the app,  log incoming params at debug level.
     before do
       #username = env[‘REMOTE_USER’]}
-      
       logger.debug params
     end
 
@@ -101,14 +100,7 @@ module SequenceServer
     # Returns data that is used to render the search form client side. These
     # include available databases and user-defined search options.
     get '/searchdata.json' do
-      #puts "in EDIT get '/searchdata.json' do"
-      #puts request
-      #puts 'HTTP_X_FORWARDED_FOR',request.env["HTTP_X_FORWARDED_FOR"]
-      #puts request.remote_addr
       
-      #puts 'REMOTE_ADDR1: '+request.env['REMOTE_ADDR']
-        #Database.clear  # gets rid of others
-        #SequenceServer.init_database
         searchdata = {
             query: Database.retrieve(params[:query]),
             database: Database.all,
@@ -130,10 +122,8 @@ module SequenceServer
 
     # Queues a search job and redirects to `/:jid`.
     post '/' do
-      logger.info "IP:#{request.ip}: Type:#{$HOMD_URL}: Requested:#{request.path_info}"
-      #puts 'REMOTE_ADDR: '+request.env['REMOTE_ADDR']
-      #puts 'params: ',params
-      params['REMOTE_ADDR'] = request.env['REMOTE_ADDR']
+      logger.info "IP:#{request.ip}: URL:#{$HOMD_URL}: Sequence20:#{params[:input_sequence][0,20]}"
+      
       if params[:input_sequence]
         @input_sequence = params[:input_sequence]
         erb :search, layout: true
