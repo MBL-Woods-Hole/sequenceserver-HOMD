@@ -60,9 +60,10 @@ def run(args):
              path = root+'/'+genome+'.'+ext
              #print(root,ext,genome,path)
              id = result = hashlib.md5(path.encode())
-             collector[path] = {"g":genome,"e":ext,"i":id.hexdigest(),"p":path}
+             collector[path] = {"g":genome,"e":ext,"i":id.hexdigest(),'o':org,"p":path}
     
-    fmt = args.outfmt.split(',')  # g,e,i
+    #fmt = args.outfmt.split(',')  # g,e,i
+    fmt = 'g,e,i,o'
     for path in collector:
         for letter in fmt:
             if letter == fmt[-1]:

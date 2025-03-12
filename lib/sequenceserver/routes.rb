@@ -181,6 +181,7 @@ module SequenceServer
             end
             i.title.concat("\n::#{$ORGANISM} (#{$gid})") 
             #i.organism = $ORGANISM
+            puts "new DBs: i-2",i
             newdbs.push(i)
           end
           #puts 'newdbs',newdbs
@@ -192,7 +193,7 @@ module SequenceServer
           #updated_on="Mar 4, 2023  11:00 AM", 
           #format="5", categories=[]>
         end
-       puts "new DBs:",newdbs
+        puts "new DBs:",newdbs.length
         searchdata = {
             query: Database.retrieve(params[:query]),
             database: newdbs,
