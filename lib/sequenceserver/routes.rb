@@ -167,6 +167,7 @@ module SequenceServer
           puts 'i.id',"'"+i.id+"'"
           puts '1i.name',i.name
           if mydataids.include? i.id
+            puts "in mydataids"
             if lookup.has_key?(i.id)
                $ORGANISM = lookup[i.id]
             end

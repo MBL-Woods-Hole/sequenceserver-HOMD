@@ -44,6 +44,7 @@ def get_organism(g):
     return result[0]
     
 def run(args):
+    print('in run')
     collector = {}
     ext_list = ['faa','ffn','fna']
     
@@ -60,7 +61,7 @@ def run(args):
              path = root+'/'+genome+'.'+ext
              #print(root,ext,genome,path)
              id = result = hashlib.md5(path.encode())
-             collector[path] = {"g":genome,"e":ext,"i":id.hexdigest(),'o':org,"p":path}
+             collector[path] = {"g":genome,"e":ext,"i":id.hexdigest(),"o":org,"p":path}
     
     #fmt = args.outfmt.split(',')  # g,e,i
     fmt = 'g,e,i,o'
@@ -86,7 +87,7 @@ if __name__ == "__main__":
           ./blast_get_SS_databaseIDs.py -i /mnt/xvdb/blastdb/genomes_prokka/V11.0 > PROKKA-IDs.csv
           
           { 
-            localhost: /User/avoorhis/programming/blast_db/genomes
+            localhost: /User/avoorhis/programming/blast_db/genomes_prokka
                        /User/avoorhis/programming/blast_db/genomes_ncbi
           }
         -i reqired infile: path to search for single blast databases
