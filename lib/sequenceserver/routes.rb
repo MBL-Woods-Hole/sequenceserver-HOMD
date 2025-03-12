@@ -192,7 +192,7 @@ module SequenceServer
           #updated_on="Mar 4, 2023  11:00 AM", 
           #format="5", categories=[]>
         end
- 
+       puts "new DBs:",newdbs
         searchdata = {
             query: Database.retrieve(params[:query]),
             database: newdbs,
