@@ -16,10 +16,14 @@ https://support.sequenceserver.com/t/blast-against-between-two-sequence-database
 
 ### Helpful commands
 ```
-push to .42
-rsync -avzhe "ssh -i ~/.ssh/andy.pem" genome_database_ids.txt ubuntu@homd.info:genome_database_ids2.txt
-then pull to local
-rsync -avzhe "ssh -i ~/.ssh/andy.pem" ubuntu@homd.info:genome_database_ids2.txt genome_database_ids2.txt
+push to sequenceserver (currently 192.168.1.61 or 1.60)
+
+
+PUSH to server from localhost: BYPASS gateway
+scp  -i ~/.ssh/andy.pem -o "ProxyCommand ssh -i ~/.ssh/andy.pem ubuntu@homd.info -W %h:%p" FILENAME ubuntu@192.168.1.61:
+PULL FROM localhost 
+scp  -i ~/.ssh/andy.pem -o "ProxyCommand ssh -i ~/.ssh/andy.pem ubuntu@homd.info -W %h:%p" ubuntu@192.168.1.102:FILENAME ./
+
 
 -To re-write the *.min.js files and run webpack (compiles sequenceserver-search.min.js and sequenceserver-report.min.js):
 "npm run build" in the SS directory
@@ -30,6 +34,15 @@ sudo systemcmd stop SS-XXX;
 bundle exec bin/sequenceserver -D -c ~/.sequenceserver-XXX.conf (you may need to 'npm run build' if edited recently)
 ```
 
+### Important for singles: prokka and ncbi
+Must regenerate NCBI-IDs.csv and PROKKA-IDs.csv
+by running 'blast_get_SS_databaseIDs.py' with correct infile for blast directory
+These files have format:
+genome_id<TAB>ext<TAB>directory hash
+where ext is fna or ffn or faa
+and dirctory hash is created in the py script
+These files are placed in the root directories of the singles node app on the sequence server
+They should be recreated when new genomes are added.
 ---
 ## HOMD Setup and Administration:
 ### On 192.168.1.60 (the BLAST-Server)

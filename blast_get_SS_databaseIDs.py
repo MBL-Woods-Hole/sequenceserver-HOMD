@@ -38,28 +38,31 @@ def md5(args):
     print(result.hexdigest())
 
 def get_organism(g):
-    q = "SELECT organism from genomes where seq_id='%s'"  % (g)
-    print(q)
+    q = "SELECT organism from `genomesV11.0` where genome_id='%s'"  % (g)
+    #print(q)
     result = myconn.execute_fetch_one(q)
     return result[0]
+    
 def run(args):
     collector = {}
+    ext_list = ['faa','ffn','fna']
     
     for (root,dirs,files) in os.walk(args.indir, topdown=True):
-       for file in files:
-          if file.startswith('SEQF'):
-             
+       for file in files:  
+          
+          if file.startswith('GCA'):
+             #print(file)
              file_pts = file.split('.') # eg  SEQF1595.2.faa.psq
              ext = file_pts[2]
              genome = file_pts[0]+'.'+file_pts[1]
              org = get_organism(genome)
-             print('org',org)
+             #print('org',org)
              path = root+'/'+genome+'.'+ext
              #print(root,ext,genome,path)
              id = result = hashlib.md5(path.encode())
              collector[path] = {"g":genome,"e":ext,"i":id.hexdigest(),"p":path}
     
-    fmt = args.outfmt.split(',')  # p,e,i,g
+    fmt = args.outfmt.split(',')  # g,e,i
     for path in collector:
         for letter in fmt:
             if letter == fmt[-1]:
@@ -78,9 +81,13 @@ if __name__ == "__main__":
            *** IMPORTANT the indirectory must be the same as in the database_dir from the SS.conf file
               currently: /mnt/xvdb/blastdb/genomes_prokka/V10.1/
               
-          ./blast_get_SS_databaseIDs.py -i /mnt/xvdb/blastdb/genomes_ncbi/V10.1 > NCBI-IDs.csv
-          ./blast_get_SS_databaseIDs.py -i /mnt/xvdb/blastdb/genomes_prokka/V10.1 > PROKKA-IDs.csv
+          ./blast_get_SS_databaseIDs.py -i /mnt/xvdb/blastdb/genomes_ncbi/V11.0 > NCBI-IDs.csv
+          ./blast_get_SS_databaseIDs.py -i /mnt/xvdb/blastdb/genomes_prokka/V11.0 > PROKKA-IDs.csv
           
+          { 
+            localhost: /User/avoorhis/programming/blast_db/genomes
+                       /User/avoorhis/programming/blast_db/genomes_ncbi
+          }
         -i reqired infile: path to search for single blast databases
         
         Install both NCBI-IDs.csv and PROKKA-IDs.csv  into the root directories of the SS server:
@@ -112,14 +119,14 @@ if __name__ == "__main__":
     
     #parser.print_help(usage)
                         
-    if args.dbhost == 'homd':
+    if args.dbhost == 'homd_dev':
         #args.json_file_path = '/groups/vampsweb/vamps/nodejs/json'
         #args.TAX_DATABASE = 'HOMD_taxonomy'
         args.DATABASE = 'homd'
         #dbhost_old = '192.168.1.51'
-        dbhost= '192.168.1.42'   #TESTING is 1.42  PRODUCTION is 1.40
+        dbhost= '192.168.1.46'   #
         args.prettyprint = False
-        #args.ncbi_dir = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1/GCA_V10.1_all'
+        #args.indr = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1/GCA_V10.1_all'
         #args.prokka_dir = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1/prokka_V10.1_all'
         
     elif args.dbhost == 'localhost':

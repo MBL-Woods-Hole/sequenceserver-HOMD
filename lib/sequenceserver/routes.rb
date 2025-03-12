@@ -125,6 +125,7 @@ module SequenceServer
         else
           #$ids_fn = './genome_blastdbIds_prokkaHASH.csv'
           $ids_fn = './PROKKA-IDs.csv'
+          puts "gid is #{$gid}"
           puts "Reading PROKKA ID File #{$ids_fn}"
         end
         $file_data = CSV.parse(File.read($ids_fn), headers: false)
@@ -206,6 +207,7 @@ module SequenceServer
           # If a job_id is specified, update searchdata from job meta data (i.e.,
           # query, pre-selected databases, advanced options used). Query is only
           # updated if params[:query] is not specified.
+        puts "Entering update_searchdata_from_job2"
         update_searchdata_from_job2(searchdata) if params[:job_id]
         
       else
