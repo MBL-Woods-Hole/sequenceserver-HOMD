@@ -151,7 +151,7 @@ module SequenceServer
              #print 'tmp[2]',tmp[2], "\n"
              mydataids.push(hash_dir_id)
              if row_items.length > 3  # means organism present
-               print "Found #{tmp}", "\n"
+               print "Found #{row_items}", "\n"
                organism_lookup[hash_dir_id] = row_items[3].strip()
              end
            end
