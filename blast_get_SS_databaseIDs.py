@@ -58,6 +58,7 @@ def run(args):
              ext = file_pts[2]
              genome = file_pts[0]+'.'+file_pts[1]
              org = get_organism(genome)
+             org = org.replace('"','')
              #print('org',org)
              path = root+'/'+genome+'.'+ext
              #print(root,ext,genome,path)
