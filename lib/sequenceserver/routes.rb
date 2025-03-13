@@ -137,21 +137,22 @@ module SequenceServer
 #         ]
         $ORGANISM = ''
         mydataids = []
-        lookup = {}
+        organism_lookup = {}
         $file_data.each do |i|
-           print "i", i, "\n"
-           tmp = i[0].split("\t")
-           print "X",tmp,tmp[0],$gid, "\n"
-           if tmp[0] == $gid
+           print "i ", i, "\n"
+           row_items = i[0].split("\t")
+           print "row_items: ",row_items," gid: ",$gid, "\n"
+           if row_items[0] == $gid  
+             hash_dir_id = row_items[2].strip() # this is database ID (hashed dir path)
              #puts 'Match', "\n"
              # ["SEQF1595.2\tfaa\t45fd1a168c938b04c2a30ec725c0acdd"]
              # ["SEQF1595.2\tfaa\t45fd1a168c938b04c2a30ec725c0acdd\torganism"]
-             tmp = i[0].split("\t")
+             
              #print 'tmp[2]',tmp[2], "\n"
-             mydataids.push(tmp[2].strip())
-             if tmp.length >3
+             mydataids.push(hash_dir_id)
+             if row_items.length > 3  # means organism present
                print "Found #{tmp}", "\n"
-               lookup[tmp[2].strip()] = tmp[3].strip()
+               organism_lookup[hash_dir_id] = row_items[3].strip()
              end
            end
         end
@@ -169,7 +170,7 @@ module SequenceServer
           print '1i.name',i.name, "\n"
           if mydataids.include? i.id
             print "in mydataids", "\n"
-            if lookup.has_key?(i.id)
+            if organism_lookup.has_key?(i.id)
                $ORGANISM = lookup[i.id]
             end
             #print '2i.name',i.name
