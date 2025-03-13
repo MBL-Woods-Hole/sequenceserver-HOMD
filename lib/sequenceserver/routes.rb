@@ -141,7 +141,7 @@ module SequenceServer
         $file_data.each do |i|
            logger.debug "i: #{i}\n"
            row_items = i[0].split("\t")
-           logger.debug "row_items: "+row_items.join("', '")}+" gid: #{$gid}\n"
+           logger.debug "row_items: "+row_items.join("', '")+" gid: #{$gid}\n"
            if row_items[0] == $gid  
              hash_dir_id = row_items[2].strip() # this is database ID (hashed dir path)
              #puts 'Match', "\n"
@@ -157,7 +157,7 @@ module SequenceServer
            end
         end
         newdbs =[]
-        logger.debug 'mydataids: '+mydataids.join("', '")}+ "\n"
+        logger.debug 'mydataids: '+mydataids.join("', '")+ "\n"
         #mydataids.each do |i|
         #  print "'"+i+"'"
         #end
