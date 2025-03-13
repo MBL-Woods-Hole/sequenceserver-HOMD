@@ -139,7 +139,7 @@ module SequenceServer
         mydataids = []
         organism_lookup = {}
         $file_data.each do |i|
-           print "i ", i, "\n"
+           print "i: ", i, "\n"
            row_items = i[0].split("\t")
            print "row_items: ",row_items," gid: ",$gid, "\n"
            if row_items[0] == $gid  
@@ -151,13 +151,13 @@ module SequenceServer
              #print 'tmp[2]',tmp[2], "\n"
              mydataids.push(hash_dir_id)
              if row_items.length > 3  # means organism present
-               print "Found #{row_items}", "\n"
+               print "Found #{row_items}\n"
                organism_lookup[hash_dir_id] = row_items[3].strip()
              end
            end
         end
         newdbs =[]
-        print 'mydataids',mydataids, "\n"
+        print 'mydataids: ',mydataids, "\n"
         #mydataids.each do |i|
         #  print "'"+i+"'"
         #end
@@ -165,9 +165,9 @@ module SequenceServer
         #print 'anno',$ANNO
         #print 'annoup',annoup
         Database.each do |i|
-          print 'database inspect',i.inspect(), "\n"
-          print 'i.id',"'"+i.id+"'", "\n"
-          print '1i.name',i.name, "\n"
+          print 'database inspect: ',i.inspect(), "\n"
+          print 'i.id: ',"'"+i.id+"'", "\n"
+          print '1i.name: ',i.name, "\n"
           if mydataids.include? i.id
             print "in mydataids", "\n"
             if organism_lookup.has_key?(i.id)
@@ -182,9 +182,9 @@ module SequenceServer
             else
               i.title = "#{annoup}::Genomic DNA sequences/contigs (fna)"
             end
-            i.title.concat("\n::#{$ORGANISM} (#{$gid})") 
+            i.title.concat("<br>::#{$ORGANISM} (#{$gid})") 
             #i.organism = $ORGANISM
-            print "new DBs: i-2",i, "\n"
+            print "new DB: ",i, "\n"
             newdbs.push(i)
           end
           #puts 'newdbs',newdbs
@@ -196,7 +196,7 @@ module SequenceServer
           #updated_on="Mar 4, 2023  11:00 AM", 
           #format="5", categories=[]>
         end
-        print "new DBs:",newdbs.length, "\n"
+        print "new DBs: ",newdbs.length, "\n"
         searchdata = {
             query: Database.retrieve(params[:query]),
             database: newdbs,
