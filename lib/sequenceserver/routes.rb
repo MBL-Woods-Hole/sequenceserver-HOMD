@@ -139,7 +139,7 @@ module SequenceServer
         mydataids = []
         organism_lookup = {}
         $file_data.each do |i|
-           logger.debug "i: ", i, "\n"
+           logger.debug "i: #{i}\n"
            row_items = i[0].split("\t")
            logger.debug "row_items: "+row_items.map{ |s| "'#{ s }'"}+" gid: #{$gid}\n"
            if row_items[0] == $gid  
