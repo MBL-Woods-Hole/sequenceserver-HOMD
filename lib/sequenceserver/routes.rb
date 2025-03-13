@@ -166,8 +166,8 @@ module SequenceServer
         #print 'annoup',annoup
         Database.each do |i|
           print 'database inspect: ',i.inspect(), "\n"
-          print 'i.id: ',"'"+i.id+"'", "\n"
-          print '1i.name: ',i.name, "\n"
+          print 'i.id (hash): ',"'"+i.id+"'", "\n"
+          print '1i.name (db path): ',i.name, "\n"
           if mydataids.include? i.id
             print "in mydataids", "\n"
             if organism_lookup.has_key?(i.id)
@@ -182,7 +182,8 @@ module SequenceServer
             else
               i.title = "#{annoup}::Genomic DNA sequences/contigs (fna)"
             end
-            i.title.concat("<br>::#{$ORGANISM} (#{$gid})") 
+            #i.title.concat("<br>::#{$ORGANISM} (#{$gid})") 
+            i.title.concat(" :: (#{$gid})") 
             #i.organism = $ORGANISM
             print "new DB: ",i, "\n"
             newdbs.push(i)
