@@ -139,9 +139,9 @@ module SequenceServer
         mydataids = []
         organism_lookup = {}
         $file_data.each do |i|
-           logger.debug "i: #{i}\n"
+           logger.debug "i: #{i}"
            row_items = i[0].split("\t")
-           logger.debug "row_items: "+row_items.join("', '")+" gid: #{$gid}\n"
+           logger.debug "row_items: "+row_items.join("', '")+" gid: #{$gid}"
            if row_items[0] == $gid  
              hash_dir_id = row_items[2].strip() # this is database ID (hashed dir path)
              #puts 'Match', "\n"
@@ -151,13 +151,13 @@ module SequenceServer
              #print 'tmp[2]',tmp[2], "\n"
              mydataids.push(hash_dir_id)
              if row_items.length > 3  # means organism present
-               logger.debug "Found #{row_items}\n"
+               logger.debug "Found #{row_items}"
                organism_lookup[hash_dir_id] = row_items[3].strip()
              end
            end
         end
         newdbs =[]
-        logger.debug 'mydataids: '+mydataids.join("', '")+ "\n"
+        logger.debug 'mydataids: '+mydataids.join("', '")
         #mydataids.each do |i|
         #  print "'"+i+"'"
         #end
@@ -165,11 +165,11 @@ module SequenceServer
         #print 'anno',$ANNO
         #print 'annoup',annoup
         Database.each do |i|
-          logger.debug "database inspect: #{i.inspect()}\n"
-          logger.debug "i.id (hash): #{i.id}\n"
-          logger.debug "1i.name (db path): #{i.name}\n"
+          logger.debug "database inspect: #{i.inspect()}"
+          logger.debug "i.id (hash): #{i.id}"
+          logger.debug "1i.name (db path): #{i.name}"
           if mydataids.include? i.id
-            logger.debug "in mydataids\n"
+            logger.debug "in mydataids"
             if organism_lookup.has_key?(i.id)
                $ORGANISM = organism_lookup[i.id]
             end
@@ -185,7 +185,7 @@ module SequenceServer
             #i.title.concat("<br>::#{$ORGANISM} (#{$gid})") 
             i.title.concat(" :: (#{$gid})") 
             #i.organism = $ORGANISM
-            logger.debug "new DB: #{i}\n"
+            logger.debug "new DB: #{i}"
             newdbs.push(i)
           end
           #puts 'newdbs',newdbs
@@ -197,7 +197,7 @@ module SequenceServer
           #updated_on="Mar 4, 2023  11:00 AM", 
           #format="5", categories=[]>
         end
-        logger.debug "new DBs count: #{newdbs.length}\n"
+        logger.debug "new DBs count: #{newdbs.length}"
         searchdata = {
             query: Database.retrieve(params[:query]),
             database: newdbs,
@@ -212,7 +212,7 @@ module SequenceServer
           # If a job_id is specified, update searchdata from job meta data (i.e.,
           # query, pre-selected databases, advanced options used). Query is only
           # updated if params[:query] is not specified.
-        logger.debug "Entering update_searchdata_from_job2\n"
+        logger.debug "Entering update_searchdata_from_job2"
         update_searchdata_from_job2(searchdata) if params[:job_id]
         
       else
