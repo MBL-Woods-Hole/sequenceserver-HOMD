@@ -4,8 +4,8 @@ sequenceserver
 BLAST server
 
 localhost (macbook)
-just run 'sequenceserver'   /usr/local/bin/sequenceserver
-will open http://localhost:4567/  (from /Users/avoorhis/programming/sequenceserver/)
+just run 'bundle exec bin/sequenceserver -D'  in /Users/avoorhis/programming/sequenceserver-HOMD
+will open http://localhost:4567/ 
 -edit the *.js files then run
  "npm run build" to update the webpack file.
  
