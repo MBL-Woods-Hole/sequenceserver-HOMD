@@ -171,7 +171,7 @@ module SequenceServer
           if mydataids.include? i.id
             print "in mydataids", "\n"
             if organism_lookup.has_key?(i.id)
-               $ORGANISM = lookup[i.id]
+               $ORGANISM = organism_lookup[i.id]
             end
             #print '2i.name',i.name
             #print '$ORGANISM',$ORGANISM
