@@ -117,16 +117,16 @@ module SequenceServer
         $DB_TO_SHOW = $gid
         if $DEV_HOST == 'AVhome'
           $ids_fn = './LOCAL-IDs.csv'
-          logger.debug "Reading LOCAL ID File #{$ids_fn}", "\n"
+          logger.debug "Reading LOCAL ID File #{$ids_fn}\n"
         elsif $ANNO == 'ncbi'
           #$ids_fn = './genome_blastdbIds_ncbiHASH.csv'
           $ids_fn = './NCBI-IDs.csv'
-          logger.debug "Reading NCBI ID File #{$ids_fn}", "\n"
+          logger.debug "Reading NCBI ID File #{$ids_fn}\n"
         else
           #$ids_fn = './genome_blastdbIds_prokkaHASH.csv'
           $ids_fn = './PROKKA-IDs.csv'
-          logger.debug "gid is #{$gid}", '\n'
-          logger.debug "Reading PROKKA ID File #{$ids_fn}", "\n"
+          logger.debug "gid is #{$gid}\n"
+          logger.debug "Reading PROKKA ID File #{$ids_fn}\n"
         end
         $file_data = CSV.parse(File.read($ids_fn), headers: false)
         #puts 'ANNO',$ANNO
@@ -141,7 +141,7 @@ module SequenceServer
         $file_data.each do |i|
            logger.debug "i: ", i, "\n"
            row_items = i[0].split("\t")
-           logger.debug "row_items: ",row_items," gid: ",$gid, "\n"
+           logger.debug "row_items: "+row_items.map{ |s| "'#{ s }'"}+" gid: #{$gid}\n"
            if row_items[0] == $gid  
              hash_dir_id = row_items[2].strip() # this is database ID (hashed dir path)
              #puts 'Match', "\n"
@@ -157,7 +157,7 @@ module SequenceServer
            end
         end
         newdbs =[]
-        logger.debug 'mydataids: ',mydataids, "\n"
+        logger.debug 'mydataids: '+mydataids.map{ |s| "'#{ s }'"}+ "\n"
         #mydataids.each do |i|
         #  print "'"+i+"'"
         #end
@@ -165,11 +165,11 @@ module SequenceServer
         #print 'anno',$ANNO
         #print 'annoup',annoup
         Database.each do |i|
-          logger.debug 'database inspect: ',i.inspect(), "\n"
-          logger.debug 'i.id (hash): ',"'"+i.id+"'", "\n"
-          logger.debug '1i.name (db path): ',i.name, "\n"
+          logger.debug "database inspect: #{i.inspect()}\n"
+          logger.debug "i.id (hash): #{i.id}\n"
+          logger.debug "1i.name (db path): #{i.name}\n"
           if mydataids.include? i.id
-            logger.debug "in mydataids", "\n"
+            logger.debug "in mydataids\n"
             if organism_lookup.has_key?(i.id)
                $ORGANISM = organism_lookup[i.id]
             end
@@ -185,7 +185,7 @@ module SequenceServer
             #i.title.concat("<br>::#{$ORGANISM} (#{$gid})") 
             i.title.concat(" :: (#{$gid})") 
             #i.organism = $ORGANISM
-            logger.debug "new DB: ",i, "\n"
+            logger.debug "new DB: #{i}\n"
             newdbs.push(i)
           end
           #puts 'newdbs',newdbs
@@ -197,7 +197,7 @@ module SequenceServer
           #updated_on="Mar 4, 2023  11:00 AM", 
           #format="5", categories=[]>
         end
-        logger.debug "new DBs: ",newdbs.length, "\n"
+        logger.debug "new DBs count: #{newdbs.length}\n"
         searchdata = {
             query: Database.retrieve(params[:query]),
             database: newdbs,
@@ -212,7 +212,7 @@ module SequenceServer
           # If a job_id is specified, update searchdata from job meta data (i.e.,
           # query, pre-selected databases, advanced options used). Query is only
           # updated if params[:query] is not specified.
-        logger.debug "Entering update_searchdata_from_job2", "\n"
+        logger.debug "Entering update_searchdata_from_job2\n"
         update_searchdata_from_job2(searchdata) if params[:job_id]
         
       else
