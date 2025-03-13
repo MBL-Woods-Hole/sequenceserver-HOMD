@@ -34,8 +34,8 @@ def md5(args):
     result = hashlib.md5(str2hash.encode())
 
     # # printing the equivalent hexadecimal value.
-    print("The hexadecimal equivalent of hash is : ", end ="")
-    print(result.hexdigest())
+    #print("The hexadecimal equivalent of hash is : ", end ="")
+    #print(result.hexdigest())
 
 def get_organism(g):
     q = "SELECT organism from `genomesV11.0` where genome_id='%s'"  % (g)
@@ -44,15 +44,16 @@ def get_organism(g):
     return result[0]
     
 def run(args):
-    print('in run')
+    
     collector = {}
     ext_list = ['faa','ffn','fna']
     
     for (root,dirs,files) in os.walk(args.indir, topdown=True):
+       
        for file in files:  
           
           if file.startswith('GCA'):
-             #print(file)
+             
              file_pts = file.split('.') # eg  SEQF1595.2.faa.psq
              ext = file_pts[2]
              genome = file_pts[0]+'.'+file_pts[1]
@@ -64,8 +65,9 @@ def run(args):
              collector[path] = {"g":genome,"e":ext,"i":id.hexdigest(),"o":org,"p":path}
     
     #fmt = args.outfmt.split(',')  # g,e,i
-    fmt = 'g,e,i,o'
+    fmt = ['g','e','i','o']
     for path in collector:
+        #print(path)
         for letter in fmt:
             if letter == fmt[-1]:
                print(collector[path][letter], end =" ")
@@ -87,9 +89,10 @@ if __name__ == "__main__":
           ./blast_get_SS_databaseIDs.py -i /mnt/xvdb/blastdb/genomes_prokka/V11.0 > PROKKA-IDs.csv
           
           { 
-            localhost: /User/avoorhis/programming/blast_db/genomes_prokka
-                       /User/avoorhis/programming/blast_db/genomes_ncbi
-          }
+            localhost: /Users/avoorhis/programming/blast_db/genomes_prokka/V11.0
+                       /Users/avoorhis/programming/blast_db/genomes_ncbi/V11.0
+                       
+        }
         -i reqired infile: path to search for single blast databases
         
         Install both NCBI-IDs.csv and PROKKA-IDs.csv  into the root directories of the SS server:
