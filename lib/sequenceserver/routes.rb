@@ -117,16 +117,16 @@ module SequenceServer
         $DB_TO_SHOW = $gid
         if $DEV_HOST == 'AVhome'
           $ids_fn = './LOCAL-IDs.csv'
-          print "Reading LOCAL ID File #{$ids_fn}", '\n'
+          print "Reading LOCAL ID File #{$ids_fn}", "\n"
         elsif $ANNO == 'ncbi'
           #$ids_fn = './genome_blastdbIds_ncbiHASH.csv'
           $ids_fn = './NCBI-IDs.csv'
-          print "Reading NCBI ID File #{$ids_fn}", '\n'
+          print "Reading NCBI ID File #{$ids_fn}", "\n"
         else
           #$ids_fn = './genome_blastdbIds_prokkaHASH.csv'
           $ids_fn = './PROKKA-IDs.csv'
           print "gid is #{$gid}", '\n'
-          print "Reading PROKKA ID File #{$ids_fn}", '\n'
+          print "Reading PROKKA ID File #{$ids_fn}", "\n"
         end
         $file_data = CSV.parse(File.read($ids_fn), headers: false)
         #puts 'ANNO',$ANNO
@@ -139,24 +139,24 @@ module SequenceServer
         mydataids = []
         lookup = {}
         $file_data.each do |i|
-           print "i", i, '\n'
+           print "i", i, "\n"
            tmp = i[0].split("\t")
-           print "X",tmp,tmp[0],$gid, '\n'
+           print "X",tmp,tmp[0],$gid, "\n"
            if tmp[0] == $gid
-             #puts 'Match', '\n'
+             #puts 'Match', "\n"
              # ["SEQF1595.2\tfaa\t45fd1a168c938b04c2a30ec725c0acdd"]
              # ["SEQF1595.2\tfaa\t45fd1a168c938b04c2a30ec725c0acdd\torganism"]
              tmp = i[0].split("\t")
-             #print 'tmp[2]',tmp[2], '\n'
+             #print 'tmp[2]',tmp[2], "\n"
              mydataids.push(tmp[2].strip())
              if tmp.length >3
-               print "Found #{tmp}", '\n'
+               print "Found #{tmp}", "\n"
                lookup[tmp[2].strip()] = tmp[3].strip()
              end
            end
         end
         newdbs =[]
-        print 'mydataids',mydataids, '\n'
+        print 'mydataids',mydataids, "\n"
         #mydataids.each do |i|
         #  print "'"+i+"'"
         #end
@@ -164,11 +164,11 @@ module SequenceServer
         #print 'anno',$ANNO
         #print 'annoup',annoup
         Database.each do |i|
-          print 'database inspect',i.inspect(), '\n'
-          print 'i.id',"'"+i.id+"'", '\n'
-          print '1i.name',i.name, '\n'
+          print 'database inspect',i.inspect(), "\n"
+          print 'i.id',"'"+i.id+"'", "\n"
+          print '1i.name',i.name, "\n"
           if mydataids.include? i.id
-            print "in mydataids", '\n'
+            print "in mydataids", "\n"
             if lookup.has_key?(i.id)
                $ORGANISM = lookup[i.id]
             end
@@ -183,7 +183,7 @@ module SequenceServer
             end
             i.title.concat("\n::#{$ORGANISM} (#{$gid})") 
             #i.organism = $ORGANISM
-            print "new DBs: i-2",i, '\n'
+            print "new DBs: i-2",i, "\n"
             newdbs.push(i)
           end
           #puts 'newdbs',newdbs
@@ -195,7 +195,7 @@ module SequenceServer
           #updated_on="Mar 4, 2023  11:00 AM", 
           #format="5", categories=[]>
         end
-        print "new DBs:",newdbs.length, '\n'
+        print "new DBs:",newdbs.length, "\n"
         searchdata = {
             query: Database.retrieve(params[:query]),
             database: newdbs,
@@ -210,7 +210,7 @@ module SequenceServer
           # If a job_id is specified, update searchdata from job meta data (i.e.,
           # query, pre-selected databases, advanced options used). Query is only
           # updated if params[:query] is not specified.
-        print "Entering update_searchdata_from_job2", '\n'
+        print "Entering update_searchdata_from_job2", "\n"
         update_searchdata_from_job2(searchdata) if params[:job_id]
         
       else
