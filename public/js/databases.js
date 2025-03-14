@@ -16,7 +16,8 @@ export class Databases extends Component {
     }
     componentDidUpdate() {
         // code to preselect a single db by name
-        let db = this.databases().find(db => db.title === 'HOMD_16S_rRNA_RefSeq_V15.23.p9.fasta');
+        //let db = this.databases().find(db => db.title === 'HOMD_16S_rRNA_RefSeq_V15.23.p9.fasta');
+        let db = this.databases().find(db => db.title === 'HOMD_16S_rRNA_RefSeq_V16.0_full.fasta');
         if (this.databases() && db){
             $('input[value="'+db.id+'"]').prop('checked', true);
             this.handleClick(db);

@@ -72,7 +72,10 @@ genome databases (faa, ffn and fna). The Database ID is used and derived from an
 If the path changes in the future we will need to re-create the ID files. There is a script in homd-scripts  
 that will re-create the ID data files: ```blast_get_SS_databaseIDs.py```
 
-
+#### Notes
+When calling the URL it is important to add a trailing slash so that nginx will accept it!!
+SO Use   src="https://devel.homd.org/refseq_blast/"
+NOT      src="https://devel.homd.org/refseq_blast"
 
 ### On 192.168.0.42 (the WebServer)
 > The SS webpages are made visible on the web using nginx on the 
@@ -115,6 +118,8 @@ located in the SS bin directory ```/home/ubuntu/.sequenceserver-bin/``` on the B
 For both $ANNO and $DB_TYPE it's purpose is to simple change the background color and titles for each interface.  
 The actual databases loaded are in the .conf file themselves.
 
-   
+#### How to pre-select a certain database in the web form?
+   in public/js/databases.js about line 20
+   if changed must run "npm run build" in the SS directory to rebuild the webpack
    
    
