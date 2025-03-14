@@ -163,20 +163,20 @@ export class Form extends Component {
         return (
             <div className="container">
                 <div id="overlay" style={{ position: 'absolute', top: 0, left: 0, width: '100vw', height: '100vw', background: 'rgba(0, 0, 0, 0.2)', display: 'none', zIndex: 99 }} />
-<div id='instructions'>
-   <small><strong>Instructions</strong>: 
-   <ol>
-   <li>Select the type of sequences to search for by selecting the correct database.</li>
-   <li>Paste your sequence(s) into the box below (up to 100 sequences in FASTA format with unique ids).</li>
-   <li>Optionally adjust the parameters (in Advanced parameters below).</li>
-   </ol>
-   </small>
-    
-</div>
+				<div id='instructions'>
+				   <small><strong>Instructions</strong>: 
+				   <ol>
+				   <li>Select the type of sequences to search for by selecting the correct database.</li>
+				   <li>Paste your sequence(s) into the box below (up to 100 sequences in FASTA format with unique ids).</li>
+				   <li>Optionally adjust the parameters (in Advanced parameters below).</li>
+				   </ol>
+				   </small>
+					
+				</div>
                 
                 <form id="blast" method="post" className="form-horizontal">
                     
-
+                   <span>Loading Databases</span>
                     <div className="notifications" id="notifications">
                         <NucleotideNotification />
                         <ProteinNotification />

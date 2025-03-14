@@ -89,6 +89,11 @@ if __name__ == "__main__":
           ./blast_get_SS_databaseIDs.py -i /mnt/xvdb/blastdb/genomes_ncbi/V11.0 > NCBI-IDs.csv
           ./blast_get_SS_databaseIDs.py -i /mnt/xvdb/blastdb/genomes_prokka/V11.0 > PROKKA-IDs.csv
           
+          Try
+          ./blast_get_SS_databaseIDs.py -host homd_dev -i /home/ubuntu/blast-db-genome/genomes_prokka_single/ffn >> PROKKA-IDsNEW.csv
+          ./blast_get_SS_databaseIDs.py -host homd_dev -i /home/ubuntu/blast-db-genome/genomes_prokka_single/fna >> PROKKA-IDsNEW.csv
+          ./blast_get_SS_databaseIDs.py -host homd_dev -i /home/ubuntu/blast-db-genome/genomes_prokka_single/faa >> PROKKA-IDsNEW.csv
+          
           { 
             localhost: /Users/avoorhis/programming/blast_db/genomes_prokka/V11.0
                        /Users/avoorhis/programming/blast_db/genomes_ncbi/V11.0
