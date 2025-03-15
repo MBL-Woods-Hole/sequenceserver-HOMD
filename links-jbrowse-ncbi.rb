@@ -9,16 +9,16 @@ require "mysql2"    # if needed
 # links-jbrowse-prokka.rb (used in ~/.sequenceserver-single_prokka.conf)
 # links-refseq.rb         (used in ~/.sequenceserver-refseq.conf)
 #########################################################################
-
-$HOMD_URL = "genome_blast"
-$DB_TYPE = "genome"
 #$db_host  = "localhost"
+$HOMD_URL = "genome_blast_single_ncbi"
+$DB_TYPE = "genome"
 $db_host  = "192.168.1.46"
-$ANNO = ""
+$ANNO = "ncbi"
 
 #$conn = Mysql2::Client.new(:host => $db_host, :username => $db_user, :password => $db_pass)
 $conn = Mysql2::Client.new(:host => $db_host, :default_file => '/home/ubuntu/.my.cnf_node', :reconnect => true)
 
+#$url_base = "https://homd.org/jbrowse/index.html?data=homd_V11.0/"
 $homd_url_base = "https://devel.homd.org/"
 $jb_url_base = "https://www.homd.org/jbrowse/?data=homd_V11.0/"
 # mysqlconn.query(@db_query)
@@ -131,7 +131,7 @@ module SequenceServer
         print stats,"\n"
 
         gc = "0.37"  # default -- This is wrong! but it is a start
-		url = $url_base+seq_id
+		url = $jb_url_base+seq_id
 
 		if stats[:seqtype]   # fna are always nil - no sql needed
 		    if stats[:seqtype] == 'ffn' && stats[:anno] == 'NCBI' && stats[:pid] == nil && stats[:acc]

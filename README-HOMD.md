@@ -1,4 +1,6 @@
 # sequenceserver-HOMD
+FAQ
+1. [change database](#How-to-change-database-names)
 
 ### Examples around the web:
 ```
@@ -16,36 +18,44 @@ https://support.sequenceserver.com/t/blast-against-between-two-sequence-database
 
 ### Helpful commands
 ```
-push to sequenceserver (currently 192.168.1.61 or 1.60)
-
-
-PUSH to server from localhost: BYPASS gateway
-scp  -i ~/.ssh/andy.pem -o "ProxyCommand ssh -i ~/.ssh/andy.pem ubuntu@homd.info -W %h:%p" FILENAME ubuntu@192.168.1.61:
-PULL FROM localhost 
-scp  -i ~/.ssh/andy.pem -o "ProxyCommand ssh -i ~/.ssh/andy.pem ubuntu@homd.info -W %h:%p" ubuntu@192.168.1.102:FILENAME ./
-
-
--To re-write the *.min.js files and run webpack (compiles sequenceserver-search.min.js and sequenceserver-report.min.js):
-"npm run build" in the SS directory
-
-For debugging each SS instance:
-cd ~/sequenceserver-XXX
-sudo systemcmd stop SS-XXX; 
-bundle exec bin/sequenceserver -D -c ~/.sequenceserver-XXX.conf (you may need to 'npm run build' if edited recently)
+	push to sequenceserver (currently 192.168.1.61 or 1.60)
+	
+	
+	PUSH to server from localhost: BYPASS gateway
+	scp  -i ~/.ssh/andy.pem -o "ProxyCommand ssh -i ~/.ssh/andy.pem ubuntu@homd.info -W %h:%p" FILENAME ubuntu@192.168.1.61:
+	PULL FROM localhost 
+	scp  -i ~/.ssh/andy.pem -o "ProxyCommand ssh -i ~/.ssh/andy.pem ubuntu@homd.info -W %h:%p" ubuntu@192.168.1.102:FILENAME ./
+	
+	
+	-To re-write the *.min.js files and run webpack (compiles sequenceserver-search.min.js and sequenceserver-report.min.js):
+	"npm run build" in the SS directory
+	
+	For debugging each SS instance:
+	cd ~/sequenceserver-XXX
+	sudo systemcmd stop SS-XXX; 
+	bundle exec bin/sequenceserver -D -c ~/.sequenceserver-XXX.conf (you may need to 'npm run build' if edited recently)
 ```
 
-### Important for singles: prokka and ncbi
-Must regenerate NCBI-IDs.csv and PROKKA-IDs.csv
-by running 'blast_get_SS_databaseIDs.py' with correct infile for blast directory
-These files have format:
-genome_id<TAB>ext<TAB>directory hash
-where ext is fna or ffn or faa
-and dirctory hash is created in the py script
-These files are placed in the root directories of the singles node app on the sequence server
-They should be recreated when new genomes are added.
+### Important for singles: PROKKA and NCBI
+```
+	Must regenerate NCBI-IDs.csv and PROKKA-IDs.csv
+	by running 'blast_get_SS_databaseIDs.py' with correct infile for blast directory
+	These files have format:
+	genome_id<TAB>ext<TAB>directory hash
+	where ext is fna or ffn or faa
+	and dirctory hash is created in the py script
+	These files are placed in the root directories of the singles node app on the sequence server
+	They should be recreated when new genomes are added.
+```
 ---
 ## HOMD Setup and Administration:
-### On 192.168.1.60 (the BLAST-Server)
+### On localhost:
+   I have TWO SequenceServer directories that I edit separately: 
+   1. sequenceserver-HOMD
+   2. sequenceserver-singles-HOMD
+   
+
+### On 192.168.1.60 and 1.61 (the BLAST-Server):
 SequenceServer is setup on 192.168.1.60 (the BLAST-Server) on which I use systemd to stop/start the SS services.
 
 See /etc/systemd/system/SS-refseq.service, SS-genome.service SS-single_ncbi.service and SS-single_prokka.service
@@ -140,6 +150,12 @@ located in the SS bin directory ```/home/ubuntu/.sequenceserver-bin/``` on the B
 For both $ANNO and $DB_TYPE it's purpose is to simple change the background color and titles for each interface.  
 The actual databases loaded are in the .conf file themselves.
 
-   
+### How to change database names
+    Database names are created automatically by SequenceServer but can be changed
+    by editing the .pal or .nal files
+
+#### How to pre-select a certain database in the web form?
+   in public/js/databases.js about line 20
+   if changed must run "npm run build" in the SS directory to rebuild the webpack
    
    
