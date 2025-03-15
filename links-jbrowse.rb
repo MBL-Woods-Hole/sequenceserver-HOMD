@@ -131,7 +131,7 @@ module SequenceServer
         print stats,"\n"
 
         gc = "0.37"  # default -- This is wrong! but it is a start
-		url = $url_base+seq_id
+		url = $jb_url_base+seq_id
 
 		if stats[:seqtype]   # fna are always nil - no sql needed
 		    if stats[:seqtype] == 'ffn' && stats[:anno] == 'NCBI' && stats[:pid] == nil && stats[:acc]
