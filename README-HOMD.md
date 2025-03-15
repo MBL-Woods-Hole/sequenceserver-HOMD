@@ -122,4 +122,5 @@ The actual databases loaded are in the .conf file themselves.
    in public/js/databases.js about line 20
    if changed must run "npm run build" in the SS directory to rebuild the webpack
    
+### Database Names come from the *.pal or *nal file
    
