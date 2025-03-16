@@ -1,8 +1,15 @@
 # sequenceserver-HOMD
 FAQ
-1. [change database](#How-to-change-database-names)
+1. [How To change database name](#How-to-change-database-names)
+2. [How To Pre-Select a certain database](#How-to-pre-select-a-certain-database-in-the-web-form)
+3. [nginx setup](#NGINX-Setup)
+4. [iFRAME in HOMD web app]
+5. [routes.rb for SequenceServer Singles DBs]
+6. [How to differentiate between RefSeq, ALLGenome and Singles web page]
+7. [Webbrick - What is it? and How to use it?]
 
-### Examples around the web:
+
+### SequenceServer Examples around the web:
 ```
 http://spottedwingflybase.org/blast
 https://lotus.au.dk/blast/
@@ -18,8 +25,7 @@ https://support.sequenceserver.com/t/blast-against-between-two-sequence-database
 
 ### Helpful commands
 ```
-	push to sequenceserver (currently 192.168.1.61 or 1.60)
-	
+	push extra files to sequenceserver (currently 192.168.1.61 or 1.60) (this is NOT GitHub)
 	
 	PUSH to server from localhost: BYPASS gateway
 	scp  -i ~/.ssh/andy.pem -o "ProxyCommand ssh -i ~/.ssh/andy.pem ubuntu@homd.info -W %h:%p" FILENAME ubuntu@192.168.1.61:
@@ -41,18 +47,24 @@ https://support.sequenceserver.com/t/blast-against-between-two-sequence-database
 	Must regenerate NCBI-IDs.csv and PROKKA-IDs.csv
 	by running 'blast_get_SS_databaseIDs.py' with correct infile for blast directory
 	These files have format:
-	genome_id<TAB>ext<TAB>directory hash
+	genome_id<TAB>ext<TAB>directory hash<TAB>organism
 	where ext is fna or ffn or faa
 	and dirctory hash is created in the py script
-	These files are placed in the root directories of the singles node app on the sequence server
+	and is the same as the Directory.id in SequenceServer.
+	These files are placed in the root directories of the singles nodejs app on the sequence server
 	They should be recreated when new genomes are added.
 ```
 ---
 ## HOMD Setup and Administration:
 ### On localhost:
-   I have TWO SequenceServer directories that I edit separately: 
+   I have TWO SequenceServer directories on localhost that I edit separately: 
    1. sequenceserver-HOMD
    2. sequenceserver-singles-HOMD
+   NGINX setup
+   
+   Important files to edit:
+   routes.rb
+   
    
 
 ### On 192.168.1.60 and 1.61 (the BLAST-Server):
@@ -62,13 +74,13 @@ See /etc/systemd/system/SS-refseq.service, SS-genome.service SS-single_ncbi.serv
 
 There are three directories that matter in /home/ubuntu/ on the BLAST-Server:
 
-```/home/ubuntu/sequenceserver-HOMD  (uses config files: ~/.sequenceserver-refseq.conf and ~/.sequenceserver-genome.conf)
-/home/ubuntu/sequenceserver-single_ncbi (uses config file ~/.sequenceserver-single_ncbi.conf)
-/home/ubuntu/sequenceserver-single_prokka (uses config file ~/.sequenceserver-single_prokka.conf)
+```/home/ubuntu/sequenceserver-HOMD  (uses config files: ~/.sequenceserver-refseq.conf and ~/.sequenceserver-genome.conf -ALLGenomes*)
+   /home/ubuntu/sequenceserver-single_ncbi (uses config file ~/.sequenceserver-single_ncbi.conf)
+   /home/ubuntu/sequenceserver-single_prokka (uses config file ~/.sequenceserver-single_prokka.conf)
 ```
 These directories were installed as git repositories (NOT by 'gem install') from  https://github.com/wurmlab/sequenceserver
 
-The important parts from a systemd configuration file:
+The important parts from a systemd configuration file: SS-genome, SS-refseq, SS-single-ncbi and SS-single-prokka
 ```
 WorkingDirectory=/home/ubuntu/sequenceserver-HOMD
 StandardOutput=file:/home/ubuntu/logs/genome-blast_stdout.log
@@ -154,8 +166,11 @@ The actual databases loaded are in the .conf file themselves.
     Database names are created automatically by SequenceServer but can be changed
     by editing the .pal or .nal files
 
-#### How to pre-select a certain database in the web form?
+### How to pre-select a certain database in the web form?
    in public/js/databases.js about line 20
    if changed must run "npm run build" in the SS directory to rebuild the webpack
    
+### The logic to select one genome's set of DBs from the roughly 9000 available:
+    See file routes.rb in the sequenceserver-singles directories
+    Also need proprly formated PROKKA-DB.csv and NCBI_DB.csv files in the sequenceserver-singles directories
    
