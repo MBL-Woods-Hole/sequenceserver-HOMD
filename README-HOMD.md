@@ -7,7 +7,7 @@ FAQ
 5. [iFRAME in HOMD web app](#iFrame-in-Web-Application)
 6. [routes.rb for SequenceServer Singles DBs](#routes.rb-file)
 7. [How to differentiate between RefSeq, ALLGenome and Singles web page](#Load Extra Code)
-8. [Webbrick - What is it? and How to use it?](#WebBrick)
+8. [WebPack - What is it? and How to use it?](#WebPack)
 9. [Testing the System](#How-I-Test-HOMD-SequenceServer)
 
 ### SequenceServer Examples around the web:
@@ -263,6 +263,8 @@ server {
     To load variables into the code at server startup I have ruby files in the ~/.sequenceserver-bin
     directory. These files are read at startup if they are refernced from the .conf file
     I have JBrowse links, and database types (for color differentiation) in these files.
+    Note the 'links-*' files in the base directory --> Edit then copy them to the ~/.sequenceserver-bin 
+    directory
     
 ### How I Use GitHub
     'https://github.com/MBL-Woods-Hole/sequenceserver-HOMD'
@@ -287,8 +289,8 @@ server {
     -rw-rw-r--  1 ubuntu ubuntu    1131 Mar 14 14:16 .sequenceserver-single_ncbi.conf
     -rw-rw-r--  1 ubuntu ubuntu    1141 Mar 14 14:00 .sequenceserver-single_prokka.conf
     ```
-### WebBrick
-    WebBrick needs to be recreated on the server if you change any javascript code
+### WebPack
+    WebPack needs to be recreated on the server if you change any javascript code
     or any css (anything in the public directory). So edit,push changes, pull to server
     then run 'npm run build' in the base SS directory to recreate the *min.js files that it reads on startup
 
