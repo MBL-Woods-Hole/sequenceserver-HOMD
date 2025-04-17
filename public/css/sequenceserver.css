@@ -713,6 +713,15 @@ input[type=checkbox] {
    padding:0;
    margin:0;
 }
+.homdlink{
+  color:black;
+}
+.homdlink a{
+  color:darkslateblue;
+}
+.homdlink a:hover{
+  color:brown;
+}
 .qselect{
    width:100%;
    max-width:100px;
