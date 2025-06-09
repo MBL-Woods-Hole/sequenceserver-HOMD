@@ -19,7 +19,7 @@ $ANNO = ""
 #$conn = Mysql2::Client.new(:host => $db_host, :username => $db_user, :password => $db_pass)
 $conn = Mysql2::Client.new(:host => $db_host, :default_file => '/home/ubuntu/.my.cnf_node', :reconnect => true)
 
-$homd_url_base = "https://v4.homd.org/"
+$homd_url_base = "https://homd.org/"
 $jb_url_base = "https://www.homd.org/jbrowse/?data=homd_V11.0/"
 # mysqlconn.query(@db_query)
 # less /var/lib/gems/2.7.0/gems/sequenceserver-2.0.0/lib/sequenceserver/links.rb

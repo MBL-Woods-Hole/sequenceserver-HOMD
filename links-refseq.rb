@@ -18,7 +18,7 @@ require 'json'
 
 $HOMD_URL = "refseq_blast"
 $DB_TYPE = "refseq"
-$homd_url_base = "https://v4.homd.org/"
+$homd_url_base = "https://homd.org/"
 $ANNO = ""
 
 module SequenceServer
