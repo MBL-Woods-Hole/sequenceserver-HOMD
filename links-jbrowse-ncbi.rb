@@ -18,9 +18,8 @@ $ANNO = "ncbi"
 #$conn = Mysql2::Client.new(:host => $db_host, :username => $db_user, :password => $db_pass)
 $conn = Mysql2::Client.new(:host => $db_host, :default_file => '/home/ubuntu/.my.cnf_node', :reconnect => true)
 
-#$url_base = "https://homd.org/jbrowse/index.html?data=homd_V11.0/"
 $homd_url_base = "https://homd.org/"
-$jb_url_base = "https://www.homd.org/jbrowse/?data=homd_V11.0/"
+$jb_url_base = "https://www.homd.org/jbrowse/?data=homd_current/"
 # mysqlconn.query(@db_query)
 # less /var/lib/gems/2.7.0/gems/sequenceserver-2.0.0/lib/sequenceserver/links.rb
 # expl pid from ncbi:   ESK64677.1
