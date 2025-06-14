@@ -30,7 +30,8 @@ def retrieve_seqid (idx)
 
    #if no index of '|' then use '_'
    if idx.index("|") == nil
-      seqid = idx[0, id.index("_")]
+      pts = idx.split('_')
+      seqid = pts[0]+'_'+pts[1]
    else
      seqid = idx[0, id.index("|")]
    end
