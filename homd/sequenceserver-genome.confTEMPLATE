@@ -36,7 +36,7 @@
 :job_lifetime: 43200
 :database_dir: "/home/ubuntu/blast-db-genomeALL"
 :bin: "/home/ubuntu/.sequenceserver-bin/ncbi-blast-2.16.0+/bin"
-:require: "/home/ubuntu/.sequenceserver-bin/db_type-genome.rb"
-#:require: "/home/ubuntu/.sequenceserver-bin/links-jbrowse.rb"
-#:require: "/home/ubuntu/.sequenceserver-bin/routes_testing.rb"
+:require: "/home/ubuntu/sequenceserver-HOMD/homd/db_type-genome.rb"
+#:require: "/home/ubuntu/sequenceserver-HOMD/homd/links-jbrowse.rb"
+#:require: "/home/ubuntu/sequenceserver-HOMD/homd/routes_testing.rb"
 :devel: true

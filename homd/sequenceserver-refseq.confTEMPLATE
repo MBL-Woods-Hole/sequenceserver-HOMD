@@ -19,6 +19,6 @@
 #:database_dir: "/home/ubuntu/blast-db-refseqV16.0"
 #:database_dir: "/mnt/xvdb/blastdb/oral16S/V16.0"
 :bin: "/home/ubuntu/.sequenceserver-bin/ncbi-blast-2.16.0+/bin"
-:require: "/home/ubuntu/.sequenceserver-bin/links-refseq.rb"
-#:require: "/home/ubuntu/.sequenceserver-bin/db_type-refseq.rb"
+:require: "/home/ubuntu/sequenceserver-HOMD/homd/links-refseq.rb"
+#:require: "/home/ubuntu/sequenceserver-HOMD/homd/db_type-refseq.rb"
 :devel: true
