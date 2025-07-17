@@ -57,9 +57,9 @@ def run(args):
     for (root,dirs,files) in os.walk(args.indir, topdown=True):
        
        for file in files:  
-          
+          print(file)
           if file.startswith('GCA'):
-             print(file)
+             
              file_pts = file.split('.') # eg  SEQF1595.2.faa.psq
              ext = file_pts[2]
              genome = file_pts[0]+'.'+file_pts[1]
@@ -166,5 +166,5 @@ if __name__ == "__main__":
         myconn = MyConnection(host=dbhost, db='homd',  read_default_file = "~/.my.cnf_node")
   
     run(args)
-    md5(args)   
+    #md5(args)   
     
