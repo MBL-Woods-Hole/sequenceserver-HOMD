@@ -9,7 +9,7 @@ require 'resolv'
 #ENV['LOGFILE'] = '/mnt/efs/homd/sequenceserver-access.log'
 
 # development
-ENV['LOGFILE'] = '/mnt/efs/homd_v4/sequenceserver-access.log'
+ENV['LOGFILE'] = '/home/ubuntu/logs/sequenceserver-access.log'
 
 # Top level module / namespace.
 module SequenceServer
