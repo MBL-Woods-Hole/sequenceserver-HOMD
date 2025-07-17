@@ -98,7 +98,20 @@ end
 module SequenceServer
 	module Links
 
-	  def jbrowse
+        def hmt
+            hmtMatchData = title.match /(HMT-\d{3})/
+            hmt = hmtMatchData[1]
+            homdurl = $homd_url_base+"/taxa/tax_description?otid=" +hmt.split('-')[1]
+            {
+             :order => 3,
+             :title => hmt,
+             :url   => homdurl,
+             :icon  => 'fa-external-link'
+            }
+        end
+
+
+	def jbrowse
 
 		puts 'dbtype: '+dbtype   # nucleotide or protein
         puts 'id '+id
