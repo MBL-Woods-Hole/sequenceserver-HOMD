@@ -1,0 +1,42 @@
+---
+:host: 0.0.0.0
+:port: 4567
+:databases_widget: default
+:options:
+  :blastn:
+    :default:
+    - "-task blastn"
+    - "-evalue 1e-5"
+    - "-max_target_seqs 20"
+    :custom:
+    - "-task blastn"
+    - "-evalue 1e-5"
+    - "-max_target_seqs 20"
+  :blastp:
+    :default:
+    - "-evalue 1e-5"
+    - "-max_target_seqs 20"
+    :custom:
+    - "-evalue 1e-5"
+    - "-max_target_seqs 20"
+  :blastx:
+    :default:
+    - "-evalue 1e-5"
+    - "-max_target_seqs 20"
+  :tblastx:
+    :default:
+    - "-evalue 1e-5"
+    - "-max_target_seqs 20"
+  :tblastn:
+    :default:
+    - "-evalue 1e-5"
+    - "-max_target_seqs 20"
+:num_threads: 4
+:num_jobs: 1
+:job_lifetime: 43200
+:database_dir: "/home/ubuntu/blast-db-genomeALL"
+:bin: "/home/ubuntu/.sequenceserver-bin/ncbi-blast-2.16.0+/bin"
+:require: "/home/ubuntu/.sequenceserver-bin/db_type-genome.rb"
+#:require: "/home/ubuntu/.sequenceserver-bin/links-jbrowse.rb"
+#:require: "/home/ubuntu/.sequenceserver-bin/routes_testing.rb"
+:devel: true
