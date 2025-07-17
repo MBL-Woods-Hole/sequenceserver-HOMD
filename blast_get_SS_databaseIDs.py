@@ -50,15 +50,15 @@ def get_organism(g):
         return ''
     
 def run(args):
-    print('running....')
+    #print('running....')
     collector = {}
     ext_list = ['faa','ffn','fna']
     org = ''
-    print('indir:',args.indir)
+    #print('indir:',args.indir)
     for (root,dirs,files) in os.walk(args.indir, topdown=True, followlinks=True):
        
        for file in files:  
-          print(file)
+          #print(file)
           if file.startswith('GCA'):
              
              file_pts = file.split('.') # eg  SEQF1595.2.faa.psq
