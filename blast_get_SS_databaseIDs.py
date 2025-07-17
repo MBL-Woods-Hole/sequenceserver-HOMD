@@ -128,7 +128,7 @@ if __name__ == "__main__":
 
     parser.add_argument("-i", "--indir",   required=True,  action="store",   dest = "indir", 
                                                     help=" ")
-    parser.add_argument("-sql", "--sql",   required=False,  action="store_true",   dest = "sql", default=False 
+    parser.add_argument("-sql", "--sql",   required=False,  action="store_true",   dest = "sql", default=False,
                                                     help=" ")
     parser.add_argument("-host", "--host",
                         required = False, action = 'store', dest = "dbhost", default = 'localhost',
