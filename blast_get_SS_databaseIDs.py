@@ -59,7 +59,7 @@ def run(args):
        for file in files:  
           
           if file.startswith('GCA'):
-             #print(file)
+             print(file)
              file_pts = file.split('.') # eg  SEQF1595.2.faa.psq
              ext = file_pts[2]
              genome = file_pts[0]+'.'+file_pts[1]
