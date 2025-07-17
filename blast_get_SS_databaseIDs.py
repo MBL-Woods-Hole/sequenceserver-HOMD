@@ -50,10 +50,11 @@ def get_organism(g):
         return ''
     
 def run(args):
-    
+    print('running....')
     collector = {}
     ext_list = ['faa','ffn','fna']
     org = ''
+    print('indir:',args.indir)
     for (root,dirs,files) in os.walk(args.indir, topdown=True):
        
        for file in files:  
