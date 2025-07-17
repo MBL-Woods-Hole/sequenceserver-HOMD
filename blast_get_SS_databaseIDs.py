@@ -15,8 +15,11 @@ import hashlib
 
 sys.path.append('/Users/avoorhis/programming/homd-scripts/')
 sys.path.append('/home/ubuntu/homd-work')
-
-from connect import MyConnection,mysql
+try:
+    from connect import MyConnection
+except:
+    MyConnection = None
+    
 import datetime
 def md5(args):
     #ruby code
@@ -41,24 +44,29 @@ def get_organism(g):
     q = "SELECT organism from `genomesV11.0` where genome_id='%s'"  % (g)
     #print(q)
     result = myconn.execute_fetch_one(q)
-    return result[0]
+    if result:
+        return result[0]
+    else:
+        return ''
     
 def run(args):
     
     collector = {}
     ext_list = ['faa','ffn','fna']
-    
+    org = ''
     for (root,dirs,files) in os.walk(args.indir, topdown=True):
        
        for file in files:  
           
           if file.startswith('GCA'):
-             
+             #print(file)
              file_pts = file.split('.') # eg  SEQF1595.2.faa.psq
              ext = file_pts[2]
              genome = file_pts[0]+'.'+file_pts[1]
-             org = get_organism(genome)
-             org = org.replace('"','')
+             if args.sql:
+                 org = get_organism(genome)
+                 org = org.replace('"','')
+             
              #print('org',org)
              path = root+'/'+genome+'.'+ext
              #print(root,ext,genome,path)
@@ -84,6 +92,7 @@ if __name__ == "__main__":
         
         Run like this:
            *** IMPORTANT the indirectory must be the same as in the database_dir from the SS.conf file
+               INCLUDING the soft-link path
               currently: /mnt/xvdb/blastdb/genomes_prokka/V10.1/
               
           ./blast_get_SS_databaseIDs.py -i /mnt/xvdb/blastdb/genomes_ncbi/V11.0 > NCBI-IDs.csv
@@ -101,7 +110,7 @@ if __name__ == "__main__":
         }
         -i reqired infile: path to search for single blast databases
         
-        Install both NCBI-IDs.csv and PROKKA-IDs.csv  into the root directories of the SS server:
+        Install both NCBI-IDs.csv and PROKKA-IDs.csv  into the root directories of the SS server (singles):
           
           ~/sequenceserver-single_ncbi
           ~/sequenceserver-single_prokka 
@@ -119,7 +128,8 @@ if __name__ == "__main__":
 
     parser.add_argument("-i", "--indir",   required=True,  action="store",   dest = "indir", 
                                                     help=" ")
-    
+    parser.add_argument("-sql", "--sql",   required=False,  action="store_true",   dest = "sql", default=False 
+                                                    help=" ")
     parser.add_argument("-host", "--host",
                         required = False, action = 'store', dest = "dbhost", default = 'localhost',
                         help = "choices=['homd',  'localhost']")
@@ -130,15 +140,16 @@ if __name__ == "__main__":
     
     #parser.print_help(usage)
                         
-    if args.dbhost == 'homd_dev':
+    if args.dbhost == 'homd_v4':
         #args.json_file_path = '/groups/vampsweb/vamps/nodejs/json'
         #args.TAX_DATABASE = 'HOMD_taxonomy'
         args.DATABASE = 'homd'
-        #dbhost_old = '192.168.1.51'
         dbhost= '192.168.1.46'   #
         args.prettyprint = False
-        #args.indr = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1/GCA_V10.1_all'
-        #args.prokka_dir = '/mnt/efs/bioinfo/projects/homd_add_genomes_V10.1/prokka_V10.1_all'
+        
+    elif args.dbhost == 'homd_dev':
+        args.DATABASE = 'homd'
+        dbhost= '192.168.1.58' 
         
     elif args.dbhost == 'localhost':
         #args.json_file_path = '/Users/avoorhis/programming/homd-data/json'
@@ -151,8 +162,8 @@ if __name__ == "__main__":
     else:
         sys.exit('dbhost - error')
     
-    
-    myconn = MyConnection(host=dbhost, db='homd',  read_default_file = "~/.my.cnf_node")
+    if args.sql:
+        myconn = MyConnection(host=dbhost, db='homd',  read_default_file = "~/.my.cnf_node")
   
     run(args)
     md5(args)   
