@@ -9,7 +9,7 @@ require 'resolv'
 #ENV['LOGFILE'] = '/mnt/efs/homd/sequenceserver.log'
 
 # development
-ENV['LOGFILE'] = '~/logs/sequenceserver-access.log'
+ENV['LOGFILE'] = '/home/ubuntu/logs/sequenceserver-access.log'
 # Top level module / namespace.
 module SequenceServer
   # The default version of BLAST that will be downloaded and configured for use.
