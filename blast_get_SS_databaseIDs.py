@@ -55,7 +55,7 @@ def run(args):
     ext_list = ['faa','ffn','fna']
     org = ''
     print('indir:',args.indir)
-    for (root,dirs,files) in os.walk(args.indir, topdown=True):
+    for (root,dirs,files) in os.walk(args.indir, topdown=True, followlinks=True):
        
        for file in files:  
           print(file)
