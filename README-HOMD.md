@@ -118,6 +118,7 @@ into files (one prokka and one ncbi) which is loaded at runtime and searched to 
 genome databases (faa, ffn and fna). The Database ID is used and derived from an MD5HASH() of the BLAST database full-path.  
 If the path changes in the future we will need to re-create the ID files. There is a script in homd-scripts  
 that will re-create the ID data files: ```blast_get_SS_databaseIDs.py```
+This requires that the database path in the .config file be identical to the path fed to the script: ```blast_get_SS_databaseIDs.py```
 
 
 

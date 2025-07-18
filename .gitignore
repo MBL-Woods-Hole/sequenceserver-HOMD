@@ -60,3 +60,5 @@ public/sequenceserver-report.min.js
 public/sequenceserver-search.min.js
 public/css/sequenceserver.min.css
 homd/*conf
+PROKKA-IDs.csv
+NCBI-IDs.csv
