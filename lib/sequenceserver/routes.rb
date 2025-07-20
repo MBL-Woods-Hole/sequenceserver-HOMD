@@ -184,6 +184,7 @@ module SequenceServer
     get '/get_sequence/' do
       sequence_ids = params[:sequence_ids].split(',')
       database_ids = params[:database_ids].split(',')
+      logger.info "1-sequence_ids: #{sequence_ids}"
       sequences = Sequence::Retriever.new(sequence_ids, database_ids)
       sequences.to_json
     end
@@ -192,7 +193,7 @@ module SequenceServer
       sequence_ids = params['sequence_ids'].split(',')
       database_ids = params['database_ids'].split(',')
       sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
-      logger.info("sequence_ids: #{sequence_ids}")
+      logger.info "2-sequence_ids: #{sequence_ids}" 
       send_file(sequences.file.path,
                 type:     sequences.mime,
                 filename: sequences.filename)
