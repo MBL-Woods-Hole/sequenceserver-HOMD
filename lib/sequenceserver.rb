@@ -55,7 +55,9 @@ module SequenceServer
     def logger
       @logger ||= case environment
                   when 'development'
-                    Logger.new(STDERR, Logger::DEBUG)
+                    #Logger.new(STDERR, Logger::DEBUG)
+                    Logger.new(STDOUT)
+                    Logger.new(ENV['LOGFILE'])
                   when 'test'
                     Logger.new(STDERR, Logger::WARN)
                   else

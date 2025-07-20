@@ -192,6 +192,7 @@ module SequenceServer
       sequence_ids = params['sequence_ids'].split(',')
       database_ids = params['database_ids'].split(',')
       sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
+      logger.info("sequence_ids: #{sequence_ids}")
       send_file(sequences.file.path,
                 type:     sequences.mime,
                 filename: sequences.filename)
