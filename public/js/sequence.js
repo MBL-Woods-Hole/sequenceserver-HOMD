@@ -328,7 +328,7 @@ require = (function e(t, n, r) { function s(o, u) { if (!n[o]) { if (!t[o]) { va
          * 
          */
                 setSequence: function (seq, identifier) {
-                     console.log('setSequence id: ' + identifier);
+                     //console.log('setSequence id: ' + identifier);
                     if (seq.match(/^([A-N,R-Z][0-9][A-Z][A-Z, 0-9][A-Z, 0-9][0-9])|([O,P,Q][0-9][A-Z, 0-9][A-Z, 0-9][A-Z, 0-9][0-9])(\.\d+)?$/i)) {
                         this._requestSequence(arguments[0]);
 
