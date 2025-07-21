@@ -25,6 +25,7 @@ module SequenceServer
 	module Links
 	
         def hmt
+            puts 'ID: '+id
             hmtMatchData = title.match /(HMT-\d{3})/
             hmt = hmtMatchData[1]
             homdurl = $homd_url_base+"/taxa/tax_description?otid=" +hmt.split('-')[1]
