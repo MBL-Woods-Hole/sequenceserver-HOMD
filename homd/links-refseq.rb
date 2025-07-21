@@ -22,13 +22,11 @@ $homd_url_base = "https://homd.org/"
 $ANNO = ""
 
 module SequenceServer
-	module Links
-	
+    module Links
         def hmt
             puts 'puts ID: '+id
             puts 'puts TITLE: '+title
-            puts 'puts sequence_id: '+sequence_id
-            #UNDEFINED: logger.debug "logger ID: #{id}"
+            #UNDEFINED logger: logger.debug "logger ID: #{id}"
             hmtMatchData = title.match /(HMT-\d{3})/
             hmt = hmtMatchData[1]
             homdurl = $homd_url_base+"/taxa/tax_description?otid=" +hmt.split('-')[1]

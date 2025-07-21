@@ -96,7 +96,7 @@ end
 
 
 module SequenceServer
-	module Links
+    module Links
 
         def hmt
             hmtMatchData = title.match /(HMT-\d{3})/
@@ -111,9 +111,9 @@ module SequenceServer
         end
 
 
-	def jbrowse
+    def jbrowse
 
-		puts 'dbtype: '+dbtype   # nucleotide or protein
+        puts 'dbtype: '+dbtype   # nucleotide or protein
         puts 'id '+id
         puts 'title '+title
         # get ANNO from database
@@ -166,17 +166,17 @@ module SequenceServer
         print stats,"\n"
 
         gc = "0.37"  # default -- This is wrong! but it is a start
-		url = $jb_url_base + seq_id
+        url = $jb_url_base + seq_id
 
-		if stats[:seqtype] != 'fna'  # 
-		    if stats[:seqtype] == 'ffn' && stats[:anno] == 'NCBI' && stats[:pid] == nil && stats[:acc]
-			  a = stats[:acc]
-			  first_hit_start = hsps.map(&:sstart).at(0)
-			  first_hit_end = hsps.map(&:send).at(0)
+        if stats[:seqtype] != 'fna'  # 
+            if stats[:seqtype] == 'ffn' && stats[:anno] == 'NCBI' && stats[:pid] == nil && stats[:acc]
+              a = stats[:acc]
+              first_hit_start = hsps.map(&:sstart).at(0)
+              first_hit_end = hsps.map(&:send).at(0)
 
-			  url += "&loc=#{seq_id}|#{a}:#{first_hit_start-500}..#{first_hit_end+500}"
-			  url += "&highlight=#{seq_id}|#{a}:#{first_hit_start}..#{first_hit_end}"
-			  url += "&tracks=" + ERB::Util.url_encode("DNA,prokka,prokka_ncrna,ncbi,ncbi_ncrna,GC Content (pivot at "+gc+"),GC Skew")
+              url += "&loc=#{seq_id}|#{a}:#{first_hit_start-500}..#{first_hit_end+500}"
+              url += "&highlight=#{seq_id}|#{a}:#{first_hit_start}..#{first_hit_end}"
+              url += "&tracks=" + ERB::Util.url_encode("DNA,prokka,prokka_ncrna,ncbi,ncbi_ncrna,GC Content (pivot at "+gc+"),GC Skew")
             else
                 q2 = "SELECT accession, gc, start, stop FROM `"+stats[:anno]+"_meta`.`orf` where protein_id='"+stats[:pid]+"' limit 1"
 
@@ -218,29 +218,29 @@ module SequenceServer
 
                 end
 
-			   url += "&tracks="+ ERB::Util.url_encode("DNA,prokka,prokka_ncrna,ncbi,ncbi_ncrna,GC Content (pivot at "+gc+"),GC Skew")
-			end
-		else
-			#nucleotide fna only
-			# SEQF5022.1|CP022384.1
-			split_id = id.split('|')
-			first_hit_start = hsps.map(&:sstart).at(0)
-			first_hit_end = hsps.map(&:send).at(0)
-			acc = split_id[1]
-			gc = "0.37"  # default -- This is wrong!
+               url += "&tracks="+ ERB::Util.url_encode("DNA,prokka,prokka_ncrna,ncbi,ncbi_ncrna,GC Content (pivot at "+gc+"),GC Skew")
+            end
+        else
+            #nucleotide fna only
+            # SEQF5022.1|CP022384.1
+            split_id = id.split('|')
+            first_hit_start = hsps.map(&:sstart).at(0)
+            first_hit_end = hsps.map(&:send).at(0)
+            acc = split_id[1]
+            gc = "0.37"  # default -- This is wrong!
 
-			url += "&loc=#{seq_id}|#{acc}:#{first_hit_start-500}..#{first_hit_end+500}"
-			url += "&highlight=#{seq_id}|#{acc}:#{first_hit_start}..#{first_hit_end}"
-			url += "&tracks=" + ERB::Util.url_encode("DNA,prokka,prokka_ncrna,ncbi,ncbi_ncrna,GC Content (pivot at "+gc+"),GC Skew")
-		end
-		puts url
-		{
-		 :order => 2,
-		 :title => 'JBrowse',
-		 :url   => url,
-		 :icon  => 'fa-external-link'
-		}
-	  end
+            url += "&loc=#{seq_id}|#{acc}:#{first_hit_start-500}..#{first_hit_end+500}"
+            url += "&highlight=#{seq_id}|#{acc}:#{first_hit_start}..#{first_hit_end}"
+            url += "&tracks=" + ERB::Util.url_encode("DNA,prokka,prokka_ncrna,ncbi,ncbi_ncrna,GC Content (pivot at "+gc+"),GC Skew")
+        end
+        puts url
+        {
+         :order => 2,
+         :title => 'JBrowse',
+         :url   => url,
+         :icon  => 'fa-external-link'
+        }
+      end
 
 
 
