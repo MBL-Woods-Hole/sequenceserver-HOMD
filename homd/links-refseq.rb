@@ -27,6 +27,7 @@ module SequenceServer
         def hmt
             puts 'puts ID: '+id
             puts 'puts TITLE: '+title
+            puts 'puts sequence_id: '+sequence_id
             #UNDEFINED: logger.debug "logger ID: #{id}"
             hmtMatchData = title.match /(HMT-\d{3})/
             hmt = hmtMatchData[1]
