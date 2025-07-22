@@ -12,12 +12,12 @@ require "mysql2"    # if needed
 
 $HOMD_URL = "genome_blast"
 $DB_TYPE = "genome"
-#$db_host  = "localhost"
-$db_host  = "192.168.1.46"
+$db_host  = "localhost"
+#$db_host  = "192.168.1.46"
 $ANNO = ""
 
 #$conn = Mysql2::Client.new(:host => $db_host, :username => $db_user, :password => $db_pass)
-$conn = Mysql2::Client.new(:host => $db_host, :default_file => '/home/ubuntu/.my.cnf_node', :reconnect => true)
+$conn = Mysql2::Client.new(:host => $db_host, :default_file => '/home/ubuntu/.my.cnf', :reconnect => true)
 
 $homd_url_base = "https://homd.org/"
 $jb_url_base = "https://www.homd.org/jbrowse/?data=homd_current/"

@@ -24,6 +24,24 @@ https://medium.com/coding-design/setting-up-sequenceserver-edf9d992998c
 https://support.sequenceserver.com/t/blast-against-between-two-sequence-database-sequence-path-is-variable-based-on-user-input-in-server/120/2
 ```
 
+### *******Updating SS on Forsyth *************************
+On AWS mysql server 192.168.1.58:
+ 
+#dump the tables
+sudo mysqldump NCBI_meta orf  > /mnt/efs/bioinfo/projects/mysql_export/NCBI_meta.orf.sql
+sudo mysqldump PROKKA_meta orf  > /mnt/efs/bioinfo/projects/mysql_export/PROKKA_meta.orf.sql
+#secure copy to Forsyth server
+scp -i ~/.ssh/andy.pem -o "ProxyCommand ssh -i ~/.ssh/andy.pem ubuntu@brop.org -W %h:%p" /mnt/efs/bioinfo/projects/mysql_export/NCBI_meta.orf.sql ubuntu@192.168.1.136:/mnt/bioinfo4/ubuntu/homd_blast/mysql_import/
+scp -i ~/.ssh/andy.pem -o "ProxyCommand ssh -i ~/.ssh/andy.pem ubuntu@brop.org -W %h:%p" /mnt/efs/bioinfo/projects/mysql_export/NCBI_meta.orf.sql ubuntu@192.168.1.136:/mnt/bioinfo4/ubuntu/homd_blast/mysql_import/
+ 
+ 
+on Forsyth blast_mysql server 192.168.1.136:
+ 
+#import into corresponding databases
+sudo mysql NCBI_meta < /mnt/bioinfo4/ubuntu/homd_blast/mysql_import/NCBI_meta.orf.sql
+sudo mysql PROKKA_meta < /mnt/bioinfo4/ubuntu/homd_blast/mysql_import/PROKKA_meta.orf.sql
+********************************************************
+
 ### Helpful commands
 ```
     push extra files to sequenceserver (currently 192.168.1.61 or 1.60) (this is NOT GitHub)
