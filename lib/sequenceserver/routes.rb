@@ -74,6 +74,7 @@ module SequenceServer
     # Returns base HTML. Rest happens client-side: rendering the search form.
     get '/' do
       erb :search, layout: true
+      
     end
     
     # Borrowed from makeblastdb.rb
