@@ -104,7 +104,8 @@ module SequenceServer
         searchdata = {
             query: Database.retrieve(params[:query]),
             database: Database.all,
-            options: SequenceServer.config[:options]
+            options: SequenceServer.config[:options],
+            gid: "GCA_012396315.1"
         }
      
 
