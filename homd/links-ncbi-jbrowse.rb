@@ -14,6 +14,7 @@ $DB_TYPE = "genome"
 #$db_host  = "192.168.1.46"
 $db_host  = "localhost"
 $ANNO = "ncbi"
+$GID = ""
 
 #$conn = Mysql2::Client.new(:host => $db_host, :username => $db_user, :password => $db_pass)
 $conn = Mysql2::Client.new(:host => $db_host, :default_file => '/home/ubuntu/.my.cnf', :reconnect => true)

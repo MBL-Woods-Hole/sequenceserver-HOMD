@@ -12,6 +12,7 @@ require 'json'
 $HOMD_URL = "genome_blast_single_ncbi"
 $DB_TYPE = "genome"
 $ANNO = "ncbi"
+$GID = ""
 
 $homd_url_base = "https://homd.org/"
 

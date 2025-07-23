@@ -112,9 +112,9 @@ module SequenceServer
 #       end
       #puts 'dbs', dbs
       if !params[:gid].nil?
-        $gid  = params[:gid]
+        $GID  = params[:gid]
         $SINGLE = true
-        $DB_TO_SHOW = $gid
+        $DB_TO_SHOW = $GID
         if $DEV_HOST == 'AVhome'
           $ids_fn = './LOCAL-IDs.csv'
           logger.debug "Reading LOCAL ID File #{$ids_fn}\n"
@@ -125,7 +125,7 @@ module SequenceServer
         else
           #$ids_fn = './genome_blastdbIds_prokkaHASH.csv'
           $ids_fn = './PROKKA-IDs.csv'
-          logger.debug "gid is #{$gid}\n"
+          logger.debug "gid is #{$GID}\n"
           logger.debug "Reading PROKKA ID File #{$ids_fn}\n"
         end
         $file_data = CSV.parse(File.read($ids_fn), headers: false)
@@ -141,8 +141,8 @@ module SequenceServer
         $file_data.each do |i|
            logger.debug "i: #{i}"
            row_items = i[0].split("\t")
-           logger.debug "row_items: "+row_items.join("', '")+" gid: #{$gid}"
-           if row_items[0] == $gid  
+           logger.debug "row_items: "+row_items.join("', '")+" gid: #{$GID}"
+           if row_items[0] == $GID  
              hash_dir_id = row_items[2].strip() # this is database ID (hashed dir path)
              #puts 'Match', "\n"
              # ["SEQF1595.2\tfaa\t45fd1a168c938b04c2a30ec725c0acdd"]
@@ -182,8 +182,8 @@ module SequenceServer
             else
               i.title = "#{annoup}::Genomic DNA sequences/contigs (fna)"
             end
-            #i.title.concat("<br>::#{$ORGANISM} (#{$gid})") 
-            i.title.concat(" :: (#{$gid})") 
+            #i.title.concat("<br>::#{$ORGANISM} (#{$GID})") 
+            i.title.concat(" :: (#{$GID})") 
             #i.organism = $ORGANISM
             logger.debug "new DB: #{i}"
             newdbs.push(i)

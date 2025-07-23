@@ -12,7 +12,7 @@ require 'json'
 $HOMD_URL = "genome_blast_single_prokka"
 $DB_TYPE = "genome"
 $ANNO = "prokka"  
-
+$GID = ""
 $homd_url_base = "https://homd.org/"
 
 
