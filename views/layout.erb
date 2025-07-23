@@ -60,9 +60,10 @@
             &nbsp;Help &amp; Support
           </a>
         <br><a href="https://homd.org">HOMD Home</a>&nbsp;|&nbsp;
-        BLAST:
-        <a href="/genome_blast">All Genomes</a>
-        
+        <% if $DB_TYPE == 'genome' %>
+           BLAST: <a href="/genome_blast">All Genomes</a>
+           <a href="https://homd.org/genome/blast_select_genome">Select a Genome</a>
+        <% end %>
         
         </div>
 
