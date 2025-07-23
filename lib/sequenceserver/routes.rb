@@ -73,7 +73,7 @@ module SequenceServer
 
     # Returns base HTML. Rest happens client-side: rendering the search form.
     get '/' do
-      erb :search, layout: true, gid:"GCA_012396315.1"
+      erb :search, layout: true
       
     end
     
@@ -105,8 +105,7 @@ module SequenceServer
         searchdata = {
             query: Database.retrieve(params[:query]),
             database: Database.all,
-            options: SequenceServer.config[:options],
-            gid: "GCA_012396315.1"
+            options: SequenceServer.config[:options]
         }
      
 
