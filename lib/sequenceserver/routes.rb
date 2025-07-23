@@ -73,7 +73,7 @@ module SequenceServer
 
     # Returns base HTML. Rest happens client-side: rendering the search form.
     get '/' do
-      erb :search, layout: true
+      erb :search, layout: true, gid:"GCA_012396315.1"
       
     end
     
