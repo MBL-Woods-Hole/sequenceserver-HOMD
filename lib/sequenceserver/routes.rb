@@ -101,7 +101,7 @@ module SequenceServer
     # include available databases and user-defined search options.
     get '/searchdata.json' do
       #puts "in EDIT get '/searchdata.json' do"
-      searchdata
+      
       # if $DEV_HOST == 'AVhome'
 #          path_prokka = '/Users/avoorhis/programming/blast-db-alt/'  #SEQF1595.fna*
 #          path_ncbi = '/Users/avoorhis/programming/blast-db-alt_ncbi/'  #SEQF1595.fna*
