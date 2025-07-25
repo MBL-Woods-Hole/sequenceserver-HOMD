@@ -18,7 +18,8 @@ require 'json'
 
 $HOMD_URL = "genome_blast"
 $DB_TYPE = "genome"
-$homd_url_base = "https://homd.org/"
+$blast_url_base = "https://blast.homd.org/"
+$homd_url_base = "https://devel.homd.org/"
 $ANNO = ""
 
 module SequenceServer

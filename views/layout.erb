@@ -30,7 +30,7 @@
 <% end %>
   <div id='header'>
     
-    <span id='homd_banner'><a href="https://homd.org"><img id='homd_logo_img' src='homd_banner.png' alt='HOMD Banner'  \></a></span>
+    <span id='homd_banner'><a href="<%= $homd_url_base %>"><img id='homd_logo_img' src='homd_banner.png' alt='HOMD Banner'  \></a></span>
     
   </div>
   <div
@@ -59,12 +59,12 @@
             <i class="fa fa-comment-o"></i>
             &nbsp;Help &amp; Support
           </a>
-        <br><a href="https://homd.org">HOMD Home</a>
+        <br><a href="<%= $homd_url_base %>">HOMD Home</a>
         <% if $DB_TYPE == 'genome' %>
            &nbsp;&nbsp;|&nbsp;
            BLAST: 
            <a href="/genome_blast">All Genomes</a>&nbsp;&nbsp;|&nbsp;
-           <a href="https://homd.org/genome/blast_select_genome">Select a Genome</a>
+           <a href="<%= $homd_url_base %>/genome/blast_select_genome">Select a Genome</a>
         <% end %>
         
         </div>
