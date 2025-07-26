@@ -32,9 +32,9 @@
   <body style='background:#E8F4EA;'>
 
   <div id='header'>
-    
-    <span id='homd_banner'><a href="https://homd.org"><img id='homd_logo_img' src='homd_banner.png' alt='HOMD Banner'  \></a></span>
-    
+    <a href="<%= $homd_url_base %>">
+      <span id='homd_banner'><img id='homd_logo_img' src='homd_banner.png' alt='HOMD Banner' \></span>
+    </a>
   </div>
 
   <div
@@ -43,12 +43,13 @@
     <div
       class="container">
       
-      <span class="homd-label">HOMD Genomic BLAST Server</small></span>
+      <span class="homd-label">HOMD Genomic BLAST Server</span>
 
       
       <a
         class="navbar-brand"
-        href="https://sequenceserver.com" target="_blank">
+        href="https://sequenceserver.com" target="_blank"
+      >
         <img class="logo" src="SequenceServer_logo.png" alt="sequenceserver_logo">
         <small>
           <%= SequenceServer::VERSION %>
@@ -63,12 +64,12 @@
             SequenceServer Help &amp; Support
           </a>
         
-        <br><a href="https://homd.org">HOMD Home</a>&nbsp;&nbsp;|&nbsp;
+        <br><a href="<%= $homd_url_base %>">HOMD Home</a>&nbsp;&nbsp;||&nbsp;
             BLAST:
-            <a href="/genome_blast">All Genomes</a>&nbsp;&nbsp;|&nbsp;
-            <a href="/genome_blast_single_ncbi/?gid=<%= params[:gid] %>">NCBI</a>&nbsp;&nbsp;|&nbsp;
-            <a href="/genome_blast_single_prokka/?gid=<%= params[:gid] %>">PROKKA</a>&nbsp;&nbsp;|&nbsp;
-            <a href="https://homd.org/genome/blast_select_genome">Select a Genome</a>
+            <a href="<%= $blast_url_base %>/genome_blast">All Genomes</a>&nbsp;&nbsp;|&nbsp;
+            <a href="<%= $blast_url_base %>/genome_blast_single_ncbi/?gid=<%= params[:gid] %>">NCBI</a>&nbsp;&nbsp;|&nbsp;
+            <a href="<%= $blast_url_base %>/genome_blast_single_prokka/?gid=<%= params[:gid] %>">PROKKA</a>&nbsp;&nbsp;|&nbsp;
+            <a href="<%= $homd_url_base %>/genome/blast_select_genome">Select another genome</a>
       </div>
      
     </div>

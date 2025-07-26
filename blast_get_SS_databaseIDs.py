@@ -76,6 +76,7 @@ def run(args):
     
     #fmt = args.outfmt.split(',')  # g,e,i
     fmt = ['g','e','i','o']
+    print('InDirectory:\t'+args.indir)
     for path in collector:
         #print(path)
         for letter in fmt:
