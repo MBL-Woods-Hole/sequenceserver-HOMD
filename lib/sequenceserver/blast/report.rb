@@ -64,6 +64,8 @@ module SequenceServer
         else
           xml_ir = parse_xml File.read(Formatter.run(job, 'xml').file)
           tsv_ir = parse_tsv File.read(Formatter.run(job, 'custom_tsv').file)
+          ## AAV
+          Formatter.run_mysql(job)
         end
         extract_program_info xml_ir
         extract_db_info xml_ir

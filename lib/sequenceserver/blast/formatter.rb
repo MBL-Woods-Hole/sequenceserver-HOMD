@@ -48,6 +48,16 @@ module SequenceServer
         # have been caught before reaching here.
         raise SystemError, e.stderr
       end
+      
+      def run_mysql
+        # AAV
+        q = "SELECT * from PROKKA_meta.orf WHERE genome_id like '%1599%'"
+        print q
+        rs = $conn.query(q)
+        print "MySQL in report"
+        print rs
+        
+      end
     end
   end
 end
