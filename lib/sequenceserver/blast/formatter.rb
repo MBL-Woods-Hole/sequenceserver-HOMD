@@ -42,22 +42,30 @@ module SequenceServer
         command = "blast_formatter -archive '#{job.stdout}'" \
           " -outfmt '#{format} #{specifiers}'"
         sys(command, path: config[:bin], dir: DOTDIR, stdout: file)
-      rescue CommandFailed => e
-        # Mostly we will never get here: empty archive file,
-        # file permissions, broken BLAST binaries, etc. will
-        # have been caught before reaching here.
-        raise SystemError, e.stderr
-      end
-      
-      def run_mysql
-        # AAV
+        
+        #AAV
         q = "SELECT * from PROKKA_meta.orf WHERE genome_id like '%1599%'"
         print q
         rs = $conn.query(q)
         print "MySQL in report"
         print rs
         
+        rescue CommandFailed => e
+        # Mostly we will never get here: empty archive file,
+        # file permissions, broken BLAST binaries, etc. will
+        # have been caught before reaching here.
+        raise SystemError, e.stderr
       end
+      
+      # def run_mysql
+#         # AAV
+#         q = "SELECT * from PROKKA_meta.orf WHERE genome_id like '%1599%'"
+#         print q
+#         rs = $conn.query(q)
+#         print "MySQL in report"
+#         print rs
+#         
+#       end
     end
   end
 end
