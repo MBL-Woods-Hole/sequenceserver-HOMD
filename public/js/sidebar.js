@@ -298,6 +298,14 @@ export default class extends Component {
                         </li>
                     }
                     {
+                        <li>
+                            <a href="#" className={`btn-link`}
+                                onClick={this.downloadSpecial}>
+                                Download Special
+                            </a>
+                        </li>
+                    }
+                    {
                         !(this.props.data.imported_xml || this.props.data.non_parse_seqids) && <li>
                             <a href="#" className="btn-link download-fasta-of-selected disabled"
                                 onClick={this.downloadFastaOfSelected}>
@@ -350,12 +358,7 @@ export default class extends Component {
                             </a>
                         </li>
                     }
-                    <li>
-                        <a href="#" className="btn-link"
-                            onClick={this.downloadSpecial}>
-                            Download Special
-                        </a>
-                    </li>
+                    
                 </ul>
             </div>
         );
