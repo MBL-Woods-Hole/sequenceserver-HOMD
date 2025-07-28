@@ -29,11 +29,9 @@
     <body style='background:#E8F4EA;'>
 <% end %>
   <div id='header'>
-    <a href="<%= $homd_url_base %>">
-       <span id='homd_banner'>
-        <img id='homd_logo_img' src='homd_banner.png' alt='HOMD Banner' \>
-       </span>
-    </a>
+    
+    <span id='homd_banner'><a href="<%= $homd_url_base %>"><img id='homd_logo_img' src='homd_banner.png' alt='HOMD Banner'  \></a></span>
+    
   </div>
   <div
     class="navbar">
@@ -48,8 +46,7 @@
       <% end %>
       <a
         class="navbar-brand"
-        href="https://sequenceserver.com" target="_blank"
-      >
+        href="https://sequenceserver.com" target="_blank">
         <img class="logo" src="SequenceServer_logo.png" alt="sequenceserver_logo">
         <small>
           <%= SequenceServer::VERSION %>
@@ -64,7 +61,7 @@
           </a>
         <br><a href="<%= $homd_url_base %>">HOMD Home</a>
         <% if $DB_TYPE == 'genome' %>
-           &nbsp;&nbsp;||&nbsp;
+           &nbsp;&nbsp;|&nbsp;
            BLAST: 
            <a href="/genome_blast">All Genomes</a>&nbsp;&nbsp;|&nbsp;
            <a href="<%= $homd_url_base %>/genome/blast_select_genome">Select a Genome</a>

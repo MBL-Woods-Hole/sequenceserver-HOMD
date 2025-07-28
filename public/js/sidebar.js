@@ -20,7 +20,6 @@ export default class extends Component {
         this.downloadAlignmentOfAll = this.downloadAlignmentOfAll.bind(this);
         this.downloadAlignmentOfSelected = this.downloadAlignmentOfSelected.bind(this);
         
-        this.downloadSpecial = this.downloadSpecial.bind(this);
         
         this.topPanelJSX = this.topPanelJSX.bind(this);
         this.summaryString = this.summaryString.bind(this);
@@ -297,7 +296,6 @@ export default class extends Component {
                             </a>
                         </li>
                     }
-                    
                     {
                         !(this.props.data.imported_xml || this.props.data.non_parse_seqids) && <li>
                             <a href="#" className="btn-link download-fasta-of-selected disabled"
