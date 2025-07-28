@@ -5,7 +5,7 @@ import React, { Component, useState } from 'react';
 import _ from 'underscore';
 
 import downloadFASTA from './download_fasta';
-import downloadSQLQUERY from './download_fasta';
+import downloadSQLQUERY from './download_sqlquery';
 import AlignmentExporter from './alignment_exporter'; // to download textual alignment
 
 /**
