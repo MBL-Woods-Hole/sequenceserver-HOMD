@@ -44,10 +44,10 @@ module SequenceServer
         sys(command, path: config[:bin], dir: DOTDIR, stdout: file)
         
         #AAV
-        q = "SELECT * from PROKKA_meta.orf WHERE genome_id like '%1599%' limit 200"
-        puts q
-        rs = $conn.query(q)
-        puts "MySQL in report"
+        # q = "SELECT * from PROKKA_meta.orf WHERE genome_id like '%1599%' limit 200"
+#         puts q
+#         rs = $conn.query(q)
+#         puts "MySQL in report"
         
         
         
