@@ -74,7 +74,7 @@ export default class extends Component {
     }
     
     mysql_download() {
-        var sequence_ids = $('.hit-links').map(function () {
+        var sequence_ids = $('.hit-links :checkbox').map(function () {
             return this.value;
         }).get();
         //var database_ids = _.map(this.props.data.querydb, _.iteratee('id'));
