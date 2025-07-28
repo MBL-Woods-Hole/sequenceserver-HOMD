@@ -298,7 +298,7 @@ export default class extends Component {
                         </li>
                     }
                     {
-                        <li>
+                        !this.props.data.imported_xml && <li>
                             <a href="#" className={`btn-link`}
                                 onClick={this.downloadSpecial}>
                                 Download Special
