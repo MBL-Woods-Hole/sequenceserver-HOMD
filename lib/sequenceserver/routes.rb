@@ -202,9 +202,12 @@ module SequenceServer
     
     post '/get_sqlquery' do
       sequence_ids = params['sequence_ids'].split(',')
-      
+      gids = Array.new
+      sequence_ids.each {|n|
+          gids.push(n.split('|')[0])
+      }
       #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
-      logger.info "3-sequence_ids: #{sequence_ids}" 
+      logger.info "3-sequence_ids: #{gids}" 
       # send_file(sequences.file.path,
 #                 type:     sequences.mime,
 #                 filename: sequences.filename)

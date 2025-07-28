@@ -78,6 +78,7 @@ export default class extends Component {
             return this.value;
         }).get();
         //var database_ids = _.map(this.props.data.querydb, _.iteratee('id'));
+        // see public/js/download_sqlquery.js and lib/sequenceserver/routes.rb
         downloadSQLQUERY(sequence_ids);
         return false;
     }
