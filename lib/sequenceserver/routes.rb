@@ -199,7 +199,17 @@ module SequenceServer
                 type:     sequences.mime,
                 filename: sequences.filename)
     end
-
+    
+    post '/get_sqlquery' do
+      sequence_ids = params['sequence_ids'].split(',')
+      
+      #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
+      logger.info "3-sequence_ids: #{sequence_ids}" 
+      # send_file(sequences.file.path,
+#                 type:     sequences.mime,
+#                 filename: sequences.filename)
+    end
+    
     # Download BLAST report in various formats.
     get '/download/:jid.:type' do |jid, type|
       job = Job.fetch(jid)

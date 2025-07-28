@@ -5,6 +5,7 @@ import React, { Component, useState } from 'react';
 import _ from 'underscore';
 
 import downloadFASTA from './download_fasta';
+import downloadSQLQUERY from './download_fasta';
 import AlignmentExporter from './alignment_exporter'; // to download textual alignment
 
 /**
@@ -20,6 +21,7 @@ export default class extends Component {
         this.downloadAlignmentOfAll = this.downloadAlignmentOfAll.bind(this);
         this.downloadAlignmentOfSelected = this.downloadAlignmentOfSelected.bind(this);
         
+        this.mysql_download = this.mysql_download.bind(this);
         
         this.topPanelJSX = this.topPanelJSX.bind(this);
         this.summaryString = this.summaryString.bind(this);
@@ -70,7 +72,16 @@ export default class extends Component {
         downloadFASTA(sequence_ids, database_ids);
         return false;
     }
-
+    
+    mysql_download() {
+        var sequence_ids = $('.hit-links').map(function () {
+            return this.value;
+        }).get();
+        //var database_ids = _.map(this.props.data.querydb, _.iteratee('id'));
+        downloadSQLQUERY(sequence_ids);
+        return false;
+    }
+    
     downloadAlignmentOfAll() {
         // Get number of hits and array of all hsps.
         var num_hits = 0;
@@ -304,6 +315,12 @@ export default class extends Component {
                             </a>
                         </li>
                     }
+                    <li>
+                        <a href="#" className={`btn-link download-alignment-of-all ${!this.props.atLeastOneHit && 'disabled'}`}
+                            onClick={this.mysql_download}>
+                            MySQL Download Testing
+                        </a>
+                    </li>
                     <li>
                         <a href="#" className={`btn-link download-alignment-of-all ${!this.props.atLeastOneHit && 'disabled'}`}
                             onClick={this.downloadAlignmentOfAll}>
