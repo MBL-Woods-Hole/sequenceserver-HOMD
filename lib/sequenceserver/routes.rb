@@ -209,9 +209,9 @@ module SequenceServer
       #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
       logger.info "3-sequence_ids: #{gids}" 
       
-      # send_file(sequences.file.path,
-#                 type:     sequences.mime,
-#                 filename: sequences.filename)
+      send_file(SequenceServer.config[:bin],
+                type:     'csv',
+                filename: 'test_mysql')
     end
     
     # Download BLAST report in various formats.
