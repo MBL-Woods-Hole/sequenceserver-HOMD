@@ -45,10 +45,11 @@ module SequenceServer
         
         #AAV
         q = "SELECT * from PROKKA_meta.orf WHERE genome_id like '%1599%' limit 200"
-        print q
+        puts q
         rs = $conn.query(q)
-        print "MySQL in report"
-        print rs
+        puts "MySQL in report"
+        
+        
         
         rescue CommandFailed => e
         # Mostly we will never get here: empty archive file,

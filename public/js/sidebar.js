@@ -19,6 +19,9 @@ export default class extends Component {
         this.downloadFastaOfSelected = this.downloadFastaOfSelected.bind(this);
         this.downloadAlignmentOfAll = this.downloadAlignmentOfAll.bind(this);
         this.downloadAlignmentOfSelected = this.downloadAlignmentOfSelected.bind(this);
+        
+        this.downloadSpecial = this.downloadSpecial.bind(this);
+        
         this.topPanelJSX = this.topPanelJSX.bind(this);
         this.summaryString = this.summaryString.bind(this);
         this.indexJSX = this.indexJSX.bind(this);
@@ -347,7 +350,12 @@ export default class extends Component {
                             </a>
                         </li>
                     }
-
+                    <li>
+                        <a href="#" className="btn-link"
+                            onClick={this.downloadSpecial}>
+                            Download Special
+                        </a>
+                    </li>
                 </ul>
             </div>
         );
