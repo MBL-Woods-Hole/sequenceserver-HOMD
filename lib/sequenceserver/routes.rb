@@ -1,3 +1,6 @@
+require 'ox'
+Ox.default_options = { skip: :skip_none }
+
 require 'json'
 require 'tilt/erb'
 require 'sinatra/base'
@@ -209,8 +212,10 @@ module SequenceServer
       logger.info "job.methods: #{job.methods}"
       #Report.generate(job).to_json
       xml = File.join(DOTDIR, job_id, 'sequenceserver-xml_report.xml')
-      xml_ir = parse_xml File.read(xml)
-      logger.info "new-jobxml_ir: #{xml_ir}"
+      raw_xml = File.read(xml)
+      logger.info "new-jobrawxml_ir: #{raw_xml}"
+      #xml_ir = parse_xml raw_xml
+      #logger.info "new-jobxml_ir: #{xml_ir}"
       # sequenceserver-xml_report.xml
       if job.imported_xml_file
           xml_ir = parse_xml File.read(job.imported_xml_file)
