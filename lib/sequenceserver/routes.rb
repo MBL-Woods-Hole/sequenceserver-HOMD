@@ -207,7 +207,8 @@ module SequenceServer
       gids_list = ''
       sequence_ids.each {|n|
           # puts n
-          gid = n.split('|')[0].split('_')[0]
+          #gid = n.split('|')[0].split('_')[0]
+          gid = 'GCA_'+n.split('_')[1].split('|')[0]
           #  prokka::protein sequence_ids look like this:   GCA_937930255.1_00575
 #         #  prokka:nucleotide sequence_ids look like this: GCA_937930255.1|pid
 #         #  ncbi::protein sequence_ids look like this:     GCA_026783725.1|MCY7224249.1
