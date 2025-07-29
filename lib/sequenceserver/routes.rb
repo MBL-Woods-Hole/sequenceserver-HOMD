@@ -204,6 +204,9 @@ module SequenceServer
       sequence_ids = params['sequence_ids'].split(',')
       job_id = params['job_id']
       job = Job.fetch(job_id)
+      logger.info "3x-job: #{job_id}" 
+      logger.info "job: #{job}"
+      logger.info "job.methods: #{job.methods}"
       #Report.generate(job).to_json
       if job.imported_xml_file
           xml_ir = parse_xml File.read(job.imported_xml_file)
@@ -213,9 +216,10 @@ module SequenceServer
               h2[k2]=['','',[]]
             end
           end
-        end
-      logger.info "3x-job: #{job_id}" 
-      logger.info "job: #{job}"
+      else
+         logger.info "no xml file"
+      end
+      
       gids = Array.new
       gids_list = ''
       sequence_ids.each {|n|
