@@ -324,7 +324,7 @@ export default class extends Component {
                     <li>
                         <a href="#" className={`btn-link download-alignment-of-all ${!this.props.atLeastOneHit && 'disabled'}`}
                             onClick={this.mysql_download}>
-                            MySQL Download Testing
+                            HOMD Taxonomy of all hits
                         </a>
                     </li>
                     <li>
