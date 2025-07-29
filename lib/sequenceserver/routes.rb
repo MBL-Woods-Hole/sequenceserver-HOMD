@@ -223,7 +223,7 @@ module SequenceServer
       q += " JOIN homd.`genomesV11.0` using(otid)"
       q += " WHERE genome_id in ('"+gids.join("','")+"')"
       File.open(fpath, 'w') do |f|
-        rs = $conn.query(q)
+        results = $conn.query(q)
         #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
         # Sequence::Retriever is in lib/sequenceserver/blast/sequence.rb
         logger.info "3-sequence_ids: #{gids}" 
