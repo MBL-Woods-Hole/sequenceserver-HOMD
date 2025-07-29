@@ -213,9 +213,9 @@ module SequenceServer
       #x = Report.generate(job).to_json
       xhash = Report.generate(job)
       #x['querydb']['name'] = x[0]  # since we always only use one db
-      logger.info "xprogram-blastn?: #{xhash['program']}"
-      logger.info xhash['program']
-      logger.info xhash[program]
+      logger.info "xprogram-start: #{xhash}"
+      logger.info "END"
+      #logger.info xhash[program]
       hits = xhash['queries'][0]['hits']  # length will be > 1 if more than one seq entered
       
       logger.info "x: #{hits}"
