@@ -220,9 +220,8 @@ module SequenceServer
       File.open(fpath, 'w') do |f|
         f.write("write your stuff here")
       end
-      logger.info "file.path: #{file.path}" 
-      # In a Rails controller action or Sinatra route
-      send_file file, 
+      
+      send_file fpath, 
               type: 'text/plain', 
               filename: 'downloaded_document.txt', 
               disposition: 'attachment' 
