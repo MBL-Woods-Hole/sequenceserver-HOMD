@@ -213,14 +213,17 @@ module SequenceServer
       logger.info "3-sequence_ids: #{gids}" 
       #out = BLAST::Formatter.new(job, 'sql_custom')
       # send_file only sends file to browser that is already created
-      file = Tempfile.new(['my_document', '.txt'])
-      file.write("This is the content of my temporary document.")
-      file.close # Close the file to ensure all data is written and flushed
+      file = Tempfile.new
+      file.write('Bob wuz here.')
+      file.close
+      logger.info "file.path: #{file.path}" 
       # In a Rails controller action or Sinatra route
       send_file file, 
               type: 'text/plain', 
               filename: 'downloaded_document.txt', 
               disposition: 'attachment' 
+      #file.close # Close the file to ensure all data is written and flushed
+      #file.unlink
       #send_file(SequenceServer.config[:bin],
       #          type:     'sql_custom',
       #          filename: 'test_mysql')
