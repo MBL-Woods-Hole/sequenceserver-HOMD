@@ -215,12 +215,12 @@ module SequenceServer
       
       fpath = File.join(DOTDIR, job_id, 'out.txt')
       
-      q = "SELECT genome_id,otid_prime.otid,domain,phylum,klass from `otid_prime`"
-      q += " JOIN taxonomy using(taxonomy_id)"
-      q += " JOIN domain using(domain_id)"
-      q += " JOIN phylum using(phylum_id)"
-      q += " JOIN klass using(klass_id)"
-      q += " JOIN `genomesV11.0` using(otid)"
+      q = "SELECT genome_id,otid_prime.otid,domain,phylum,klass from homd.`otid_prime`"
+      q += " JOIN homd.taxonomy using(taxonomy_id)"
+      q += " JOIN homd.domain using(domain_id)"
+      q += " JOIN homd.phylum using(phylum_id)"
+      q += " JOIN homd.klass using(klass_id)"
+      q += " JOIN homd.`genomesV11.0` using(otid)"
       q += " WHERE genome_id in ('"+gids.join("','")+"')"
       File.open(fpath, 'w') do |f|
         rs = $conn.query(q)
