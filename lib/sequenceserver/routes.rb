@@ -240,7 +240,7 @@ module SequenceServer
         logger.info "3-path: #{fpath}" 
         results.each do |row|
            #f.write("write your stuff here")
-           hmt = row['otid'].to_s.rjust(3,'0')
+           hmt = 'HMT-'+row['otid'].to_s.rjust(3,'0')
            f.puts "#{row['genome_id']}\t#{row['strain']}\t#{hmt}\t#{row['domain']}\t#{row['phylum']}\t#{row['klass']}\t#{row['order']}\t#{row['family']}\t#{row['genus']}\t#{row['species']}"
         end
       end
