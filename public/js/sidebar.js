@@ -75,13 +75,16 @@ export default class extends Component {
     }
     
     mysql_download() {
+        var path = location.pathname.split('/');
+        // Get job id.
+        var job_id = path.pop();
         let sequence_ids = $('.hit-links :checkbox').map(function () {
             return this.value;
         }).get();
         
         //var database_ids = _.map(this.props.data.querydb, _.iteratee('id'));
         // see public/js/download_sqlquery.js and lib/sequenceserver/routes.rb
-        downloadSQLQUERY(sequence_ids,this.props.data.search_id);
+        downloadSQLQUERY(sequence_ids, job_id);
         return false;
     }
     

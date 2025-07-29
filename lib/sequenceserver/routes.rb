@@ -212,7 +212,7 @@ module SequenceServer
       #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
       # Sequence::Retriever is in lib/sequenceserver/blast/sequence.rb
       logger.info "3-sequence_ids: #{gids}" 
-      
+      logger.info "3-job_id: #{job_id}" 
       #out = BLAST::Formatter.new(job, 'sql_custom')
       # send_file only sends file to browser that is already created
       fpath = File.join(SequenceServer.config[:bin], job_id, 'out.txt')
