@@ -258,7 +258,7 @@ module SequenceServer
         results.each do |row|
            #f.write("write your stuff here")
            hmt = 'HMT-'+row['otid'].to_s.rjust(3,'0')
-           f.puts "#{row['genome_id']}\t#{hmt}\t#{row['domain']}\t#{row['phylum']}\t#{row['klass']}\t#{row['order']}\t#{row['family']}\t#{row['genus']}\t#{row['species']\t#{row['subspecies']}\t#{row['strain']}"
+           f.puts "#{row['genome_id']}\t#{hmt}\t#{row['domain']}\t#{row['phylum']}\t#{row['klass']}\t#{row['order']}\t#{row['family']}\t#{row['genus']}\t#{row['species']}\t#{row['subspecies']}\t#{row['strain']}"
         end
       end
       
