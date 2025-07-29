@@ -211,7 +211,7 @@ module SequenceServer
       logger.info "job: #{job}"
       logger.info "job.methods: #{job.methods}"
       #x = Report.generate(job).to_json
-      xhash = Report.generate(job).to_json
+      xhash = Report.generate(job)
       #x['querydb']['name'] = x[0]  # since we always only use one db
       logger.info "xprogram-blastn?: #{xhash['program']}"
       logger.info xhash['program']
