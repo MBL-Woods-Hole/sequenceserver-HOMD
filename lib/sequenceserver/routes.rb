@@ -213,7 +213,7 @@ module SequenceServer
       #x = Report.generate(job).to_json
       fname = File.join(DOTDIR, job_id, 'sequenceserver-xml_report.xml')
       xml_ir = File.read(fname)
-      logger.info JSON.parse xml_ir
+      logger.info xml_ir
      #  xhash = Report.generate(job).to_json
 #       #x['querydb']['name'] = x[0]  # since we always only use one db
 #       logger.info "xprogram-start: #{xhash['querydb']}"
