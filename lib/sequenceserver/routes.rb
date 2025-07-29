@@ -215,7 +215,7 @@ module SequenceServer
       logger.info "3-job_id: #{job_id}" 
       #out = BLAST::Formatter.new(job, 'sql_custom')
       # send_file only sends file to browser that is already created
-      fpath = File.join(SequenceServer.config[:bin], job_id, 'out.txt')
+      fpath = File.join(DOTDIR, job_id, 'out.txt')
       logger.info "3-path: #{fpath}" 
       File.open(fpath, ['w']) do |f|
         f.write("write your stuff here")
