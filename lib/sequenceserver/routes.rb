@@ -208,7 +208,7 @@ module SequenceServer
       logger.info "job: #{job}"
       logger.info "job.methods: #{job.methods}"
       #Report.generate(job).to_json
-      xml = = File.join(DOTDIR, job_id, 'sequenceserver-xml_report.xml')
+      xml = File.join(DOTDIR, job_id, 'sequenceserver-xml_report.xml')
       xml_ir = parse_xml File.read(xml)
       logger.info "new-jobxml_ir: #{xml_ir}"
       # sequenceserver-xml_report.xml
