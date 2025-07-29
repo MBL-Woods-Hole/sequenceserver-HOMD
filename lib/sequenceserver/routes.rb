@@ -202,6 +202,7 @@ module SequenceServer
     
     post '/get_sqlquery' do
       sequence_ids = params['sequence_ids'].split(',')
+      job_id = params['job_id']
       gids = Array.new
       sequence_ids.each {|n|
           # puts n
@@ -211,11 +212,14 @@ module SequenceServer
       #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
       # Sequence::Retriever is in lib/sequenceserver/blast/sequence.rb
       logger.info "3-sequence_ids: #{gids}" 
+      
       #out = BLAST::Formatter.new(job, 'sql_custom')
       # send_file only sends file to browser that is already created
-      file = Tempfile.new
-      file.write('Bob wuz here.')
-      file.close
+      fpath = File.join(SequenceServer.config[:bin], job_id, 'out.txt')
+      logger.info "3-path: #{fpath}" 
+      File.open(fpath, ['w']) do |f|
+        f.write("write your stuff here")
+      end
       logger.info "file.path: #{file.path}" 
       # In a Rails controller action or Sinatra route
       send_file file, 

@@ -81,7 +81,7 @@ export default class extends Component {
         
         //var database_ids = _.map(this.props.data.querydb, _.iteratee('id'));
         // see public/js/download_sqlquery.js and lib/sequenceserver/routes.rb
-        downloadSQLQUERY(sequence_ids);
+        downloadSQLQUERY(sequence_ids,this.props.data.search_id);
         return false;
     }
     
