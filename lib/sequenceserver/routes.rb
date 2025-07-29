@@ -204,14 +204,26 @@ module SequenceServer
       sequence_ids = params['sequence_ids'].split(',')
       gids = Array.new
       sequence_ids.each {|n|
-          gids.push(n.split('|')[0])
+          # puts n
+          gid = n.split('|')[0]
+          gids.push(gid)
       }
       #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
+      # Sequence::Retriever is in lib/sequenceserver/blast/sequence.rb
       logger.info "3-sequence_ids: #{gids}" 
-      
-      send_file(SequenceServer.config[:bin],
-                type:     'csv',
-                filename: 'test_mysql')
+      #out = BLAST::Formatter.new(job, 'sql_custom')
+      # send_file only sends file to browser that is already created
+      file = Tempfile.new(['my_document', '.txt'])
+      file.write("This is the content of my temporary document.")
+      file.close # Close the file to ensure all data is written and flushed
+      # In a Rails controller action or Sinatra route
+      send_file file, 
+              type: 'text/plain', 
+              filename: 'downloaded_document.txt', 
+              disposition: 'attachment' 
+      #send_file(SequenceServer.config[:bin],
+      #          type:     'sql_custom',
+      #          filename: 'test_mysql')
     end
     
     # Download BLAST report in various formats.

@@ -29,7 +29,8 @@ module SequenceServer
       'asn_text'        => [8, :asn],
       'asn_binary'      => [9, :asn],
       'csv'             => [10, :csv],
-      'archive'         => [11, :txt]
+      'archive'         => [11, :txt],
+      'sql_custom' => [99, :xlsx]
     }.freeze
   end
 end

@@ -21,6 +21,7 @@ export default class extends Component {
         this.downloadAlignmentOfAll = this.downloadAlignmentOfAll.bind(this);
         this.downloadAlignmentOfSelected = this.downloadAlignmentOfSelected.bind(this);
         
+        /*  Found in public/js/download_sqlquery.js */
         this.mysql_download = this.mysql_download.bind(this);
         
         this.topPanelJSX = this.topPanelJSX.bind(this);
@@ -74,9 +75,10 @@ export default class extends Component {
     }
     
     mysql_download() {
-        var sequence_ids = $('.hit-links :checkbox').map(function () {
+        let sequence_ids = $('.hit-links :checkbox').map(function () {
             return this.value;
         }).get();
+        
         //var database_ids = _.map(this.props.data.querydb, _.iteratee('id'));
         // see public/js/download_sqlquery.js and lib/sequenceserver/routes.rb
         downloadSQLQUERY(sequence_ids);

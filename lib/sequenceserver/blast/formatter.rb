@@ -18,7 +18,7 @@ module SequenceServer
       def initialize(job, type)
         @job = job
         @type = type
-
+        # OUTFMT is Where? lib/sequenceserver/blast/constants.rb
         @format, @mime, @specifiers = OUTFMT[type]
         run
       end
@@ -60,7 +60,7 @@ module SequenceServer
       
       # def run_mysql
 #         # AAV
-#         q = "SELECT * from PROKKA_meta.orf WHERE genome_id like '%1599%'"
+#         q = "SELECT * from homd.`genomesV11.0` WHERE genome_id like '%1599%'"
 #         print q
 #         rs = $conn.query(q)
 #         print "MySQL in report"
