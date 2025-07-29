@@ -215,14 +215,20 @@ module SequenceServer
       
       fpath = File.join(DOTDIR, job_id, 'out.txt')
       
-      q = "SELECT genome_id,otid_prime.otid,domain,phylum,klass from homd.`otid_prime`"
+      q = "SELECT genome_id,strain,otid_prime.otid,domain,phylum,klass,`order`,family,genus,species from homd.`otid_prime`"
       q += " JOIN homd.taxonomy using(taxonomy_id)"
       q += " JOIN homd.domain using(domain_id)"
       q += " JOIN homd.phylum using(phylum_id)"
       q += " JOIN homd.klass using(klass_id)"
+      q += " JOIN homd.`order` using(order_id)"
+      q += " JOIN homd.family using(family_id)"
+      q += " JOIN homd.genus using(genus_id)"
+      q += " JOIN homd.species using(species_id)"
+      
       q += " JOIN homd.`genomesV11.0` using(otid)"
       q += " WHERE genome_id in ('"+gids.join("','")+"')"
       File.open(fpath, 'w') do |f|
+        f.puts "Genome-ID\tStrain\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies"
         results = $conn.query(q)
         #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
         # Sequence::Retriever is in lib/sequenceserver/blast/sequence.rb
@@ -230,17 +236,18 @@ module SequenceServer
         logger.info "3-q: #{q}" 
         #out = BLAST::Formatter.new(job, 'sql_custom')
         # send_file only sends file to browser that is already created
-      
+        
         logger.info "3-path: #{fpath}" 
         results.each do |row|
            #f.write("write your stuff here")
-           f.puts "#{row['genome_id']}\t#{row['otid']}"
+           hmt = row['otid'].rjust(3,'0')
+           f.puts "#{row['genome_id']}\t#{strain}\t#{hmt}\t#{domain}\t#{phylum}\t#{klass}\t#{order}\t#{family}\t#{genus}\t#{species}"
         end
       end
       
       send_file fpath, 
               type: 'text/csv', 
-              filename: 'downloaded_document.csv', 
+              filename: 'custom_homd_taxonomy.csv', 
               disposition: 'attachment' 
       #file.close # Close the file to ensure all data is written and flushed
       #file.unlink
