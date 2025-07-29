@@ -234,7 +234,7 @@ module SequenceServer
         logger.info "3-path: #{fpath}" 
         results.each do |row|
            #f.write("write your stuff here")
-           f.puts "#{row.genome_id}\t#{row.otid}"
+           f.puts "#{row['genome_id']}\t#{row['otid']}"
         end
       end
       
