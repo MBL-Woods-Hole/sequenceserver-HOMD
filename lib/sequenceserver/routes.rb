@@ -203,6 +203,19 @@ module SequenceServer
     post '/get_sqlquery' do
       sequence_ids = params['sequence_ids'].split(',')
       job_id = params['job_id']
+      job = Job.fetch(job_id)
+      #Report.generate(job).to_json
+      if job.imported_xml_file
+          xml_ir = parse_xml File.read(job.imported_xml_file)
+          logger.info "jobxml_ir: #{xml_ir}"
+          tsv_ir = Hash.new do |h1,k1|
+            h1[k1] = Hash.new do |h2,k2|
+              h2[k2]=['','',[]]
+            end
+          end
+        end
+      logger.info "3x-job: #{job_id}" 
+      logger.info "job: #{job}"
       gids = Array.new
       gids_list = ''
       sequence_ids.each {|n|
@@ -219,7 +232,7 @@ module SequenceServer
       
       fpath = File.join(DOTDIR, job_id, 'out.txt')
       
-      q = "SELECT genome_id,strain,otid_prime.otid,domain,phylum,klass,`order`,family,genus,species from homd.`otid_prime`"
+      q = "SELECT genome_id,otid_prime.otid,domain,phylum,klass,`order`,family,genus,species,subspecies,strain from homd.`otid_prime`"
       q += " JOIN homd.taxonomy using(taxonomy_id)"
       q += " JOIN homd.domain using(domain_id)"
       q += " JOIN homd.phylum using(phylum_id)"
@@ -228,11 +241,11 @@ module SequenceServer
       q += " JOIN homd.family using(family_id)"
       q += " JOIN homd.genus using(genus_id)"
       q += " JOIN homd.species using(species_id)"
-      
+      q += " JOIN homd.subspecies using(subspecies_id)"
       q += " JOIN homd.`genomesV11.0` using(otid)"
       q += " WHERE genome_id in ('"+gids.join("','")+"')"
       File.open(fpath, 'w') do |f|
-        f.puts "Genome-ID\tStrain\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies"
+        f.puts "Genome-ID\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
         results = $conn.query(q)
         #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
         # Sequence::Retriever is in lib/sequenceserver/blast/sequence.rb
@@ -245,7 +258,7 @@ module SequenceServer
         results.each do |row|
            #f.write("write your stuff here")
            hmt = 'HMT-'+row['otid'].to_s.rjust(3,'0')
-           f.puts "#{row['genome_id']}\t#{row['strain']}\t#{hmt}\t#{row['domain']}\t#{row['phylum']}\t#{row['klass']}\t#{row['order']}\t#{row['family']}\t#{row['genus']}\t#{row['species']}"
+           f.puts "#{row['genome_id']}\t#{hmt}\t#{row['domain']}\t#{row['phylum']}\t#{row['klass']}\t#{row['order']}\t#{row['family']}\t#{row['genus']}\t#{row['species']\t#{row['subspecies']}\t#{row['strain']}"
         end
       end
       
