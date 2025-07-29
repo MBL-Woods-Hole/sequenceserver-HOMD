@@ -217,7 +217,7 @@ module SequenceServer
       # send_file only sends file to browser that is already created
       fpath = File.join(DOTDIR, job_id, 'out.txt')
       logger.info "3-path: #{fpath}" 
-      File.open(fpath, ['w']) do |f|
+      File.open(fpath, 'w') do |f|
         f.write("write your stuff here")
       end
       logger.info "file.path: #{file.path}" 
