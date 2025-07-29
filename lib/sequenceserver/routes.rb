@@ -211,14 +211,16 @@ module SequenceServer
       logger.info "job: #{job}"
       logger.info "job.methods: #{job.methods}"
       #x = Report.generate(job).to_json
-      xhash = Report.generate(job).to_json
-      #x['querydb']['name'] = x[0]  # since we always only use one db
-      logger.info "xprogram-start: #{xhash['querydb']}"
-      logger.info "END"
-      #logger.info xhash[program]
-      hits = xhash['queries'][0]['hits']  # length will be > 1 if more than one seq entered
-      
-      logger.info "x: #{hits}"
+      xml_ir = File.read(job.imported_xml_file)
+      logger.info JSON.parse xml_ir
+     #  xhash = Report.generate(job).to_json
+#       #x['querydb']['name'] = x[0]  # since we always only use one db
+#       logger.info "xprogram-start: #{xhash['querydb']}"
+#       logger.info "END"
+#       #logger.info xhash[program]
+#       hits = xhash['queries'][0]['hits']  # length will be > 1 if more than one seq entered
+#       
+#       logger.info "x: #{hits}"
       #xml = File.join(DOTDIR, job_id, 'sequenceserver-xml_report.xml')
       #raw_xml = File.read(xml)
       #logger.info "new-jobrawxml_ir: #{raw_xml}"
