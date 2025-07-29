@@ -2,6 +2,7 @@ require 'ox'
 Ox.default_options = { skip: :skip_none }
 
 require 'json'
+require 'nokogiri'
 require 'tilt/erb'
 require 'sinatra/base'
 
@@ -213,7 +214,9 @@ module SequenceServer
       #x = Report.generate(job).to_json
       fname = File.join(DOTDIR, job_id, 'sequenceserver-xml_report.xml')
       xml_ir = File.read(fname)
-      logger.info xml_ir
+      # Parse the XML string
+      document = Ox.parse(xml_ir)
+      logger.info document
      #  xhash = Report.generate(job).to_json
 #       #x['querydb']['name'] = x[0]  # since we always only use one db
 #       logger.info "xprogram-start: #{xhash['querydb']}"
