@@ -204,21 +204,38 @@ module SequenceServer
       sequence_ids = params['sequence_ids'].split(',')
       job_id = params['job_id']
       gids = Array.new
+      gids_list = ''
       sequence_ids.each {|n|
           # puts n
           gid = n.split('|')[0]
+          
           gids.push(gid)
+          
       }
-      #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
-      # Sequence::Retriever is in lib/sequenceserver/blast/sequence.rb
-      logger.info "3-sequence_ids: #{gids}" 
-      logger.info "3-job_id: #{job_id}" 
-      #out = BLAST::Formatter.new(job, 'sql_custom')
-      # send_file only sends file to browser that is already created
+      
       fpath = File.join(DOTDIR, job_id, 'out.txt')
-      logger.info "3-path: #{fpath}" 
+      
+      q = "SELECT genome_id,otid_prime.otid,domain,phylum,klass from `otid_prime`"
+      q += " JOIN taxonomy using(taxonomy_id)"
+      q += " JOIN domain using(domain_id)"
+      q += " JOIN phylum using(phylum_id)"
+      q += " JOIN klass using(klass_id)"
+      q += " JOIN `genomesV11.0` using(otid)"
+      q += " WHERE genome_id in ('"+gids.join("','")+"')"
       File.open(fpath, 'w') do |f|
-        f.write("write your stuff here")
+        rs = $conn.query(q)
+        #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
+        # Sequence::Retriever is in lib/sequenceserver/blast/sequence.rb
+        logger.info "3-sequence_ids: #{gids}" 
+        logger.info "3-q: #{q}" 
+        #out = BLAST::Formatter.new(job, 'sql_custom')
+        # send_file only sends file to browser that is already created
+      
+        logger.info "3-path: #{fpath}" 
+        results.each do |row|
+           #f.write("write your stuff here")
+           f.puts row
+        end
       end
       
       send_file fpath, 
