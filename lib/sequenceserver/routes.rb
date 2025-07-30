@@ -207,6 +207,11 @@ module SequenceServer
     
     post '/get_sqlquery' do
         sequence_ids = params['sequence_ids'].split(',')
+        if sequence_ids[0].starts_with? 'HMT'
+            db_type = 'refseq'
+        else
+            db_type = 'genome'
+        end
         job_id = params['job_id']
         job = Job.fetch(job_id)
         fpath_out = File.join(DOTDIR, job_id, 'custom_homd_taxonomy.csv')
@@ -214,47 +219,74 @@ module SequenceServer
       #
       # First get GIDS and Taxonomy from MySQL DB
       #
-        gids = Array.new
+        mysql_ids = Array.new
         gids_list = ''
         logger.info "SEQ IDS= #{sequence_ids}"
         sequence_ids.each {|n|
-          gid = 'GCA_'+n.split('_')[1].split('|')[0]
-          #  prokka::protein sequence_ids look like this:   GCA_937930255.1_00575
-          #  prokka:nucleotide sequence_ids look like this: GCA_937930255.1|pid
-          #  ncbi::protein sequence_ids look like this:     GCA_026783725.1|MCY7224249.1
-          #  ncbi::nucleotide sequence_ids look like this:  GCA_001815865.1|KV822194.1
-          gids.push(gid)
+          if db_type == 'refseq'
+             # ID == HMT-389_16S000742
+             otid = n.split('_')[0].split('-')[1]
+             mysql_ids.push(otid)
+          else
+             gid = 'GCA_'+n.split('_')[1].split('|')[0]
+              #  prokka::protein sequence_ids look like this:   GCA_937930255.1_00575
+              #  prokka:nucleotide sequence_ids look like this: GCA_937930255.1|pid
+              #  ncbi::protein sequence_ids look like this:     GCA_026783725.1|MCY7224249.1
+              #  ncbi::nucleotide sequence_ids look like this:  GCA_001815865.1|KV822194.1
+              mysql_ids.push(gid)
+          end
         }
-        logger.info "GIDS= #{gids}"
+        logger.info "MYSQLIDS= #{mysql_ids}"
         tax_hash = {}
-        q = "SELECT genome_id,otid_prime.otid,domain,phylum,klass,`order`,family,genus,species,subspecies,strain from homd.`otid_prime`"
-        q += " JOIN homd.taxonomy using(taxonomy_id)"
-        q += " JOIN homd.domain using(domain_id)"
-        q += " JOIN homd.phylum using(phylum_id)"
-        q += " JOIN homd.klass using(klass_id)"
-        q += " JOIN homd.`order` using(order_id)"
-        q += " JOIN homd.family using(family_id)"
-        q += " JOIN homd.genus using(genus_id)"
-        q += " JOIN homd.species using(species_id)"
-        q += " JOIN homd.subspecies using(subspecies_id)"
-        q += " JOIN homd.`genomesV11.0` using(otid)"
-        q += " WHERE genome_id in ('"+gids.join("','")+"')"
+        if db_type == 'refseq'
+            q = "SELECT otid_prime.otid,domain,phylum,klass,`order`,family,genus,species,subspecies from homd.`otid_prime`"
+            q += " JOIN homd.taxonomy using(taxonomy_id)"
+            q += " JOIN homd.domain using(domain_id)"
+            q += " JOIN homd.phylum using(phylum_id)"
+            q += " JOIN homd.klass using(klass_id)"
+            q += " JOIN homd.`order` using(order_id)"
+            q += " JOIN homd.family using(family_id)"
+            q += " JOIN homd.genus using(genus_id)"
+            q += " JOIN homd.species using(species_id)"
+            q += " JOIN homd.subspecies using(subspecies_id)"
+            q += " WHERE otid in ('"+mysql_ids.join("','")+"')"
         
+        else
+            q = "SELECT genome_id,otid_prime.otid,domain,phylum,klass,`order`,family,genus,species,subspecies,strain from homd.`otid_prime`"
+            q += " JOIN homd.taxonomy using(taxonomy_id)"
+            q += " JOIN homd.domain using(domain_id)"
+            q += " JOIN homd.phylum using(phylum_id)"
+            q += " JOIN homd.klass using(klass_id)"
+            q += " JOIN homd.`order` using(order_id)"
+            q += " JOIN homd.family using(family_id)"
+            q += " JOIN homd.genus using(genus_id)"
+            q += " JOIN homd.species using(species_id)"
+            q += " JOIN homd.subspecies using(subspecies_id)"
+            q += " JOIN homd.`genomesV11.0` using(otid)"
+            q += " WHERE genome_id in ('"+mysql_ids.join("','")+"')"
+        end
         results = $conn.query(q)
         results.each do |row|
-           #f.write("write your stuff here")
-           hmt = 'HMT-'+row['otid'].to_s.rjust(3,'0')
-           tax_hash[row['genome_id']] = {:hmt => hmt,
-                                         :domain => row['domain'],
-                                         :phylum => row['phylum'],
-                                         :class => row['klass'],
-                                         :order => row['order'],
-                                         :family => row['family'],
-                                         :genus => row['genus'],
-                                         :species => row['species'],
-                                         :subspecies => row['subspecies'],
-                                         :strain => row['strain']
-                                         }
+            #f.write("write your stuff here")
+            hmt = 'HMT-'+row['otid'].to_s.rjust(3,'0')
+            if db_type == 'refseq'
+                tax_hash[hmt] = {
+            else
+                tax_hash[row['genome_id']] = {
+                  :strain => row['strain']
+            end
+           
+                :hmt => hmt,
+                :domain => row['domain'],
+                :phylum => row['phylum'],
+                :class => row['klass'],
+                :order => row['order'],
+                :family => row['family'],
+                :genus => row['genus'],
+                :species => row['species'],
+                :subspecies => row['subspecies'],
+                
+              }
            #f.puts "#{row['genome_id']}\t#{hmt}\t#{row['domain']}\t#{row['phylum']}\t#{row['klass']}\t#{row['order']}\t#{row['family']}\t#{row['genus']}\t#{row['species']}\t#{row['subspecies']}\t#{row['strain']}"
         end
         
