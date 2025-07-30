@@ -313,7 +313,7 @@ module SequenceServer
                'hsp_ident'  => hsp_ident,
                'hsp_gaps'   => hsp_gaps,
                'hmt'       => tax_hash[gid]['hmt']
-               'taxonomy'  => "#{tax_hash[gid]['genus']} #{tax_hash[gid]['species']} #{tax_hash[gid]['strain']}"
+               'taxonomy'  => tax_hash[gid]['genus']+' '+tax_hash[gid]['species']+' '+tax_hash[gid]['strain']
                }
                
                
@@ -342,7 +342,7 @@ module SequenceServer
                'hsp_ident'  => hsp_ident,
                'hsp_gaps'   => hsp_gaps,
                'hmt'       => tax_hash[gid]['hmt']
-               'taxonomy'  => "#{tax_hash[gid]['genus']} #{tax_hash[gid]['species']} #{tax_hash[gid]['strain']}"
+               'taxonomy'  => tax_hash[gid]['genus']+' '+tax_hash[gid]['species']+' '+tax_hash[gid]['strain']
             }
                
                
