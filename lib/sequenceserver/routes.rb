@@ -281,7 +281,8 @@ module SequenceServer
       #logger.info "hash['BlastOutput'] #{hash['BlastOutput']}"   #['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]
       #hit_ary = hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit']
       logger.info "keys #{newHash.keys}"
-      hit_ary = newHash['queries']['hits']
+      logger.info "QUERIES #{newHash[:queries]}"
+      hit_ary = newHash[:queries][:hits]
       
       #hits_count = hit_ary.length()
       big_array = [] # an array of hashes
