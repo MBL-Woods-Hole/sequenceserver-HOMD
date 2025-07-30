@@ -371,11 +371,11 @@ module SequenceServer
         #out = BLAST::Formatter.new(job, 'sql_custom')
         # send_file only sends file to browser that is already created
         
-        logger.info "3-path: #{fpath}" 
+        logger.info "3-path: #{fpath_out}" 
         
       end
       
-      send_file fpath, 
+      send_file fpath_out, 
               type: 'text/csv', 
               filename: 'custom_homd_taxonomy.csv', 
               disposition: 'attachment' 
