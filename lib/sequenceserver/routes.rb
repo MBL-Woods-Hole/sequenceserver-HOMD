@@ -313,7 +313,19 @@ module SequenceServer
                    #logger.info "Hsp #{hsp_elem}"
                    #logger.info "H Def #{hit_elem['Hit_def']}"
                     
-                  
+                  # :number=>1, :bit_score=>468.003, 
+#                   :score=>1203, 
+#                   :evalue=>4.74087e-165, :qstart=>1, 
+#                   :qend=>224, 
+#                   :sstart=>101, 
+#                   :send=>324, :qframe=>0, :sframe=>0, 
+#                   :identity=>224, 
+#                   :positives=>224, :gaps=>0, 
+#                   :length=>224, :qcovhsp=>100, 
+                   if gid not in tax_hash:
+                   if !tax_hash.has_key?(gid)
+                       logger.info "Key #{gid} does not exist in the tax hash."
+                    end
                    tmp_hash = {
                    :gid        => gid,
                    :query_num    => query_elem[:number],
