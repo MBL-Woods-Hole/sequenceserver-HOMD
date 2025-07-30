@@ -323,41 +323,55 @@ module SequenceServer
 #                   :positives=>224, :gaps=>0, 
 #                   :length=>224, :qcovhsp=>100, 
                    #if gid not in tax_hash:
+                   tmp_hash1 = {
+                           :gid        => gid,
+                           :query_num    => query_elem[:number],
+                           :hit_title    => hit_elem[:title],
+                           :hit_num    => hit_elem[:number],
+                           :hit_length => hit_elem[:length],
+                           :hit_qcov   => hit_elem[:qcovs],
+                           :hit_tscore => hit_elem[:total_score],
+                           :hit_evalue => hit_evalue,
+                           :hit_ident  => hit_ident, 
+                           :hit_ipct   => hit_ident_pct,
+                           :hsp_num    => hsp_elem[:number],
+                           :hsp_score  => hsp_elem[:score],
+                           :hsp_bitscore  => hsp_elem[:bit_score],
+                           :hsp_evalue => hsp_elem[:evalue],
+                           :hsp_ident  => hsp_elem[:identity],
+                           :hsp_gaps   => hsp_elem[:gaps]
+                    }
                    if !tax_hash.has_key?(gid)
                        logger.info "Key #{gid} does not exist in the tax hash."
-                    end
-                   tmp_hash = {
-                   :gid        => gid,
-                   :query_num    => query_elem[:number],
-                   :hit_title    => hit_elem[:title],
-                   :hit_num    => hit_elem[:number],
-                   :hit_length => hit_elem[:length],
-                   :hit_qcov   => hit_elem[:qcovs],
-                   :hit_tscore => hit_elem[:total_score],
-                   :hit_evalue => hit_evalue,
-                   :hit_ident  => hit_ident, 
-                   :hit_ipct   => hit_ident_pct,
-                   :hsp_num    => hsp_elem[:number],
-                   :hsp_score  => hsp_elem[:score],
-                   :hsp_bitscore  => hsp_elem[:bit_score],
-                   :hsp_evalue => hsp_elem[:evalue],
-                   :hsp_ident  => hsp_elem[:identity],
-                   :hsp_gaps   => hsp_elem[:gaps],
-                   :hmt       => tax_hash[gid][:hmt] || '',
-                   #'taxonomy'  => tax_hash[gid]['genus']+' '+tax_hash[gid]['species']+' '+tax_hash[gid]['strain']
-                   :domain    => tax_hash[gid][:domain] || '',
-                   :phylum    => tax_hash[gid][:phylum] || '',
-                   :class     => tax_hash[gid][:class] || '',
-                   :order     => tax_hash[gid][:order] || '',
-                   :family    => tax_hash[gid][:family] || '',
-                   :genus     => tax_hash[gid][:genus] || '',
-                   :species   => tax_hash[gid][:species] || '',
-                   :subspecies => tax_hash[gid][:subspecies] || '',
-                   :strain    => tax_hash[gid][:strain] || ''
-                   
-                   }
-                   
-                   
+                       tmp_hash2 = {
+                           :hmt       =>  '',
+                           :domain    =>  '',
+                           :phylum    => '',
+                           :class     =>  '',
+                           :order     =>  '',
+                           :family    =>  '',
+                           :genus     =>  '',
+                           :species   =>  '',
+                           :subspecies =>  '',
+                           :strain    =>  ''
+                       }
+                   else
+                       tmp_hash2 = {
+                           
+                           :hmt       => tax_hash[gid][:hmt],
+                           :domain    => tax_hash[gid][:domain],
+                           :phylum    => tax_hash[gid][:phylum],
+                           :class     => tax_hash[gid][:class],
+                           :order     => tax_hash[gid][:order],
+                           :family    => tax_hash[gid][:family],
+                           :genus     => tax_hash[gid][:genus],
+                           :species   => tax_hash[gid][:species],
+                           :subspecies => tax_hash[gid][:subspecies],
+                           :strain    => tax_hash[gid][:strain]''
+                       
+                       }
+                   end
+                   tmp_hash = tmp_hash1.merge(tmp_hash2)
                    big_array.push(tmp_hash)
                 end
             end
