@@ -259,14 +259,26 @@ module SequenceServer
       #
       fname_xml = File.join(DOTDIR, job_id, 'sequenceserver-xml_report.xml')
       xml_ir = File.read(fname_xml)
-      Xhash = Report.generate(job).to_json
-      myhash = Xhash.to_hash()
-      logger.info "XXX= #{Xhash}"
+      @Xhash = Report.generate(job).to_json
+      if @Xhash.kind_of?(Array)
+        logger.info "Xhash is array"
+      else
+        logger.info "Xhash not an array"
+      end
+      
+      if @Xhash.is_a?(Hash)
+        logger.info "Xhash is hash"
+      else
+        logger.info "Xhash is hash"
+      end
+      
+      #myhash = Xhash.to_hash()
+      logger.info "XXX= #{@Xhash}"
       # Parse the XML string
       hash = Ox.load(xml_ir, mode: :hash_no_attrs)
       #logger.info "hash['BlastOutput'] #{hash['BlastOutput']}"   #['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]
       #hit_ary = hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit']
-      logger.info "PARAMS #{myhash['params']}"
+      logger.info "PARAMS #{@Xhash['params']}"
       hit_ary = Xhash['queries']['hits']
       
       #hits_count = hit_ary.length()
