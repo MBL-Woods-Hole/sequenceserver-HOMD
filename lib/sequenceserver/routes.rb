@@ -209,8 +209,8 @@ module SequenceServer
       job_id = params['job_id']
       job = Job.fetch(job_id)
       fpath_out = File.join(DOTDIR, job_id, 'custom_homd_taxonomy.csv')
-      x = Report.generate(job).to_json
-      logger.info "XXX= #{x}"
+      Xhash = Report.generate(job).to_json
+      logger.info "XXX= #{Xhash}"
       #
       # First get GIDS and Taxonomy from MySQL DB
       #
@@ -262,9 +262,10 @@ module SequenceServer
       xml_ir = File.read(fname_xml)
       # Parse the XML string
       hash = Ox.load(xml_ir, mode: :hash_no_attrs)
-      logger.info "hash['BlastOutput'] #{hash['BlastOutput']}"   #['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]
-      hit_ary = hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit']
-      hit_length = hit_ary.length()
+      #logger.info "hash['BlastOutput'] #{hash['BlastOutput']}"   #['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]
+      #hit_ary = hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit']
+      hit_ary = Xhash['queries']['hits']
+      #hits_count = hit_ary.length()
       big_array = [] # an array of hashes
     #{gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
       
@@ -272,11 +273,12 @@ module SequenceServer
          
         # logger.info "Hit #{hit_elem}"
          #logger.info "Hit Def #{hit_elem['Hit_def']}"
-         hit_def = hit_elem['Hit_def']
-         hit_pts = hit_elem['Hit_def'].split()
-         gid = 'GCA_'+hit_pts[0].split('_')[1].split('|')[0]
-         hit_num = hit_elem['Hit_num']
-         hit_length = hit_elem['Hit_len']
+         hit_title = hit_elem['title']
+         hit_id = hit_elem['id']
+         #hit_pts = hit_elem['Hit_def'].split()
+         gid = 'GCA_'+hit_id.split('_')[1].split('|')[0]
+         hit_num = hit_elem['number']
+         hit_length = hit_elem['length']
          hit_qcov = hit_elem['qcovs']
          hit_tscore = hit_elem['total_score']
          
@@ -286,19 +288,19 @@ module SequenceServer
          
          #if hit_elem['Hit_hsps']['Hsp'] is array => then multiple
          
-         hsps = hit_elem['Hit_hsps']['Hsp']
+         hsps = hit_elem['Hsps']
          if hsps.kind_of?(Array)
             # multiple elements
-            hit_evalue = hsps[0]['Hsp_evalue']
-            hit_ident = hsps[0]['Hsp_identity']
+            hit_evalue = hsps[0]['evalue']
+            hit_ident = hsps[0]['identity']
             hsps.each do |hsp_elem|
                #logger.info "Hsp #{hsp_elem}"
                #logger.info "H Def #{hit_elem['Hit_def']}"
-               hsp_num = hsp_elem['Hsp_num']
-               hsp_score = hsp_elem['Hsp_score']
-               hsp_evalue = hsp_elem['Hsp_evalue']
-               hsp_ident = hsp_elem['Hsp_identity']
-               hsp_gaps = hsp_elem['Hsp_gaps']
+               hsp_num = hsp_elem['number']
+               hsp_score = hsp_elem['score']
+               hsp_evalue = hsp_elem['evalue']
+               hsp_ident = hsp_elem['identity']
+               hsp_gaps = hsp_elem['gaps']
                #hsp_strand = hsps['Hsp_strand']
                tmp_hash = {
                'gid'        => gid,
@@ -333,13 +335,13 @@ module SequenceServer
             end
          else
             # hash and single element
-            hit_evalue = hsps['Hsp_evalue']
-            hit_ident = hsps['Hsp_identity']
-            hsp_num = hsps['Hsp_num']
-            hsp_score = hsps['Hsp_score']
-            hsp_evalue = hsps['Hsp_evalue']
-            hsp_ident = hsps['Hsp_identity']
-            hsp_gaps = hsps['Hsp_gaps']
+            hit_evalue = hsps['evalue']
+            hit_ident = hsps['identity']
+            hsp_num = hsps['number']
+            hsp_score = hsps['score']
+            hsp_evalue = hsps['evalue']
+            hsp_ident = hsps['identity']
+            hsp_gaps = hsps['gaps']
             #hsp_strand = hsps['Hsp_strand']
             tmp_hash = {
                'gid'        => gid,
