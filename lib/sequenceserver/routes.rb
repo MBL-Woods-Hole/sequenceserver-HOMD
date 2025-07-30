@@ -236,6 +236,7 @@ module SequenceServer
         q += " JOIN homd.subspecies using(subspecies_id)"
         q += " JOIN homd.`genomesV11.0` using(otid)"
         q += " WHERE genome_id in ('"+gids.join("','")+"')"
+        logger.info "GIDS= #{gids}"
         results = $conn.query(q)
         results.each do |row|
            #f.write("write your stuff here")
