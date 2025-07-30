@@ -216,6 +216,7 @@ module SequenceServer
       #
         gids = Array.new
         gids_list = ''
+        logger.info "SEQ IDS= #{sequence_ids}"
         sequence_ids.each {|n|
           gid = 'GCA_'+n.split('_')[1].split('|')[0]
           #  prokka::protein sequence_ids look like this:   GCA_937930255.1_00575
@@ -224,6 +225,7 @@ module SequenceServer
           #  ncbi::nucleotide sequence_ids look like this:  GCA_001815865.1|KV822194.1
           gids.push(gid)
         }
+        logger.info "GIDS= #{gids}"
         tax_hash = {}
         q = "SELECT genome_id,otid_prime.otid,domain,phylum,klass,`order`,family,genus,species,subspecies,strain from homd.`otid_prime`"
         q += " JOIN homd.taxonomy using(taxonomy_id)"
@@ -237,7 +239,7 @@ module SequenceServer
         q += " JOIN homd.subspecies using(subspecies_id)"
         q += " JOIN homd.`genomesV11.0` using(otid)"
         q += " WHERE genome_id in ('"+gids.join("','")+"')"
-        logger.info "GIDS= #{gids}"
+        
         results = $conn.query(q)
         results.each do |row|
            #f.write("write your stuff here")
