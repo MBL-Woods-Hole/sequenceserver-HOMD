@@ -222,6 +222,7 @@ module SequenceServer
         mysql_ids = Array.new
         gids_list = ''
         logger.info "SEQ IDS= #{sequence_ids}"
+        logger.info "DB TYPE #{db_type}"
         sequence_ids.each {|n|
           if db_type == 'refseq'
              # ID == HMT-389_16S000742
@@ -236,7 +237,7 @@ module SequenceServer
               mysql_ids.push(gid)
           end
         }
-        logger.info "DB TYPE #{db_type}"
+        
         logger.info "MYSQLIDS= #{mysql_ids}"
         tax_hash = {}
         if db_type == 'refseq'
