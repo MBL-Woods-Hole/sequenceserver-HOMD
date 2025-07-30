@@ -269,7 +269,7 @@ module SequenceServer
       if Xhash.is_a?(Hash)
         logger.info "Xhash is hash"
       else
-        logger.info "Xhash is hash"
+        logger.info "Xhash is NOT hash"
       end
       
       #myhash = Xhash.to_hash()
