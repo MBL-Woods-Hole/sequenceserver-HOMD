@@ -279,11 +279,11 @@ module SequenceServer
                 :family => row['family'],
                 :genus => row['genus'],
                 :species => row['species'],
-                :subspecies => row['subspecies'],
+                :subspecies => row['subspecies']
                 }
             else
                 tax_hash[row['genome_id']] = {
-                :strain => row['strain']
+                :strain => row['strain'],
                 :hmt => hmt,
                 :domain => row['domain'],
                 :phylum => row['phylum'],
@@ -292,7 +292,7 @@ module SequenceServer
                 :family => row['family'],
                 :genus => row['genus'],
                 :species => row['species'],
-                :subspecies => row['subspecies'],
+                :subspecies => row['subspecies']
                 }
             end
            
