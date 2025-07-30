@@ -305,7 +305,7 @@ module SequenceServer
                 hit_evalue = hsps[0][:evalue]
                 #hit_ident = hsps[0][:identity]
                 hit_ident = "#{hsps[0][:identity]}"+' / '+"#{hsps[0][:length]}"
-                hit_ident_pct = (hsps[0][:identity] / hsps[0][:length] )*100
+                hit_ident_pct = ((hsps[0][:identity] / hsps[0][:length] )*100).signif(2)   
                 hsps.each do |hsp_elem|
                    #logger.info "Hsp #{hsp_elem}"
                    #logger.info "H Def #{hit_elem['Hit_def']}"
