@@ -274,14 +274,14 @@ module SequenceServer
       
       #myhash = Xhash.to_hash()
       logger.info "XXX= #{Xhash}"
-      newHash = eval(Xhash)
+      newHash = JSON.parse(Xhash.gsub("=>", ":").gsub(/\bnil\b/, "null"))
       logger.info "newkeys #{newHash.keys}"
       # Parse the XML string
       #hash = Ox.load(xml_ir, mode: :hash_no_attrs)
       #logger.info "hash['BlastOutput'] #{hash['BlastOutput']}"   #['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]
       #hit_ary = hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit']
-      logger.info "keys #{Xhash.keys}"
-      hit_ary = Xhash['queries']['hits']
+      logger.info "keys #{newHash.keys}"
+      hit_ary = newHash['queries']['hits']
       
       #hits_count = hit_ary.length()
       big_array = [] # an array of hashes
