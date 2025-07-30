@@ -260,12 +260,13 @@ module SequenceServer
       fname_xml = File.join(DOTDIR, job_id, 'sequenceserver-xml_report.xml')
       xml_ir = File.read(fname_xml)
       Xhash = Report.generate(job).to_json
+      myhash = Xhash.to_hash()
       logger.info "XXX= #{Xhash}"
       # Parse the XML string
       hash = Ox.load(xml_ir, mode: :hash_no_attrs)
       #logger.info "hash['BlastOutput'] #{hash['BlastOutput']}"   #['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]
       #hit_ary = hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit']
-      logger.info "PARAMS #{Xhash['params']}"
+      logger.info "PARAMS #{myhash['params']}"
       hit_ary = Xhash['queries']['hits']
       
       #hits_count = hit_ary.length()
