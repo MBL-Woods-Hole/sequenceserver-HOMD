@@ -265,18 +265,90 @@ module SequenceServer
       hit_ary = hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit']
       hit_length = hit_ary.length()
       big_array = [] # an array of hashes
-    #{gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident,hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
+    #{gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
       
       hit_ary.each do |hit_elem|
+         
          logger.info "Hit #{hit_elem}"
          logger.info "Hit Def #{hit_elem['Hit_def']}"
          hit_def = hit_elem['Hit_def']
+         hit_pts = hit_elem['Hit_def'].split()
+         gid = 'GCA_'+hit_pts[0].split('_')[1].split('|')[0]
+         hit_num = hit_elem['Hit_num']
+         hit_length = hit_elem['Hit_len']
+         hit_qcov = '?'#hit_elem['']
+         hit_tscore = '?'#hit_elem['']
+         hit_evalue = '?'#hit_elem['']
+         hit_ident = '?'#hit_elem['']
+         
          # get gid from hit_def
-         hsp_ary = hit_elem['Hit_hsps']['Hsp']
-         hsp_ary.each do |hsp_elem|
-           logger.info "Hsp #{hsp_elem}"
-           #logger.info "H Def #{hit_elem['Hit_def']}"
+         #if hit_elem['Hit_hsps']['Hsp'] is hash => then single
+         
+         #if hit_elem['Hit_hsps']['Hsp'] is array => then multiple
+         
+         hsps = hit_elem['Hit_hsps']['Hsp']
+         if hsps.kind_of?(Array)
+            # multiple elements
+            hsps.each do |hsp_elem|
+               logger.info "Hsp #{hsp_elem}"
+               #logger.info "H Def #{hit_elem['Hit_def']}"
+               hsp_num = hsp_elem['Hsp_num']
+               hsp_score = hsp_elem['Hsp_score']
+               hsp_evalue = hsp_elem['Hsp_evalue']
+               hsp_ident = hsp_elem['Hsp_identity']
+               hsp_gaps = hsp_elem['Hsp_gaps']
+               #hsp_strand = hsps['Hsp_strand']
+               tmp_hash = {
+               'gid'        => gid,
+               'hit_def'    => hit_def,
+               'hit_num'    => hit_num,
+               'hit_length' => hit_length,
+               'hit_qcov'   => hit_qcov,
+               'hit_tscore' => hit_tscore,
+               'hit_evalue' => hit_evalue,
+               'hit_ident'  => hit_ident, 
+               'hsp_num'    => hsp_num,
+               'hsp_score'  => hsp_score,
+               'hsp_evalue' => hsp_evalue,
+               'hsp_ident'  => hsp_ident,
+               'hsp_gaps'   => hsp_gaps,
+               'hmt'       => tax_hash[gid]['hmt']
+               'taxonomy'  => "#{tax_hash[gid]['genus']} #{tax_hash[gid]['species']} #{tax_hash[gid]['strain']}"
+               }
+               
+               
+               big_array.push(tmp_hash)
+            end
+         else
+            # hash and single element
+            hsp_num = hsps['Hsp_num']
+            hsp_score = hsps['Hsp_score']
+            hsp_evalue = hsps['Hsp_evalue']
+            hsp_ident = hsps['Hsp_identity']
+            hsp_gaps = hsps['Hsp_gaps']
+            #hsp_strand = hsps['Hsp_strand']
+            tmp_hash = {
+               'gid'        => gid,
+               'hit_def'    => hit_def,
+               'hit_num'    => hit_num,
+               'hit_length' => hit_length,
+               'hit_qcov'   => hit_qcov,
+               'hit_tscore' => hit_tscore,
+               'hit_evalue' => hit_evalue,
+               'hit_ident'  => hit_ident, 
+               'hsp_num'    => hsp_num,
+               'hsp_score'  => hsp_score,
+               'hsp_evalue' => hsp_evalue,
+               'hsp_ident'  => hsp_ident,
+               'hsp_gaps'   => hsp_gaps,
+               'hmt'       => tax_hash[gid]['hmt']
+               'taxonomy'  => "#{tax_hash[gid]['genus']} #{tax_hash[gid]['species']} #{tax_hash[gid]['strain']}"
+            }
+               
+               
+            big_array.push(tmp_hash)
          end
+         
       end
      
      
@@ -288,8 +360,10 @@ module SequenceServer
       #
       
       File.open(fpath_out, 'w') do |f|
-        f.puts "Genome-ID\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
-        
+        #f.puts "Genome-ID\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
+        f.puts "Genome-ID\tHit_def\tHit_num\tHit_length\tHit_qcov\tHit_tscore\tHit_evalue\tHit_ident\tHsp_num\tHsp_score\t\tHsp_eval|tHsp_ident\tHsp_gaps\tHMT-ID\tGenus\tSpecies\tStrain"
+        #gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
+      
         #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
         # Sequence::Retriever is in lib/sequenceserver/blast/sequence.rb
         logger.info "3-sequence_ids: #{gids}" 
