@@ -376,7 +376,7 @@ module SequenceServer
       filename_datetime = current_time.strftime("%Y%m%d_%H%M%S") 
       send_file fpath_out, 
               type: 'text/csv', 
-              filename: 'custom_homd_taxonomy_#{filename_datetime}.csv', 
+              filename: "custom_homd_taxonomy_#{filename_datetime}.csv", 
               disposition: 'attachment' 
       #file.close # Close the file to ensure all data is written and flushed
       #file.unlink
