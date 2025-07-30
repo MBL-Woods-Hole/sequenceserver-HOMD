@@ -258,49 +258,34 @@ module SequenceServer
         #
         #  Next Parse XML file and Gather BLAST info
         #
-        fname_xml = File.join(DOTDIR, job_id, 'sequenceserver-xml_report.xml')
-        xml_ir = File.read(fname_xml)
+        #fname_xml = File.join(DOTDIR, job_id, 'sequenceserver-xml_report.xml')
+        #xml_ir = File.read(fname_xml)
         Xhash = Report.generate(job).to_json
       
       
         #myhash = Xhash.to_hash()
-        logger.info "XXX= #{Xhash}"
+        #logger.info "XXX= #{Xhash}"
+        
+        #
+        #  Now we have taxonomy hash and BLAST big_array
+        #
         newHash = eval(Xhash)
-        logger.info "newkeys #{newHash.keys}"
-        # Parse the XML string
-        #hash = Ox.load(xml_ir, mode: :hash_no_attrs)
-        #logger.info "hash['BlastOutput'] #{hash['BlastOutput']}"   #['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]
-        #hit_ary = hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit']
-        logger.info "keys #{newHash.keys}"
-        logger.info "QUERIES #{newHash[:queries]}"
+        
         query_ary = newHash[:queries]
         big_array = [] # an array of hashes
         
         query_ary.each do |query_elem|
             
             hit_ary = query_elem[:hits]
-      
-            #hits_count = hit_ary.length()
-      
-            #{gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
-      
             hit_ary.each do |hit_elem|
          
                 # logger.info "Hit #{hit_elem}"
                 #logger.info "Hit Def #{hit_elem['Hit_def']}"
                 
                 hit_id = hit_elem[:id]
-                #GCA_015259595.1_00565
-                #hit_pts = hit_elem['Hit_def'].split()
                 gid = 'GCA_'+hit_id.split('_')[1].split('|')[0]
-                logger.info "GID FROM HIT-ID #{gid}"
+                #logger.info "GID FROM HIT-ID #{gid}"
                 
-                
-                
-                # get gid from hit_def
-                #if hit_elem['Hit_hsps']['Hsp'] is hash => then single
-                
-                #if hit_elem['Hit_hsps']['Hsp'] is array => then multiple
                 
                 hsps = hit_elem[:hsps]
                 
@@ -312,16 +297,6 @@ module SequenceServer
                 hsps.each do |hsp_elem|
                    #logger.info "Hsp #{hsp_elem}"
                    #logger.info "H Def #{hit_elem['Hit_def']}"
-                    
-                  # :number=>1, :bit_score=>468.003, 
-#                   :score=>1203, 
-#                   :evalue=>4.74087e-165, :qstart=>1, 
-#                   :qend=>224, 
-#                   :sstart=>101, 
-#                   :send=>324, :qframe=>0, :sframe=>0, 
-#                   :identity=>224, 
-#                   :positives=>224, :gaps=>0, 
-#                   :length=>224, :qcovhsp=>100, 
                    #if gid not in tax_hash:
                    tmp_hash1 = {
                            :gid        => gid,
@@ -381,25 +356,19 @@ module SequenceServer
       
       
       
-      #
-      #  Now we have taxonomy hash and BLAST array
-      #
+      
       
       File.open(fpath_out, 'w') do |f|
         #f.puts "Genome-ID\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
-        f.puts "Genome-ID\tQuery_num\tHit_title\tHit_num\tHit_length\tHit_qcov\tHit_tscore\tHit_evalue\tHit_ident\tHit_Ident(%)\tHsp_num\tHsp_score\tHsp_bitscore\tHsp_eval\tHsp_ident\tHsp_gaps\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
+        #f.puts "Genome-ID\tQuery_num\tHit_title\tHit_num\tHit_length\tHit_qcov\tHit_tscore\tHit_evalue\tHit_ident\tHit_Ident(%)\tHsp_num\tHsp_score\tHsp_bitscore\tHsp_eval\tHsp_ident\tHsp_gaps\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
+        f.write "Genome-ID\tQuery_num\tHit_title\tHit_num\tHit_length\tHit_qcov\tHit_tscore\t"
+        f.write "Hit_evalue\tHit_ident\tHit_Ident(%)\tHsp_num\tHsp_score\tHsp_bitscore\tHsp_eval\tHsp_ident\tHsp_gaps\tHMT-ID\t"
+        f.write "Domain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain\n"
         #gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
         big_array.each do |el|
            f.puts "#{el[:gid]}\t#{el[:query_num]}\t#{el[:hit_title]}\t#{el[:hit_num]}\t#{el[:hit_length]}\t#{el[:hit_qcov]}\t#{el[:hit_tscore]}\t#{el[:hit_evalue]}\t#{el[:hit_ident]}\t#{el[:hit_ipct]}\t#{el[:hsp_num]}\t#{el[:hsp_score]}\t#{el[:hsp_bitscore]}\t#{el[:hsp_evalue]}\t#{el[:hsp_ident]}\t#{el[:hsp_gaps]}\t#{el[:hmt]}\t#{el[:domain]}\t#{el[:phylum]}\t#{el[:class]}\t#{el[:order]}\t#{el[:family]}\t#{el[:genus]}\t#{el[:species]}\t#{el[:subspecies]}\t#{el[:strain]}"
         end
-        #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
-        # Sequence::Retriever is in lib/sequenceserver/blast/sequence.rb
-        logger.info "3-sequence_ids: #{gids}" 
-        logger.info "3-q: #{q}" 
-        #out = BLAST::Formatter.new(job, 'sql_custom')
-        # send_file only sends file to browser that is already created
         
-        logger.info "3-path: #{fpath_out}" 
         
       end
       
