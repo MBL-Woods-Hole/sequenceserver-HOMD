@@ -364,7 +364,7 @@ module SequenceServer
         f.puts "Genome-ID\tHit_def\tHit_num\tHit_length\tHit_qcov\tHit_tscore\tHit_evalue\tHit_ident\tHsp_num\tHsp_score\tHsp_eval\tHsp_ident\tHsp_gaps\tHMT-ID\tTaxonomy"
         #gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
         big_array.each do |el|
-           f.puts "#{f['gid']}\t#{f['hit_def']}\t#{f['hit_length']}\t#{f['hit_qcov']}\t#{f['hit_tscore']}\t#{f['hit_evalue']}\t#{f['hit_ident']}\t#{f['hsp_num']}\t#{f['hsp_score']}\t#{f['hsp_evalue']}\t#{f['hsp_ident']}\t#{f['hsp_gaps']}\t#{f['hmt']}\t#{f['taxonomy']}"
+           f.puts "#{el['gid']}\t#{el['hit_def']}\t#{el['hit_length']}\t#{el['hit_qcov']}\t#{el['hit_tscore']}\t#{el['hit_evalue']}\t#{el['hit_ident']}\t#{el['hsp_num']}\t#{el['hsp_score']}\t#{el['hsp_evalue']}\t#{el['hsp_ident']}\t#{el['hsp_gaps']}\t#{el['hmt']}\t#{el['taxonomy']}"
         end
         #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
         # Sequence::Retriever is in lib/sequenceserver/blast/sequence.rb
