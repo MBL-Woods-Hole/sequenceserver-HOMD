@@ -343,17 +343,17 @@ module SequenceServer
                    :hsp_evalue => hsp_elem[:evalue],
                    :hsp_ident  => hsp_elem[:identity],
                    :hsp_gaps   => hsp_elem[:gaps],
-                   :hmt       => tax_hash[gid][:hmt],
+                   :hmt       => tax_hash[gid][:hmt] || '',
                    #'taxonomy'  => tax_hash[gid]['genus']+' '+tax_hash[gid]['species']+' '+tax_hash[gid]['strain']
-                   :domain    => tax_hash[gid][:domain],
-                   :phylum    => tax_hash[gid][:phylum],
-                   :class     => tax_hash[gid][:class],
-                   :order     => tax_hash[gid][:order],
-                   :family    => tax_hash[gid][:family],
-                   :genus     => tax_hash[gid][:genus],
-                   :species   => tax_hash[gid][:species],
-                   :subspecies => tax_hash[gid][:subspecies],
-                   :strain    => tax_hash[gid][:strain]
+                   :domain    => tax_hash[gid][:domain] || '',
+                   :phylum    => tax_hash[gid][:phylum] || '',
+                   :class     => tax_hash[gid][:class] || '',
+                   :order     => tax_hash[gid][:order] || '',
+                   :family    => tax_hash[gid][:family] || '',
+                   :genus     => tax_hash[gid][:genus] || '',
+                   :species   => tax_hash[gid][:species] || '',
+                   :subspecies => tax_hash[gid][:subspecies] || '',
+                   :strain    => tax_hash[gid][:strain] || ''
                    
                    }
                    
