@@ -217,6 +217,13 @@ module SequenceServer
       # Parse the XML string
       hash = Ox.load(xml_ir, mode: :hash_no_attrs)
       logger.info hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]
+      hit_length = hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'].length()
+      ary = hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit']
+      ary.each_with_index do |element, index|
+         logger.info "Hit #{index} #{element['Hit_def']}"
+      end
+      # assume there are 20 hits
+      #hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]['Hit_def']
       #logger.info document.BlastOutput.BlastOutput_iterations.Iteration.Iteration_hits.Hit.Hit_def
      #  xhash = Report.generate(job).to_json
 #       #x['querydb']['name'] = x[0]  # since we always only use one db
