@@ -322,7 +322,7 @@ module SequenceServer
 #                   :identity=>224, 
 #                   :positives=>224, :gaps=>0, 
 #                   :length=>224, :qcovhsp=>100, 
-                   if gid not in tax_hash:
+                   #if gid not in tax_hash:
                    if !tax_hash.has_key?(gid)
                        logger.info "Key #{gid} does not exist in the tax hash."
                     end
