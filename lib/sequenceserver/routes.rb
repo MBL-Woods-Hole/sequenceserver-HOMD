@@ -367,7 +367,7 @@ module SequenceServer
                            :genus     => tax_hash[gid][:genus],
                            :species   => tax_hash[gid][:species],
                            :subspecies => tax_hash[gid][:subspecies],
-                           :strain    => tax_hash[gid][:strain]''
+                           :strain    => tax_hash[gid][:strain]
                        
                        }
                    end
