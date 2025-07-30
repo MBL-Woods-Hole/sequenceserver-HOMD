@@ -12,6 +12,7 @@ require 'sequenceserver/report'
 require 'sequenceserver/database'
 require 'sequenceserver/sequence'
 require 'sequenceserver/makeblastdb'
+require 'time'
 time = Time.now
 
 module SequenceServer
