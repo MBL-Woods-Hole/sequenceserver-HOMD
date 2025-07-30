@@ -313,7 +313,7 @@ module SequenceServer
                    :gid        => gid,
                    :query_num    => query_elem[:number],
                    :hit_title    => hit_elem[:title],
-                   :hit_num    => hit_num,
+                   :hit_num    => hit_elem[:number],
                    :hit_length => hit_elem[:length],
                    :hit_qcov   => hit_elem[:qcovs],
                    :hit_tscore => hit_elem[:total_score],
