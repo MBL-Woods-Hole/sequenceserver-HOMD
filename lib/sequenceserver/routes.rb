@@ -13,7 +13,7 @@ require 'sequenceserver/database'
 require 'sequenceserver/sequence'
 require 'sequenceserver/makeblastdb'
 require 'time'
-time = Time.now
+
 
 module SequenceServer
   # Controller.
@@ -372,10 +372,11 @@ module SequenceServer
         
         
       end
-      
+      current_time = Time.now
+      filename_datetime = current_time.strftime("%Y%m%d_%H%M%S") 
       send_file fpath_out, 
               type: 'text/csv', 
-              filename: 'custom_homd_taxonomy'+time.strftime("%m-%d-%Y.%H.%M.%S")+'.csv', 
+              filename: 'custom_homd_taxonomy_#{filename_datetime}.csv', 
               disposition: 'attachment' 
       #file.close # Close the file to ensure all data is written and flushed
       #file.unlink
