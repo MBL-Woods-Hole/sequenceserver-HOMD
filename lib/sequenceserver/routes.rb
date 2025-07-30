@@ -274,7 +274,7 @@ module SequenceServer
       
       #myhash = Xhash.to_hash()
       logger.info "XXX= #{Xhash}"
-      newHash = JSON.parse(Xhash.gsub("=>", ":").gsub(/\bnil\b/, "null"))
+      newHash = eval(Xhash)
       logger.info "newkeys #{newHash.keys}"
       # Parse the XML string
       #hash = Ox.load(xml_ir, mode: :hash_no_attrs)
