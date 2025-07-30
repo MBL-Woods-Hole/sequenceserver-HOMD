@@ -216,7 +216,7 @@ module SequenceServer
       xml_ir = File.read(fname)
       # Parse the XML string
       hash = Ox.load(xml_ir, mode: :hash_no_attrs)
-      logger.info hash['BlastOutput']
+      logger.info hash['BlastOutput']['BlastOutput_iterations']
       #logger.info document.BlastOutput.BlastOutput_iterations.Iteration.Iteration_hits.Hit.Hit_def
      #  xhash = Report.generate(job).to_json
 #       #x['querydb']['name'] = x[0]  # since we always only use one db
