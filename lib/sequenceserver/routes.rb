@@ -210,7 +210,7 @@ module SequenceServer
       job = Job.fetch(job_id)
       fpath_out = File.join(DOTDIR, job_id, 'custom_homd_taxonomy.csv')
       x = Report.generate(job).to_json
-      puts "X= #{x}"
+      logger.info "XXX= #{x}"
       #
       # First get GIDS and Taxonomy from MySQL DB
       #
