@@ -205,195 +205,151 @@ module SequenceServer
     end
     
     post '/get_sqlquery' do
-      sequence_ids = params['sequence_ids'].split(',')
-      job_id = params['job_id']
-      job = Job.fetch(job_id)
-      fpath_out = File.join(DOTDIR, job_id, 'custom_homd_taxonomy.csv')
+        sequence_ids = params['sequence_ids'].split(',')
+        job_id = params['job_id']
+        job = Job.fetch(job_id)
+        fpath_out = File.join(DOTDIR, job_id, 'custom_homd_taxonomy.csv')
       
       #
       # First get GIDS and Taxonomy from MySQL DB
       #
-      gids = Array.new
-      gids_list = ''
-      sequence_ids.each {|n|
+        gids = Array.new
+        gids_list = ''
+        sequence_ids.each {|n|
           gid = 'GCA_'+n.split('_')[1].split('|')[0]
           #  prokka::protein sequence_ids look like this:   GCA_937930255.1_00575
           #  prokka:nucleotide sequence_ids look like this: GCA_937930255.1|pid
           #  ncbi::protein sequence_ids look like this:     GCA_026783725.1|MCY7224249.1
           #  ncbi::nucleotide sequence_ids look like this:  GCA_001815865.1|KV822194.1
           gids.push(gid)
-      }
-      tax_hash = {}
-      q = "SELECT genome_id,otid_prime.otid,domain,phylum,klass,`order`,family,genus,species,subspecies,strain from homd.`otid_prime`"
-      q += " JOIN homd.taxonomy using(taxonomy_id)"
-      q += " JOIN homd.domain using(domain_id)"
-      q += " JOIN homd.phylum using(phylum_id)"
-      q += " JOIN homd.klass using(klass_id)"
-      q += " JOIN homd.`order` using(order_id)"
-      q += " JOIN homd.family using(family_id)"
-      q += " JOIN homd.genus using(genus_id)"
-      q += " JOIN homd.species using(species_id)"
-      q += " JOIN homd.subspecies using(subspecies_id)"
-      q += " JOIN homd.`genomesV11.0` using(otid)"
-      q += " WHERE genome_id in ('"+gids.join("','")+"')"
-      results = $conn.query(q)
-      results.each do |row|
+        }
+        tax_hash = {}
+        q = "SELECT genome_id,otid_prime.otid,domain,phylum,klass,`order`,family,genus,species,subspecies,strain from homd.`otid_prime`"
+        q += " JOIN homd.taxonomy using(taxonomy_id)"
+        q += " JOIN homd.domain using(domain_id)"
+        q += " JOIN homd.phylum using(phylum_id)"
+        q += " JOIN homd.klass using(klass_id)"
+        q += " JOIN homd.`order` using(order_id)"
+        q += " JOIN homd.family using(family_id)"
+        q += " JOIN homd.genus using(genus_id)"
+        q += " JOIN homd.species using(species_id)"
+        q += " JOIN homd.subspecies using(subspecies_id)"
+        q += " JOIN homd.`genomesV11.0` using(otid)"
+        q += " WHERE genome_id in ('"+gids.join("','")+"')"
+        results = $conn.query(q)
+        results.each do |row|
            #f.write("write your stuff here")
            hmt = 'HMT-'+row['otid'].to_s.rjust(3,'0')
-           tax_hash[row['genome_id']] = {'hmt' => hmt,
-                                         'domain' => row['domain'],
-                                         'phylum' => row['phylum'],
-                                         'class' => row['klass'],
-                                         'order' => row['order'],
-                                         'family' => row['family'],
-                                         'genus' => row['genus'],
-                                         'species' => row['species'],
-                                         'subspecies' => row['subspecies'],
-                                         'strain' => row['strain']
+           tax_hash[row['genome_id']] = {:hmt => hmt,
+                                         :domain => row['domain'],
+                                         :phylum => row['phylum'],
+                                         :class => row['klass'],
+                                         :order => row['order'],
+                                         :family => row['family'],
+                                         :genus => row['genus'],
+                                         :species => row['species'],
+                                         :subspecies => row['subspecies'],
+                                         :strain => row['strain']
                                          }
            #f.puts "#{row['genome_id']}\t#{hmt}\t#{row['domain']}\t#{row['phylum']}\t#{row['klass']}\t#{row['order']}\t#{row['family']}\t#{row['genus']}\t#{row['species']}\t#{row['subspecies']}\t#{row['strain']}"
-      end
+        end
         
-      #
-      #  Next Parse XML file and Gather BLAST info
-      #
-      fname_xml = File.join(DOTDIR, job_id, 'sequenceserver-xml_report.xml')
-      xml_ir = File.read(fname_xml)
-      Xhash = Report.generate(job).to_json
-      if Xhash.kind_of?(Array)
-        logger.info "Xhash is array"
-      else
-        logger.info "Xhash not an array"
-      end
+        #
+        #  Next Parse XML file and Gather BLAST info
+        #
+        fname_xml = File.join(DOTDIR, job_id, 'sequenceserver-xml_report.xml')
+        xml_ir = File.read(fname_xml)
+        Xhash = Report.generate(job).to_json
       
-      if Xhash.is_a?(Hash)
-        logger.info "Xhash is hash"
-      else
-        logger.info "Xhash is NOT hash"
-      end
       
-      #myhash = Xhash.to_hash()
-      logger.info "XXX= #{Xhash}"
-      newHash = eval(Xhash)
-      logger.info "newkeys #{newHash.keys}"
-      # Parse the XML string
-      #hash = Ox.load(xml_ir, mode: :hash_no_attrs)
-      #logger.info "hash['BlastOutput'] #{hash['BlastOutput']}"   #['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]
-      #hit_ary = hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit']
-      logger.info "keys #{newHash.keys}"
-      logger.info "QUERIES #{newHash[:queries]}"
-      hit_ary = newHash[:queries][:hits]
+        #myhash = Xhash.to_hash()
+        logger.info "XXX= #{Xhash}"
+        newHash = eval(Xhash)
+        logger.info "newkeys #{newHash.keys}"
+        # Parse the XML string
+        #hash = Ox.load(xml_ir, mode: :hash_no_attrs)
+        #logger.info "hash['BlastOutput'] #{hash['BlastOutput']}"   #['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]
+        #hit_ary = hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit']
+        logger.info "keys #{newHash.keys}"
+        logger.info "QUERIES #{newHash[:queries]}"
+        query_ary = newHash[:queries]
+        big_array = [] # an array of hashes
+        
+        query_ary.each do |query_elem|
+            query_num = query_elem[:number]
+            hit_ary = query_elem[:hits]
       
-      #hits_count = hit_ary.length()
-      big_array = [] # an array of hashes
-    #{gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
+            #hits_count = hit_ary.length()
       
-      hit_ary.each do |hit_elem|
+            #{gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
+      
+            hit_ary.each do |hit_elem|
          
-        # logger.info "Hit #{hit_elem}"
-         #logger.info "Hit Def #{hit_elem['Hit_def']}"
-         hit_title = hit_elem['title']
-         hit_id = hit_elem['id']
-         #hit_pts = hit_elem['Hit_def'].split()
-         gid = 'GCA_'+hit_id.split('_')[1].split('|')[0]
-         hit_num = hit_elem['number']
-         hit_length = hit_elem['length']
-         hit_qcov = hit_elem['qcovs']
-         hit_tscore = hit_elem['total_score']
-         
-         
-         # get gid from hit_def
-         #if hit_elem['Hit_hsps']['Hsp'] is hash => then single
-         
-         #if hit_elem['Hit_hsps']['Hsp'] is array => then multiple
-         
-         hsps = hit_elem['Hsps']
-         if hsps.kind_of?(Array)
-            # multiple elements
-            hit_evalue = hsps[0]['evalue']
-            hit_ident = hsps[0]['identity']
-            hsps.each do |hsp_elem|
-               #logger.info "Hsp #{hsp_elem}"
-               #logger.info "H Def #{hit_elem['Hit_def']}"
-               hsp_num = hsp_elem['number']
-               hsp_score = hsp_elem['score']
-               hsp_evalue = hsp_elem['evalue']
-               hsp_ident = hsp_elem['identity']
-               hsp_gaps = hsp_elem['gaps']
-               #hsp_strand = hsps['Hsp_strand']
-               tmp_hash = {
-               'gid'        => gid,
-               'hit_def'    => hit_def,
-               'hit_num'    => hit_num,
-               'hit_length' => hit_length,
-               'hit_qcov'   => hit_qcov,
-               'hit_tscore' => hit_tscore,
-               'hit_evalue' => hit_evalue,
-               'hit_ident'  => hit_ident, 
-               'hsp_num'    => hsp_num,
-               'hsp_score'  => hsp_score,
-               'hsp_evalue' => hsp_evalue,
-               'hsp_ident'  => hsp_ident,
-               'hsp_gaps'   => hsp_gaps,
-               'hmt'       => tax_hash[gid]['hmt'],
-               #'taxonomy'  => tax_hash[gid]['genus']+' '+tax_hash[gid]['species']+' '+tax_hash[gid]['strain']
-               'domain'    => tax_hash[gid]['domain'],
-               'phylum'    => tax_hash[gid]['phylum'],
-               'class'     => tax_hash[gid]['class'],
-               'order'     => tax_hash[gid]['order'],
-               'family'    => tax_hash[gid]['family'],
-               'genus'     => tax_hash[gid]['genus'],
-               'species'   => tax_hash[gid]['species'],
-               'subspecies' => tax_hash[gid]['subspecies'],
-               'strain'    => tax_hash[gid]['strain']
-               
-               }
-               
-               
-               big_array.push(tmp_hash)
+                # logger.info "Hit #{hit_elem}"
+                #logger.info "Hit Def #{hit_elem['Hit_def']}"
+                hit_title = hit_elem[:title]
+                hit_id = hit_elem[:id]
+                #hit_pts = hit_elem['Hit_def'].split()
+                gid = 'GCA_'+hit_id.split('_')[1].split('|')[0]
+                hit_num = hit_elem[:number]
+                hit_length = hit_elem[:length]
+                hit_qcov = hit_elem[:qcovs]
+                hit_tscore = hit_elem[:total_score]
+                
+                
+                # get gid from hit_def
+                #if hit_elem['Hit_hsps']['Hsp'] is hash => then single
+                
+                #if hit_elem['Hit_hsps']['Hsp'] is array => then multiple
+                
+                hsps = hit_elem[:hsps]
+                
+                # multiple elements
+                hit_evalue = hsps[0][:evalue]
+                hit_ident = hsps[0][:identity]
+                hsps.each do |hsp_elem|
+                   #logger.info "Hsp #{hsp_elem}"
+                   #logger.info "H Def #{hit_elem['Hit_def']}"
+                   hsp_num = hsp_elem[:number]
+                   hsp_score = hsp_elem[:score]
+                   hsp_evalue = hsp_elem[:value]
+                   hsp_ident = hsp_elem[:identity]
+                   hsp_gaps = hsp_elem[:gaps]
+                   #hsp_strand = hsps[:strand]
+                   tmp_hash = {
+                   :gid        => gid,
+                   :query_num    => query_num,
+                   :hit_def    => hit_def,
+                   :hit_num    => hit_num,
+                   :hit_length => hit_length,
+                   :hit_qcov   => hit_qcov,
+                   :hit_tscore => hit_tscore,
+                   :hit_evalue => hit_evalue,
+                   :hit_ident  => hit_ident, 
+                   :hsp_num    => hsp_num,
+                   :hsp_score  => hsp_score,
+                   :hsp_evalue => hsp_evalue,
+                   :hsp_ident  => hsp_ident,
+                   :hsp_gaps   => hsp_gaps,
+                   :hmt       => tax_hash[gid][:hmt],
+                   #'taxonomy'  => tax_hash[gid]['genus']+' '+tax_hash[gid]['species']+' '+tax_hash[gid]['strain']
+                   :domain    => tax_hash[gid][:domain],
+                   :phylum    => tax_hash[gid][:phylum],
+                   :class     => tax_hash[gid][:class],
+                   :order     => tax_hash[gid][:order],
+                   :family    => tax_hash[gid][:family],
+                   :genus     => tax_hash[gid][:genus],
+                   :species   => tax_hash[gid][:species],
+                   :subspecies => tax_hash[gid][:subspecies],
+                   :strain    => tax_hash[gid][:strain]
+                   
+                   }
+                   
+                   
+                   big_array.push(tmp_hash)
+                end
             end
-         else
-            # hash and single element
-            hit_evalue = hsps['evalue']
-            hit_ident = hsps['identity']
-            hsp_num = hsps['number']
-            hsp_score = hsps['score']
-            hsp_evalue = hsps['evalue']
-            hsp_ident = hsps['identity']
-            hsp_gaps = hsps['gaps']
-            #hsp_strand = hsps['Hsp_strand']
-            tmp_hash = {
-               'gid'        => gid,
-               'hit_def'    => hit_def,
-               'hit_num'    => hit_num,
-               'hit_length' => hit_length,
-               'hit_qcov'   => hit_qcov,
-               'hit_tscore' => hit_tscore,
-               'hit_evalue' => hit_evalue,
-               'hit_ident'  => hit_ident, 
-               'hsp_num'    => hsp_num,
-               'hsp_score'  => hsp_score,
-               'hsp_evalue' => hsp_evalue,
-               'hsp_ident'  => hsp_ident,
-               'hsp_gaps'   => hsp_gaps,
-               'hmt'       => tax_hash[gid]['hmt'],
-               #'taxonomy'  => tax_hash[gid]['genus']+' '+tax_hash[gid]['species']+' '+tax_hash[gid]['strain']
-               'domain'    => tax_hash[gid]['domain'],
-               'phylum'    => tax_hash[gid]['phylum'],
-               'class'     => tax_hash[gid]['class'],
-               'order'     => tax_hash[gid]['order'],
-               'family'    => tax_hash[gid]['family'],
-               'genus'     => tax_hash[gid]['genus'],
-               'species'   => tax_hash[gid]['species'],
-               'subspecies' => tax_hash[gid]['subspecies'],
-               'strain'    => tax_hash[gid]['strain']
-            }
-               
-               
-            big_array.push(tmp_hash)
-         end
-         
-      end
+        end
      
      
       
@@ -405,10 +361,10 @@ module SequenceServer
       
       File.open(fpath_out, 'w') do |f|
         #f.puts "Genome-ID\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
-        f.puts "Genome-ID\tHit_def\tHit_num\tHit_length\tHit_qcov\tHit_tscore\tHit_evalue\tHit_ident\tHsp_num\tHsp_score\tHsp_eval\tHsp_ident\tHsp_gaps\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
+        f.puts "Genome-ID\tQuery_num\tHit_def\tHit_num\tHit_length\tHit_qcov\tHit_tscore\tHit_evalue\tHit_ident\tHsp_num\tHsp_score\tHsp_eval\tHsp_ident\tHsp_gaps\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
         #gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
         big_array.each do |el|
-           f.puts "#{el['gid']}\t#{el['hit_def']}\t#{el['hit_num']}\t#{el['hit_length']}\t#{el['hit_qcov']}\t#{el['hit_tscore']}\t#{el['hit_evalue']}\t#{el['hit_ident']}\t#{el['hsp_num']}\t#{el['hsp_score']}\t#{el['hsp_evalue']}\t#{el['hsp_ident']}\t#{el['hsp_gaps']}\t#{el['hmt']}\t#{el['domain']}\t#{el['phylum']}\t#{el['class']}\t#{el['order']}\t#{el['family']}\t#{el['genus']}\t#{el['species']}\t#{el['subspecies']}\t#{el['strain']}"
+           f.puts "#{el['gid']}\t#{el['query_num']}\t#{el['hit_def']}\t#{el['hit_num']}\t#{el['hit_length']}\t#{el['hit_qcov']}\t#{el['hit_tscore']}\t#{el['hit_evalue']}\t#{el['hit_ident']}\t#{el['hsp_num']}\t#{el['hsp_score']}\t#{el['hsp_evalue']}\t#{el['hsp_ident']}\t#{el['hsp_gaps']}\t#{el['hmt']}\t#{el['domain']}\t#{el['phylum']}\t#{el['class']}\t#{el['order']}\t#{el['family']}\t#{el['genus']}\t#{el['species']}\t#{el['subspecies']}\t#{el['strain']}"
         end
         #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
         # Sequence::Retriever is in lib/sequenceserver/blast/sequence.rb
