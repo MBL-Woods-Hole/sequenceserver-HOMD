@@ -207,10 +207,10 @@ module SequenceServer
     
     post '/get_sqlquery' do
         sequence_ids = params['sequence_ids'].split(',')
-        if sequence_ids[0].starts_with? 'HMT'
-            db_type = 'refseq'
+        if sequence_ids[0].starts_with?("HMT")
+            db_type = "refseq"
         else
-            db_type = 'genome'
+            db_type = "genome"
         end
         job_id = params['job_id']
         job = Job.fetch(job_id)
@@ -236,6 +236,7 @@ module SequenceServer
               mysql_ids.push(gid)
           end
         }
+        logger.info "DB TYPE #{db_type}"
         logger.info "MYSQLIDS= #{mysql_ids}"
         tax_hash = {}
         if db_type == 'refseq'
