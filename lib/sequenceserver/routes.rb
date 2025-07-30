@@ -208,65 +208,22 @@ module SequenceServer
       sequence_ids = params['sequence_ids'].split(',')
       job_id = params['job_id']
       job = Job.fetch(job_id)
-      logger.info "3x-job: #{job_id}" 
-      logger.info "job: #{job}"
-      logger.info "job.methods: #{job.methods}"
+      fpath_out = File.join(DOTDIR, job_id, 'custom_homd_taxonomy.csv')
       #x = Report.generate(job).to_json
-      fname = File.join(DOTDIR, job_id, 'sequenceserver-xml_report.xml')
-      xml_ir = File.read(fname)
-      # Parse the XML string
-      hash = Ox.load(xml_ir, mode: :hash_no_attrs)
-      logger.info hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]
-      hit_length = hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'].length()
-      ary = hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit']
-      ary.each_with_index do |element, index|
-         logger.info "Hit #{index} #{element['Hit_def']}"
-      end
-      # assume there are 20 hits
-      #hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]['Hit_def']
-      #logger.info document.BlastOutput.BlastOutput_iterations.Iteration.Iteration_hits.Hit.Hit_def
-     #  xhash = Report.generate(job).to_json
-#       #x['querydb']['name'] = x[0]  # since we always only use one db
-#       logger.info "xprogram-start: #{xhash['querydb']}"
-#       logger.info "END"
-#       #logger.info xhash[program]
-#       hits = xhash['queries'][0]['hits']  # length will be > 1 if more than one seq entered
-#       
-#       logger.info "x: #{hits}"
-      #xml = File.join(DOTDIR, job_id, 'sequenceserver-xml_report.xml')
-      #raw_xml = File.read(xml)
-      #logger.info "new-jobrawxml_ir: #{raw_xml}"
-      #xml_ir = parse_xml raw_xml
-      #logger.info "new-jobxml_ir: #{xml_ir}"
-      # sequenceserver-xml_report.xml
-      if job.imported_xml_file
-          xml_ir = parse_xml File.read(job.imported_xml_file)
-          logger.info "jobxml_ir: #{xml_ir}"
-          tsv_ir = Hash.new do |h1,k1|
-            h1[k1] = Hash.new do |h2,k2|
-              h2[k2]=['','',[]]
-            end
-          end
-      else
-         logger.info "no xml file"
-      end
-      
+      #
+      # First get GIDS and Taxonomy from MySQL DB
+      #
       gids = Array.new
       gids_list = ''
       sequence_ids.each {|n|
-          # puts n
-          #gid = n.split('|')[0].split('_')[0]
           gid = 'GCA_'+n.split('_')[1].split('|')[0]
           #  prokka::protein sequence_ids look like this:   GCA_937930255.1_00575
-#         #  prokka:nucleotide sequence_ids look like this: GCA_937930255.1|pid
-#         #  ncbi::protein sequence_ids look like this:     GCA_026783725.1|MCY7224249.1
-#         #  ncbi::nucleotide sequence_ids look like this:  GCA_001815865.1|KV822194.1
+          #  prokka:nucleotide sequence_ids look like this: GCA_937930255.1|pid
+          #  ncbi::protein sequence_ids look like this:     GCA_026783725.1|MCY7224249.1
+          #  ncbi::nucleotide sequence_ids look like this:  GCA_001815865.1|KV822194.1
           gids.push(gid)
-          
       }
-      
-      fpath = File.join(DOTDIR, job_id, 'out.txt')
-      
+      tax_hash = {}
       q = "SELECT genome_id,otid_prime.otid,domain,phylum,klass,`order`,family,genus,species,subspecies,strain from homd.`otid_prime`"
       q += " JOIN homd.taxonomy using(taxonomy_id)"
       q += " JOIN homd.domain using(domain_id)"
@@ -279,9 +236,60 @@ module SequenceServer
       q += " JOIN homd.subspecies using(subspecies_id)"
       q += " JOIN homd.`genomesV11.0` using(otid)"
       q += " WHERE genome_id in ('"+gids.join("','")+"')"
-      File.open(fpath, 'w') do |f|
+      results = $conn.query(q)
+      results.each do |row|
+           #f.write("write your stuff here")
+           hmt = 'HMT-'+row['otid'].to_s.rjust(3,'0')
+           tax_hash[row['genome_id']] = {'hmt' => hmt,
+                                         'domain' => row['domain'],
+                                         'phylum' => row['phylum'],
+                                         'class' => row['klass'],
+                                         'order' => row['order'],
+                                         'family' => row['family'],
+                                         'genus' => row['genus'],
+                                         'species' => row['species'],
+                                         'subspecies' => row['subspecies'],
+                                         'strain' => row['strain']
+                                         }
+           #f.puts "#{row['genome_id']}\t#{hmt}\t#{row['domain']}\t#{row['phylum']}\t#{row['klass']}\t#{row['order']}\t#{row['family']}\t#{row['genus']}\t#{row['species']}\t#{row['subspecies']}\t#{row['strain']}"
+      end
+        
+      #
+      #  Next Parse XML file and Gather BLAST info
+      #
+      fname_xml = File.join(DOTDIR, job_id, 'sequenceserver-xml_report.xml')
+      xml_ir = File.read(fname_xml)
+      # Parse the XML string
+      hash = Ox.load(xml_ir, mode: :hash_no_attrs)
+      #logger.info hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]
+      hit_ary = hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit']
+      hit_length = hit_ary.length()
+      big_array = [] # an array of hashes
+    #{gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident,hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
+      
+      hit_ary.each do |hit_elem|
+         logger.info "Hit #{hit_elem}"
+         logger.info "Hit Def #{hit_elem['Hit_def']}"
+         hit_def = hit_elem['Hit_def']
+         # get gid from hit_def
+         hsp_ary = hit_elem['Hit_hsps']['Hsp']
+         hsp_ary.each do |hsp_elem|
+           logger.info "Hsp #{hsp_elem}"
+           #logger.info "H Def #{hit_elem['Hit_def']}"
+         end
+      end
+     
+     
+      
+      
+      
+      #
+      #  Now we have taxonomy hash and BLAST array
+      #
+      
+      File.open(fpath_out, 'w') do |f|
         f.puts "Genome-ID\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
-        results = $conn.query(q)
+        
         #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
         # Sequence::Retriever is in lib/sequenceserver/blast/sequence.rb
         logger.info "3-sequence_ids: #{gids}" 
@@ -290,11 +298,7 @@ module SequenceServer
         # send_file only sends file to browser that is already created
         
         logger.info "3-path: #{fpath}" 
-        results.each do |row|
-           #f.write("write your stuff here")
-           hmt = 'HMT-'+row['otid'].to_s.rjust(3,'0')
-           f.puts "#{row['genome_id']}\t#{hmt}\t#{row['domain']}\t#{row['phylum']}\t#{row['klass']}\t#{row['order']}\t#{row['family']}\t#{row['genus']}\t#{row['species']}\t#{row['subspecies']}\t#{row['strain']}"
-        end
+        
       end
       
       send_file fpath, 
