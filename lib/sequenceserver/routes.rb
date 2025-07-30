@@ -290,8 +290,10 @@ module SequenceServer
                 #logger.info "Hit Def #{hit_elem['Hit_def']}"
                 
                 hit_id = hit_elem[:id]
+                #GCA_015259595.1_00565
                 #hit_pts = hit_elem['Hit_def'].split()
                 gid = 'GCA_'+hit_id.split('_')[1].split('|')[0]
+                logger.info "GID FROM HIT-ID #{gid}"
                 
                 
                 
