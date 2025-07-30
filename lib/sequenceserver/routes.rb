@@ -271,11 +271,6 @@ module SequenceServer
             hmt = 'HMT-'+row['otid'].to_s.rjust(3,'0')
             if db_type == 'refseq'
                 tax_hash[hmt] = {
-            else
-                tax_hash[row['genome_id']] = {
-                  :strain => row['strain']
-            end
-           
                 :hmt => hmt,
                 :domain => row['domain'],
                 :phylum => row['phylum'],
@@ -285,6 +280,23 @@ module SequenceServer
                 :genus => row['genus'],
                 :species => row['species'],
                 :subspecies => row['subspecies'],
+                }
+            else
+                tax_hash[row['genome_id']] = {
+                :strain => row['strain']
+                :hmt => hmt,
+                :domain => row['domain'],
+                :phylum => row['phylum'],
+                :class => row['klass'],
+                :order => row['order'],
+                :family => row['family'],
+                :genus => row['genus'],
+                :species => row['species'],
+                :subspecies => row['subspecies'],
+                }
+            end
+           
+                
                 
               }
            #f.puts "#{row['genome_id']}\t#{hmt}\t#{row['domain']}\t#{row['phylum']}\t#{row['klass']}\t#{row['order']}\t#{row['family']}\t#{row['genus']}\t#{row['species']}\t#{row['subspecies']}\t#{row['strain']}"
