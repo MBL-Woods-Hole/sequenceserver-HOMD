@@ -274,6 +274,8 @@ module SequenceServer
       
       #myhash = Xhash.to_hash()
       logger.info "XXX= #{Xhash}"
+      newHash = eval(Xhash)
+      logger.info "newkeys #{newHash.keys}"
       # Parse the XML string
       #hash = Ox.load(xml_ir, mode: :hash_no_attrs)
       #logger.info "hash['BlastOutput'] #{hash['BlastOutput']}"   #['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]
