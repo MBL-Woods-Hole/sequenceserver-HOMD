@@ -209,8 +209,7 @@ module SequenceServer
       job_id = params['job_id']
       job = Job.fetch(job_id)
       fpath_out = File.join(DOTDIR, job_id, 'custom_homd_taxonomy.csv')
-      Xhash = Report.generate(job).to_json
-      logger.info "XXX= #{Xhash}"
+      
       #
       # First get GIDS and Taxonomy from MySQL DB
       #
@@ -260,11 +259,15 @@ module SequenceServer
       #
       fname_xml = File.join(DOTDIR, job_id, 'sequenceserver-xml_report.xml')
       xml_ir = File.read(fname_xml)
+      Xhash = Report.generate(job).to_json
+      logger.info "XXX= #{Xhash}"
       # Parse the XML string
       hash = Ox.load(xml_ir, mode: :hash_no_attrs)
       #logger.info "hash['BlastOutput'] #{hash['BlastOutput']}"   #['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]
       #hit_ary = hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit']
+      logger.info "PARAMS #{Xhash['params']}"
       hit_ary = Xhash['queries']['hits']
+      
       #hits_count = hit_ary.length()
       big_array = [] # an array of hashes
     #{gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
