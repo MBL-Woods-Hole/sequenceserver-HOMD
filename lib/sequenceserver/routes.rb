@@ -361,9 +361,11 @@ module SequenceServer
       
       File.open(fpath_out, 'w') do |f|
         #f.puts "Genome-ID\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
-        f.puts "Genome-ID\tHit_def\tHit_num\tHit_length\tHit_qcov\tHit_tscore\tHit_evalue\tHit_ident\tHsp_num\tHsp_score\t\tHsp_eval|tHsp_ident\tHsp_gaps\tHMT-ID\tGenus\tSpecies\tStrain"
+        f.puts "Genome-ID\tHit_def\tHit_num\tHit_length\tHit_qcov\tHit_tscore\tHit_evalue\tHit_ident\tHsp_num\tHsp_score\tHsp_eval\tHsp_ident\tHsp_gaps\tHMT-ID\tTaxonomy"
         #gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
-      
+        big_array.each do |el|
+           f.puts "#{f['gid']}\t#{f['hit_def']}\t#{f['hit_length']}\t#{f['hit_qcov']}\t#{f['hit_tscore']}\t#{f['hit_evalue']}\t#{f['hit_ident']}\t#{f['hsp_num']}\t#{f['hsp_score']}\t#{f['hsp_evalue']}\t#{f['hsp_ident']}\t#{f['hsp_gaps']}\t#{f['hmt']}\t#{f['taxonomy']}"
+        end
         #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
         # Sequence::Retriever is in lib/sequenceserver/blast/sequence.rb
         logger.info "3-sequence_ids: #{gids}" 
