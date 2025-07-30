@@ -276,10 +276,9 @@ module SequenceServer
          gid = 'GCA_'+hit_pts[0].split('_')[1].split('|')[0]
          hit_num = hit_elem['Hit_num']
          hit_length = hit_elem['Hit_len']
-         hit_qcov = '?'#hit_elem['']
-         hit_tscore = '?'#hit_elem['']
-         hit_evalue = '?'#hit_elem['']
-         hit_ident = '?'#hit_elem['']
+         hit_qcov = hit_elem['qcovs']
+         hit_tscore = hit_elem['total_score']
+         
          
          # get gid from hit_def
          #if hit_elem['Hit_hsps']['Hsp'] is hash => then single
@@ -289,6 +288,8 @@ module SequenceServer
          hsps = hit_elem['Hit_hsps']['Hsp']
          if hsps.kind_of?(Array)
             # multiple elements
+            hit_evalue = hsps[0]['Hsp_evalue']
+            hit_ident = hsps[0]['Hsp_identity']
             hsps.each do |hsp_elem|
                #logger.info "Hsp #{hsp_elem}"
                #logger.info "H Def #{hit_elem['Hit_def']}"
@@ -313,7 +314,17 @@ module SequenceServer
                'hsp_ident'  => hsp_ident,
                'hsp_gaps'   => hsp_gaps,
                'hmt'       => tax_hash[gid]['hmt'],
-               'taxonomy'  => tax_hash[gid]['genus']+' '+tax_hash[gid]['species']+' '+tax_hash[gid]['strain']
+               #'taxonomy'  => tax_hash[gid]['genus']+' '+tax_hash[gid]['species']+' '+tax_hash[gid]['strain']
+               'domain'    => tax_hash[gid]['domain'],
+               'phylum'    => tax_hash[gid]['phylum'],
+               'class'     => tax_hash[gid]['class'],
+               'order'     => tax_hash[gid]['order'],
+               'family'    => tax_hash[gid]['family'],
+               'genus'     => tax_hash[gid]['genus'],
+               'species'   => tax_hash[gid]['species'],
+               'subspecies' => tax_hash[gid]['subspecies'],
+               'strain'    => tax_hash[gid]['strain']
+               
                }
                
                
@@ -321,6 +332,8 @@ module SequenceServer
             end
          else
             # hash and single element
+            hit_evalue = hsps['Hsp_evalue']
+            hit_ident = hsps['Hsp_identity']
             hsp_num = hsps['Hsp_num']
             hsp_score = hsps['Hsp_score']
             hsp_evalue = hsps['Hsp_evalue']
@@ -342,7 +355,16 @@ module SequenceServer
                'hsp_ident'  => hsp_ident,
                'hsp_gaps'   => hsp_gaps,
                'hmt'       => tax_hash[gid]['hmt'],
-               'taxonomy'  => tax_hash[gid]['genus']+' '+tax_hash[gid]['species']+' '+tax_hash[gid]['strain']
+               #'taxonomy'  => tax_hash[gid]['genus']+' '+tax_hash[gid]['species']+' '+tax_hash[gid]['strain']
+               'domain'    => tax_hash[gid]['domain'],
+               'phylum'    => tax_hash[gid]['phylum'],
+               'class'     => tax_hash[gid]['class'],
+               'order'     => tax_hash[gid]['order'],
+               'family'    => tax_hash[gid]['family'],
+               'genus'     => tax_hash[gid]['genus'],
+               'species'   => tax_hash[gid]['species'],
+               'subspecies' => tax_hash[gid]['subspecies'],
+               'strain'    => tax_hash[gid]['strain']
             }
                
                
@@ -361,10 +383,10 @@ module SequenceServer
       
       File.open(fpath_out, 'w') do |f|
         #f.puts "Genome-ID\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
-        f.puts "Genome-ID\tHit_def\tHit_num\tHit_length\tHit_qcov\tHit_tscore\tHit_evalue\tHit_ident\tHsp_num\tHsp_score\tHsp_eval\tHsp_ident\tHsp_gaps\tHMT-ID\tTaxonomy"
+        f.puts "Genome-ID\tHit_def\tHit_num\tHit_length\tHit_qcov\tHit_tscore\tHit_evalue\tHit_ident\tHsp_num\tHsp_score\tHsp_eval\tHsp_ident\tHsp_gaps\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
         #gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
         big_array.each do |el|
-           f.puts "#{el['gid']}\t#{el['hit_def']}\t#{el['hit_num']}\t#{el['hit_length']}\t#{el['hit_qcov']}\t#{el['hit_tscore']}\t#{el['hit_evalue']}\t#{el['hit_ident']}\t#{el['hsp_num']}\t#{el['hsp_score']}\t#{el['hsp_evalue']}\t#{el['hsp_ident']}\t#{el['hsp_gaps']}\t#{el['hmt']}\t#{el['taxonomy']}"
+           f.puts "#{el['gid']}\t#{el['hit_def']}\t#{el['hit_num']}\t#{el['hit_length']}\t#{el['hit_qcov']}\t#{el['hit_tscore']}\t#{el['hit_evalue']}\t#{el['hit_ident']}\t#{el['hsp_num']}\t#{el['hsp_score']}\t#{el['hsp_evalue']}\t#{el['hsp_ident']}\t#{el['hsp_gaps']}\t#{el['hmt']}\t#{el['domain']}\t#{el['phylum']}\t#{el['class']}\t#{el['order']}\t#{el['family']}\t#{el['genus']}\t#{el['species']}\t#{el['subspecies']}\t#{el['strain']}"
         end
         #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
         # Sequence::Retriever is in lib/sequenceserver/blast/sequence.rb
