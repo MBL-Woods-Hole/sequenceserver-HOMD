@@ -303,9 +303,9 @@ module SequenceServer
                 
                 # multiple elements
                 hit_evalue = hsps[0][:evalue]
-                #hit_ident = hsps[0][:identity]
-                hit_ident = "#{hsps[0][:identity]}"+' / '+"#{hsps[0][:length]}"
-                hit_ident_pct = (((hsps[0][:identity].to_f) / (hsps[0][:length].to_f) )*100).to_s 
+                hit_ident = hsps[0][:identity]
+                #hit_ident = "#{hsps[0][:identity]}"+' / '+"#{hsps[0][:length]}"
+                hit_ident_pct = (((hsps[0][:identity].to_f) / (hsps[0][:length].to_f) )*100).round(1).to_s 
                 hsps.each do |hsp_elem|
                    #logger.info "Hsp #{hsp_elem}"
                    #logger.info "H Def #{hit_elem['Hit_def']}"
@@ -324,6 +324,7 @@ module SequenceServer
                    :hit_ipct   => hit_ident_pct,
                    :hsp_num    => hsp_elem[:number],
                    :hsp_score  => hsp_elem[:score],
+                   :hsp_bitscore  => hsp_elem[:bit_score],
                    :hsp_evalue => hsp_elem[:evalue],
                    :hsp_ident  => hsp_elem[:identity],
                    :hsp_gaps   => hsp_elem[:gaps],
@@ -357,10 +358,10 @@ module SequenceServer
       
       File.open(fpath_out, 'w') do |f|
         #f.puts "Genome-ID\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
-        f.puts "Genome-ID\tQuery_num\tHit_title\tHit_num\tHit_length\tHit_qcov\tHit_tscore\tHit_evalue\tHit_ident\tHit_Ident(%)\tHsp_num\tHsp_score\tHsp_eval\tHsp_ident\tHsp_gaps\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
+        f.puts "Genome-ID\tQuery_num\tHit_title\tHit_num\tHit_length\tHit_qcov\tHit_tscore\tHit_evalue\tHit_ident\tHit_Ident(%)\tHsp_num\tHsp_score\tHsp_bitscore\tHsp_eval\tHsp_ident\tHsp_gaps\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
         #gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
         big_array.each do |el|
-           f.puts "#{el[:gid]}\t#{el[:query_num]}\t#{el[:hit_title]}\t#{el[:hit_num]}\t#{el[:hit_length]}\t#{el[:hit_qcov]}\t#{el[:hit_tscore]}\t#{el[:hit_evalue]}\t#{el[:hit_ident]}\t#{el[:hit_ipct]}\t#{el[:hsp_num]}\t#{el[:hsp_score]}\t#{el[:hsp_evalue]}\t#{el[:hsp_ident]}\t#{el[:hsp_gaps]}\t#{el[:hmt]}\t#{el[:domain]}\t#{el[:phylum]}\t#{el[:class]}\t#{el[:order]}\t#{el[:family]}\t#{el[:genus]}\t#{el[:species]}\t#{el[:subspecies]}\t#{el[:strain]}"
+           f.puts "#{el[:gid]}\t#{el[:query_num]}\t#{el[:hit_title]}\t#{el[:hit_num]}\t#{el[:hit_length]}\t#{el[:hit_qcov]}\t#{el[:hit_tscore]}\t#{el[:hit_evalue]}\t#{el[:hit_ident]}\t#{el[:hit_ipct]}\t#{el[:hsp_num]}\t#{el[:hsp_score]}\t#{el[:hsp_bitscore]}\t#{el[:hsp_evalue]}\t#{el[:hsp_ident]}\t#{el[:hsp_gaps]}\t#{el[:hmt]}\t#{el[:domain]}\t#{el[:phylum]}\t#{el[:class]}\t#{el[:order]}\t#{el[:family]}\t#{el[:genus]}\t#{el[:species]}\t#{el[:subspecies]}\t#{el[:strain]}"
         end
         #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
         # Sequence::Retriever is in lib/sequenceserver/blast/sequence.rb
