@@ -261,7 +261,7 @@ module SequenceServer
       xml_ir = File.read(fname_xml)
       # Parse the XML string
       hash = Ox.load(xml_ir, mode: :hash_no_attrs)
-      #logger.info hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]
+      logger.info hash['BlastOutput']   #['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit'][0]
       hit_ary = hash['BlastOutput']['BlastOutput_iterations']['Iteration']['Iteration_hits']['Hit']
       hit_length = hit_ary.length()
       big_array = [] # an array of hashes
@@ -269,8 +269,8 @@ module SequenceServer
       
       hit_ary.each do |hit_elem|
          
-         logger.info "Hit #{hit_elem}"
-         logger.info "Hit Def #{hit_elem['Hit_def']}"
+        # logger.info "Hit #{hit_elem}"
+         #logger.info "Hit Def #{hit_elem['Hit_def']}"
          hit_def = hit_elem['Hit_def']
          hit_pts = hit_elem['Hit_def'].split()
          gid = 'GCA_'+hit_pts[0].split('_')[1].split('|')[0]
@@ -290,7 +290,7 @@ module SequenceServer
          if hsps.kind_of?(Array)
             # multiple elements
             hsps.each do |hsp_elem|
-               logger.info "Hsp #{hsp_elem}"
+               #logger.info "Hsp #{hsp_elem}"
                #logger.info "H Def #{hit_elem['Hit_def']}"
                hsp_num = hsp_elem['Hsp_num']
                hsp_score = hsp_elem['Hsp_score']
@@ -364,7 +364,7 @@ module SequenceServer
         f.puts "Genome-ID\tHit_def\tHit_num\tHit_length\tHit_qcov\tHit_tscore\tHit_evalue\tHit_ident\tHsp_num\tHsp_score\tHsp_eval\tHsp_ident\tHsp_gaps\tHMT-ID\tTaxonomy"
         #gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
         big_array.each do |el|
-           f.puts "#{el['gid']}\t#{el['hit_def']}\t#{el['hit_length']}\t#{el['hit_qcov']}\t#{el['hit_tscore']}\t#{el['hit_evalue']}\t#{el['hit_ident']}\t#{el['hsp_num']}\t#{el['hsp_score']}\t#{el['hsp_evalue']}\t#{el['hsp_ident']}\t#{el['hsp_gaps']}\t#{el['hmt']}\t#{el['taxonomy']}"
+           f.puts "#{el['gid']}\t#{el['hit_def']}\t#{el['hit_num']}\t#{el['hit_length']}\t#{el['hit_qcov']}\t#{el['hit_tscore']}\t#{el['hit_evalue']}\t#{el['hit_ident']}\t#{el['hsp_num']}\t#{el['hsp_score']}\t#{el['hsp_evalue']}\t#{el['hsp_ident']}\t#{el['hsp_gaps']}\t#{el['hmt']}\t#{el['taxonomy']}"
         end
         #sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
         # Sequence::Retriever is in lib/sequenceserver/blast/sequence.rb
