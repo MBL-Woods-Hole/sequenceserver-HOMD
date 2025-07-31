@@ -214,6 +214,7 @@ module SequenceServer
         end
         job_id = params['job_id']
         job = Job.fetch(job_id)
+        # file written to this data directory
         fpath_out = File.join(DOTDIR, job_id, 'custom_homd_taxonomy.csv')
       
       #
@@ -239,7 +240,8 @@ module SequenceServer
         }
         
         logger.info "MYSQLIDS= #{mysql_ids}"
-        tax_hash = {}
+        tax_gid_hash = {}
+        tax_hmt_hash = {}
         if db_type == 'refseq'
             q = "SELECT otid_prime.otid,domain,phylum,klass,`order`,family,genus,species,subspecies from homd.`otid_prime`"
             q += " JOIN homd.taxonomy using(taxonomy_id)"
@@ -273,7 +275,7 @@ module SequenceServer
             #f.write("write your stuff here")
             hmt = 'HMT-'+row['otid'].to_s.rjust(3,'0')
             if db_type == 'refseq'
-                tax_hash[hmt] = {
+                tax_hmt_hash[hmt] = {
                 :hmt => hmt,
                 :domain => row['domain'],
                 :phylum => row['phylum'],
@@ -285,7 +287,7 @@ module SequenceServer
                 :subspecies => row['subspecies']
                 }
             else
-                tax_hash[row['genome_id']] = {
+                tax_gid_hash[row['genome_id']] = {
                 :strain => row['strain'],
                 :hmt => hmt,
                 :domain => row['domain'],
@@ -334,6 +336,11 @@ module SequenceServer
                 
                 hit_id = hit_elem[:id]
                 gid = 'GCA_'+hit_id.split('_')[1].split('|')[0]
+                hmt=''
+                if db_type == 'refseq'
+                    # ID == HMT-389_16S000742
+                    hmt = hit_id.split('_')[0]
+                end
                 #logger.info "GID FROM HIT-ID #{gid}"
                 
                 
@@ -348,7 +355,7 @@ module SequenceServer
                    #logger.info "Hsp #{hsp_elem}"
                    #logger.info "H Def #{hit_elem['Hit_def']}"
                    #if gid not in tax_hash:
-                   tmp_hash1 = {
+                    tmp_hash1 = {
                            :gid        => gid,
                            :query_num    => query_elem[:number],
                            :hit_title    => hit_elem[:title],
@@ -366,9 +373,11 @@ module SequenceServer
                            :hsp_ident  => hsp_elem[:identity],
                            :hsp_gaps   => hsp_elem[:gaps]
                     }
-                   if !tax_hash.has_key?(gid)
-                       logger.info "Key #{gid} does not exist in the tax hash."
-                       tmp_hash2 = {
+                    
+                    #use_hash = tax_hmt_hash
+                    if !tax_hmt_hash.has_key?(hmt) || !tax_gid_hash.has_key?(gid)
+                        logger.info "Key #{gid} does not exist in the tax hash."
+                        tmp_hash2 = {
                            :hmt       =>  '',
                            :domain    =>  '',
                            :phylum    => '',
@@ -379,23 +388,43 @@ module SequenceServer
                            :species   =>  '',
                            :subspecies =>  '',
                            :strain    =>  ''
-                       }
-                   else
-                       tmp_hash2 = {
-                           
-                           :hmt       => tax_hash[gid][:hmt],
-                           :domain    => tax_hash[gid][:domain],
-                           :phylum    => tax_hash[gid][:phylum],
-                           :class     => tax_hash[gid][:class],
-                           :order     => tax_hash[gid][:order],
-                           :family    => tax_hash[gid][:family],
-                           :genus     => tax_hash[gid][:genus],
-                           :species   => tax_hash[gid][:species],
-                           :subspecies => tax_hash[gid][:subspecies],
-                           :strain    => tax_hash[gid][:strain]
-                       
-                       }
-                   end
+                        }
+                    
+                    
+                    
+                    else
+                        if db_type == 'refseq'
+                            tmp_hash2 = {
+                               
+                               :hmt       => tax_hmt_hash[hmt][:hmt],
+                               :domain    => tax_hmt_hash[hmt][:domain],
+                               :phylum    => tax_hmt_hash[hmt][:phylum],
+                               :class     => tax_hmt_hash[hmt][:class],
+                               :order     => tax_hmt_hash[hmt][:order],
+                               :family    => tax_hmt_hash[hmt][:family],
+                               :genus     => tax_hmt_hash[hmt][:genus],
+                               :species   => tax_hmt_hash[hmt][:species],
+                               :subspecies => tax_hmt_hash[hmt][:subspecies],
+                               :strain    => tax_hmt_hash[hmt][:strain]
+                           }
+                        else   
+                            tmp_hash2 = {
+                               
+                               :hmt       => tax_gid_hash[gid][:hmt],
+                               :domain    => tax_gid_hash[gid][:domain],
+                               :phylum    => tax_gid_hash[gid][:phylum],
+                               :class     => tax_gid_hash[gid][:class],
+                               :order     => tax_gid_hash[gid][:order],
+                               :family    => tax_gid_hash[gid][:family],
+                               :genus     => tax_gid_hash[gid][:genus],
+                               :species   => tax_gid_hash[gid][:species],
+                               :subspecies => tax_gid_hash[gid][:subspecies],
+                               :strain    => tax_gid_hash[gid][:strain]
+                           }
+                        end
+                    end
+                   
+                   
                    tmp_hash = tmp_hash1.merge(tmp_hash2)
                    big_array.push(tmp_hash)
                 end
@@ -403,9 +432,7 @@ module SequenceServer
         end
      
      
-      
-      
-      
+
       
       
       File.open(fpath_out, 'w') do |f|
@@ -427,11 +454,7 @@ module SequenceServer
               type: 'text/csv', 
               filename: "custom_homd_taxonomy_#{filename_datetime}.csv", 
               disposition: 'attachment' 
-      #file.close # Close the file to ensure all data is written and flushed
-      #file.unlink
-      #send_file(SequenceServer.config[:bin],
-      #          type:     'sql_custom',
-      #          filename: 'test_mysql')
+     
     end
     
     # Download BLAST report in various formats.
