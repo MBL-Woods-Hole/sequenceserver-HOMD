@@ -221,7 +221,7 @@ module SequenceServer
       #
         mysql_ids = Array.new
         gids_list = ''
-        logger.info "SEQ IDS= #{sequence_ids}"
+        logger.info "xSEQ IDS= #{sequence_ids}"
         logger.info "DB TYPE #{db_type}"
         sequence_ids.each {|n|
           if db_type == 'refseq'
@@ -252,7 +252,7 @@ module SequenceServer
             q += " JOIN homd.species using(species_id)"
             q += " JOIN homd.subspecies using(subspecies_id)"
             q += " WHERE otid in ('"+mysql_ids.join("','")+"')"
-        
+            
         else
             q = "SELECT genome_id,otid_prime.otid,domain,phylum,klass,`order`,family,genus,species,subspecies,strain from homd.`otid_prime`"
             q += " JOIN homd.taxonomy using(taxonomy_id)"
@@ -267,6 +267,7 @@ module SequenceServer
             q += " JOIN homd.`genomesV11.0` using(otid)"
             q += " WHERE genome_id in ('"+mysql_ids.join("','")+"')"
         end
+        logger.info "SQL Query= #{q}"
         results = $conn.query(q)
         results.each do |row|
             #f.write("write your stuff here")
