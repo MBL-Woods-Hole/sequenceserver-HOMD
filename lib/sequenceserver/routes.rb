@@ -322,7 +322,10 @@ module SequenceServer
         #  Now we have taxonomy hash and BLAST big_array
         #
         newHash = eval(Xhash)
-        header = "####{newHash[:querydb][0][:name]}\n"
+        header = "### DATABASE: #{newHash[:querydb][0][:title]}\n"
+        header += "### TYPE: #{newHash[:querydb][0][:type]}\n"
+        header += "### PROGRAM: #{newHash[:querydb][0][:program]}\n"
+        header += "### VERSION: #{newHash[:querydb][0][:program_version]}\n"
         query_ary = newHash[:queries]
         big_array = [] # an array of hashes
         
