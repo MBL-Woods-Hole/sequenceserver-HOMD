@@ -203,8 +203,13 @@ module SequenceServer
                 type:     sequences.mime,
                 filename: sequences.filename)
     end
+    post '/get_sqlquery' do
+    end
+    post '/get_sqlquery' do
+    end
     
     post '/get_sqlquery' do
+        out_type = params['filetype'] # xlsx or csv
         sequence_ids = params['sequence_ids'].split(',')
         if sequence_ids[0].start_with?("HMT")
             db_type = "refseq"
@@ -214,12 +219,9 @@ module SequenceServer
         job_id = params['job_id']
         job = Job.fetch(job_id)
         # file written to this data directory
-        #fpath_out_csv = File.join(DOTDIR, job_id, 'custom_homd_taxonomy.csv')
-        fpath_out_xlsx = File.join(DOTDIR, job_id, 'custom_homd_taxonomy.xlsx')
-        # Create a new Excel workbook
-        workbook = WriteXLSX.new(fpath_out_xlsx)
-        # Add a worksheet
-        worksheet = workbook.add_worksheet
+        #
+        
+        
         
         #
         # First get GIDS and Taxonomy from MySQL DB
@@ -428,95 +430,109 @@ module SequenceServer
         end
 
       
-      
-      
-        worksheet.write('A1',headerA1)
-        worksheet.write('A2',headerA2)
-        worksheet.write(2,0,"Query_num")
-        worksheet.write(2,1,"Genome-ID")
-        worksheet.write(2,2,"HMT-ID")
-        worksheet.write(2,3,"Hit_title")
-        worksheet.write(2,4,"Hit_num")
-        worksheet.write(2,5,"Hit_length")
-        worksheet.write(2,6,"Hit_qcov")
-        worksheet.write(2,7,"Hit_tscore")
-        worksheet.write(2,8,"Hit_evalue")
-        worksheet.write(2,9,"Hit_ident")
-        worksheet.write(2,10,"Hit_Ident(%)")
-        worksheet.write(2,11,"Hsp_num")
-        worksheet.write(2,12,"Hsp_score")
-        worksheet.write(2,13,"Hsp_bitscore")
-        worksheet.write(2,14,"Hsp_eval")
-        worksheet.write(2,15,"Hsp_ident")
-        worksheet.write(2,16,"Hsp_gaps")
-        worksheet.write(2,17,"HOMD-Domain")
-        worksheet.write(2,18,"HOMD-Phylum")
-        worksheet.write(2,19,"HOMD-Class")
-        worksheet.write(2,20,"HOMD-Order")
-        worksheet.write(2,21,"HOMD-Family")
-        worksheet.write(2,22,"HOMD-Genus")
-        worksheet.write(2,23,"HOMD-Species")
-        worksheet.write(2,24,"HOMD-Subspecies")
-        worksheet.write(2,25,"HOMD-Strain")
+        fpath_out = File.join(DOTDIR, job_id, "custom_homd_taxonomy.#{out_type}")
+        if out_type == 'xlsx'
+            # Create a new Excel workbook
+            workbook = WriteXLSX.new(fpath_out)
+            # Add a worksheet
+            worksheet = workbook.add_worksheet
+          
+            worksheet.write('A1',headerA1)
+            worksheet.write('A2',headerA2)
+            worksheet.write(2,0,"Query_num")
+            worksheet.write(2,1,"Genome-ID")
+            worksheet.write(2,2,"HMT-ID")
+            worksheet.write(2,3,"Hit_title")
+            worksheet.write(2,4,"Hit_num")
+            worksheet.write(2,5,"Hit_length")
+            worksheet.write(2,6,"Hit_qcov")
+            worksheet.write(2,7,"Hit_tscore")
+            worksheet.write(2,8,"Hit_evalue")
+            worksheet.write(2,9,"Hit_ident")
+            worksheet.write(2,10,"Hit_Ident(%)")
+            worksheet.write(2,11,"Hsp_num")
+            worksheet.write(2,12,"Hsp_score")
+            worksheet.write(2,13,"Hsp_bitscore")
+            worksheet.write(2,14,"Hsp_eval")
+            worksheet.write(2,15,"Hsp_ident")
+            worksheet.write(2,16,"Hsp_gaps")
+            worksheet.write(2,17,"HOMD-Domain")
+            worksheet.write(2,18,"HOMD-Phylum")
+            worksheet.write(2,19,"HOMD-Class")
+            worksheet.write(2,20,"HOMD-Order")
+            worksheet.write(2,21,"HOMD-Family")
+            worksheet.write(2,22,"HOMD-Genus")
+            worksheet.write(2,23,"HOMD-Species")
+            worksheet.write(2,24,"HOMD-Subspecies")
+            worksheet.write(2,25,"HOMD-Strain")
         
-        row = 3
-        big_array.each_with_index do |el,i|
-            col = 0
+            row = 3
+            big_array.each_with_index do |el,i|
+                col = 0
+                
+                worksheet.write(row,col,el[:query_num])
+                worksheet.write(row,col+1,el[:gid])
+                worksheet.write(row,col+2,el[:hmt])
+                worksheet.write(row,col+3,el[:hit_title])
+                worksheet.write(row,col+4,el[:hit_num])
+                worksheet.write(row,col+5,el[:hit_length])
+                worksheet.write(row,col+6,el[:hit_qcov])
+                worksheet.write(row,col+7,el[:hit_tscore])
+                worksheet.write(row,col+8,el[:hit_evalue])
+                worksheet.write(row,col+9,el[:hit_ident])
+                worksheet.write(row,col+10,el[:hit_ipct])
+                worksheet.write(row,col+11,el[:hsp_num])
+                worksheet.write(row,col+12,el[:hsp_score])
+                worksheet.write(row,col+13,el[:hsp_bitscore])
+                worksheet.write(row,col+14,el[:hsp_evalue])
+                worksheet.write(row,col+15,el[:hsp_ident])
+                worksheet.write(row,col+16,el[:hsp_gaps])
+                worksheet.write(row,col+17,el[:domain])
+                worksheet.write(row,col+18,el[:phylum])
+                worksheet.write(row,col+19,el[:class])
+                worksheet.write(row,col+20,el[:order])
+                worksheet.write(row,col+21,el[:family])
+                worksheet.write(row,col+22,el[:genus])
+                worksheet.write(row,col+23,el[:species])
+                worksheet.write(row,col+24,el[:subspecies])
+                worksheet.write(row,col+25,el[:strain])
+                
+                row += 1
+            end
+            
+            workbook.close()
+        else
             #f.puts "#{el[:query_num]}\t#{el[:gid]}\t#{el[:hmt]}\t#{el[:hit_title]}\t#{el[:hit_num]}\t#{el[:hit_length]}\t#{el[:hit_qcov]}\t#
-            #{el[:hit_tscore]}\t#{el[:hit_evalue]}\t#{el[:hit_ident]}\t#{el[:hit_ipct]}\t#{el[:hsp_num]}\t#{el[:hsp_score]}\t#{el[:hsp_bitscore]}
-            #\t#{el[:hsp_evalue]}\t#{el[:hsp_ident]}\t#{el[:hsp_gaps]}\t#{el[:domain]}\t#{el[:phylum]}\t#{el[:class]}\t#{el[:order]}\t#{el[:family]}\t#{el[:genus]}\t#{el[:species]}\t#{el[:subspecies]}\t#{el[:strain]}"
-            worksheet.write(row,col,el[:query_num])
-            worksheet.write(row,col+1,el[:gid])
-            worksheet.write(row,col+2,el[:hmt])
-            worksheet.write(row,col+3,el[:hit_title])
-            worksheet.write(row,col+4,el[:hit_num])
-            worksheet.write(row,col+5,el[:hit_length])
-            worksheet.write(row,col+6,el[:hit_qcov])
-            worksheet.write(row,col+7,el[:hit_tscore])
-            worksheet.write(row,col+8,el[:hit_evalue])
-            worksheet.write(row,col+9,el[:hit_ident])
-            worksheet.write(row,col+10,el[:hit_ipct])
-            worksheet.write(row,col+11,el[:hsp_num])
-            worksheet.write(row,col+12,el[:hsp_score])
-            worksheet.write(row,col+13,el[:hsp_bitscore])
-            worksheet.write(row,col+14,el[:hsp_evalue])
-            worksheet.write(row,col+15,el[:hsp_ident])
-            worksheet.write(row,col+16,el[:hsp_gaps])
-            worksheet.write(row,col+17,el[:domain])
-            worksheet.write(row,col+18,el[:phylum])
-            worksheet.write(row,col+19,el[:class])
-            worksheet.write(row,col+20,el[:order])
-            worksheet.write(row,col+21,el[:family])
-            worksheet.write(row,col+22,el[:genus])
-            worksheet.write(row,col+23,el[:species])
-            worksheet.write(row,col+24,el[:subspecies])
-            worksheet.write(row,col+25,el[:strain])
-            
-            
-            row += 1
+                #{el[:hit_tscore]}\t#{el[:hit_evalue]}\t#{el[:hit_ident]}\t#{el[:hit_ipct]}\t#{el[:hsp_num]}\t#{el[:hsp_score]}\t#{el[:hsp_bitscore]}
+                #\t#{el[:hsp_evalue]}\t#{el[:hsp_ident]}\t#{el[:hsp_gaps]}\t#{el[:domain]}\t#{el[:phylum]}\t#{el[:class]}\t#{el[:order]}\t#{el[:family]}\t#{el[:genus]}\t#{el[:species]}\t#{el[:subspecies]}\t#{el[:strain]}"
+                
+            File.open(fpath_out, 'w') do |f|
+                #f.puts "Genome-ID\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
+                #f.puts "Genome-ID\tQuery_num\tHit_title\tHit_num\tHit_length\tHit_qcov\tHit_tscore\tHit_evalue\tHit_ident\tHit_Ident(%)\tHsp_num\tHsp_score\tHsp_bitscore\tHsp_eval\tHsp_ident\tHsp_gaps\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
+                f.puts headerA1
+                f.puts headerA2
+                f.write "Query_num\tGenome-ID\tHMT-ID\tHit_title\tHit_num\tHit_length\tHit_qcov\tHit_tscore\t"
+                f.write "Hit_evalue\tHit_ident\tHit_Ident(%)\tHsp_num\tHsp_score\tHsp_bitscore\tHsp_eval\tHsp_ident\tHsp_gaps\t"
+                f.write "HOMD-Domain\tHOMD-Phylum\tHOMD-Class\tHOMD-Order\tHOMD-Family\tHOMD-Genus\tHOMD-Species\tHOMD-Subspecies\tStrain\n"
+                #gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
+                big_array.each do |el|
+                   f.puts "#{el[:query_num]}\t#{el[:gid]}\t#{el[:hmt]}\t#{el[:hit_title]}\t#{el[:hit_num]}\t#{el[:hit_length]}\t#{el[:hit_qcov]}\t#{el[:hit_tscore]}\t#{el[:hit_evalue]}\t#{el[:hit_ident]}\t#{el[:hit_ipct]}\t#{el[:hsp_num]}\t#{el[:hsp_score]}\t#{el[:hsp_bitscore]}\t#{el[:hsp_evalue]}\t#{el[:hsp_ident]}\t#{el[:hsp_gaps]}\t#{el[:domain]}\t#{el[:phylum]}\t#{el[:class]}\t#{el[:order]}\t#{el[:family]}\t#{el[:genus]}\t#{el[:species]}\t#{el[:subspecies]}\t#{el[:strain]}"
+                end
+            end
         end
-        
-        workbook.close()
-#       File.open(fpath_out, 'w') do |f|
-#         #f.puts "Genome-ID\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
-#         #f.puts "Genome-ID\tQuery_num\tHit_title\tHit_num\tHit_length\tHit_qcov\tHit_tscore\tHit_evalue\tHit_ident\tHit_Ident(%)\tHsp_num\tHsp_score\tHsp_bitscore\tHsp_eval\tHsp_ident\tHsp_gaps\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
-#         f.write header
-
-#         f.write "Query_num\tGenome-ID\tHMT-ID\tHit_title\tHit_num\tHit_length\tHit_qcov\tHit_tscore\t"
-#         f.write "Hit_evalue\tHit_ident\tHit_Ident(%)\tHsp_num\tHsp_score\tHsp_bitscore\tHsp_eval\tHsp_ident\tHsp_gaps\t"
-#         f.write "HOMD-Domain\tHOMD-Phylum\tHOMD-Class\tHOMD-Order\tHOMD-Family\tHOMD-Genus\tHOMD-Species\tHOMD-Subspecies\tStrain\n"
-#         #gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
-#         big_array.each do |el|
-#            f.puts "#{el[:query_num]}\t#{el[:gid]}\t#{el[:hmt]}\t#{el[:hit_title]}\t#{el[:hit_num]}\t#{el[:hit_length]}\t#{el[:hit_qcov]}\t#{el[:hit_tscore]}\t#{el[:hit_evalue]}\t#{el[:hit_ident]}\t#{el[:hit_ipct]}\t#{el[:hsp_num]}\t#{el[:hsp_score]}\t#{el[:hsp_bitscore]}\t#{el[:hsp_evalue]}\t#{el[:hsp_ident]}\t#{el[:hsp_gaps]}\t#{el[:domain]}\t#{el[:phylum]}\t#{el[:class]}\t#{el[:order]}\t#{el[:family]}\t#{el[:genus]}\t#{el[:species]}\t#{el[:subspecies]}\t#{el[:strain]}"
-#         end
-#       end
       
       
       current_time = Time.now
-      filename_datetime = current_time.strftime("%Y%m%d_%H%M%S") 
-      send_file fpath_out_xlsx, 
-              type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 
-              filename: "custom_homd_taxonomy_#{filename_datetime}.xlsx", 
+      filename_datetime = current_time.strftime("%Y%m%d_%H%M%S")
+      if out_type == 'xlsx'
+          mimetype = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      else
+          mimetype = 'text/csv'
+      end
+      
+      send_file fpath_out, 
+              type: mimetype, 
+              filename: "custom_homd_taxonomy_#{filename_datetime}.#{out_type}", 
               disposition: 'attachment' 
      
     end

@@ -74,7 +74,7 @@ export default class extends Component {
         return false;
     }
     
-    mysql_download() {
+    mysql_download(ftype) {
         var path = location.pathname.split('/');
         // Get job id.
         var job_id = path.pop();
@@ -84,7 +84,7 @@ export default class extends Component {
         
         //var database_ids = _.map(this.props.data.querydb, _.iteratee('id'));
         // see public/js/download_sqlquery.js and lib/sequenceserver/routes.rb
-        downloadSQLQUERY(sequence_ids, job_id);
+        downloadSQLQUERY(sequence_ids, job_id, ftype);
         return false;
     }
     
@@ -369,8 +369,16 @@ export default class extends Component {
                     }
                     <li>
                         <a href="#" className={`btn-link download-alignment-of-all ${!this.props.atLeastOneHit && 'disabled'}`}
-                            onClick={this.mysql_download}>
+                            title="Excel Speadsheet (xlsx):: 26 columns including HOMD Taxonomy and BLAST Stats."
+                            onClick={this.mysql_download('xlsx')}>
                             HOMD Taxonomy of all hits (xlsx)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" className={`btn-link download-alignment-of-all ${!this.props.atLeastOneHit && 'disabled'}`}
+                            title="TAB separated spreadsheet: 26 columns including HOMD Taxonomy and BLAST Stats."
+                            onClick={this.mysql_download('csv')}>
+                            HOMD Taxonomy of all hits (tsv)
                         </a>
                     </li>
                 </ul>
