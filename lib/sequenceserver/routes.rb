@@ -1,8 +1,5 @@
-require 'ox'
-Ox.default_options = { skip: :skip_none }
 
 require 'json'
-require 'nokogiri'
 require 'tilt/erb'
 require 'sinatra/base'
 
@@ -300,11 +297,6 @@ module SequenceServer
                     :subspecies => row['subspecies']
                 }
             end
-           
-                
-                
-              
-           #f.puts "#{row['genome_id']}\t#{hmt}\t#{row['domain']}\t#{row['phylum']}\t#{row['klass']}\t#{row['order']}\t#{row['family']}\t#{row['genus']}\t#{row['species']}\t#{row['subspecies']}\t#{row['strain']}"
         end
         
         #
@@ -323,9 +315,7 @@ module SequenceServer
         #
         newHash = eval(Xhash)
         header = "### DATABASE: #{newHash[:querydb][0][:title]}\n"
-        header += "### TYPE: #{newHash[:querydb][0][:type]}\n"
-        header += "### PROGRAM: #{newHash[:program]}\n"
-        header += "### VERSION: #{newHash[:program_version]}\n"
+        header += "### PROGRAM: #{newHash[:program_version]}\n"
         query_ary = newHash[:queries]
         big_array = [] # an array of hashes
         
@@ -349,10 +339,7 @@ module SequenceServer
                 end
                 #logger.info "GID FROM HIT-ID #{gid}"
                 
-                
                 hsps = hit_elem[:hsps]
-                
-                # multiple elements
                 hit_evalue = hsps[0][:evalue]
                 hit_ident = hsps[0][:identity]
                 #hit_ident = "#{hsps[0][:identity]}"+' / '+"#{hsps[0][:length]}"
@@ -396,8 +383,6 @@ module SequenceServer
                            :strain    =>  ''
                         }
                     
-                    
-                    
                     else
                         if db_type == 'refseq'
                             tmp_hash2 = {
@@ -429,17 +414,12 @@ module SequenceServer
                            }
                         end
                     end
-                   
-                   
                    tmp_hash = tmp_hash1.merge(tmp_hash2)
                    big_array.push(tmp_hash)
                 end
             end
         end
-     
-     
 
-      
       
       File.open(fpath_out, 'w') do |f|
         #f.puts "Genome-ID\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
