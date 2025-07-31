@@ -449,7 +449,7 @@ module SequenceServer
       
       current_time = Time.now
       filename_datetime = current_time.strftime("%Y%m%d_%H%M%S") 
-      send_file fpath_out, 
+      send_file fpath_out_xlsx, 
               type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 
               filename: "custom_homd_taxonomy_#{filename_datetime}.xlsx", 
               disposition: 'attachment' 
