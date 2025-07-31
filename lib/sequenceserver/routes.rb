@@ -276,28 +276,28 @@ module SequenceServer
             hmt = 'HMT-'+row['otid'].to_s.rjust(3,'0')
             if db_type == 'refseq'
                 tax_hmt_hash[hmt] = {
-                :hmt => hmt,
-                :domain => row['domain'],
-                :phylum => row['phylum'],
-                :class => row['klass'],
-                :order => row['order'],
-                :family => row['family'],
-                :genus => row['genus'],
-                :species => row['species'],
-                :subspecies => row['subspecies']
+                    :hmt => hmt,
+                    :domain => row['domain'],
+                    :phylum => row['phylum'],
+                    :class => row['klass'],
+                    :order => row['order'],
+                    :family => row['family'],
+                    :genus => row['genus'],
+                    :species => row['species'],
+                    :subspecies => row['subspecies']
                 }
             else
                 tax_gid_hash[row['genome_id']] = {
-                :strain => row['strain'],
-                :hmt => hmt,
-                :domain => row['domain'],
-                :phylum => row['phylum'],
-                :class => row['klass'],
-                :order => row['order'],
-                :family => row['family'],
-                :genus => row['genus'],
-                :species => row['species'],
-                :subspecies => row['subspecies']
+                    :strain => row['strain'],
+                    :hmt => hmt,
+                    :domain => row['domain'],
+                    :phylum => row['phylum'],
+                    :class => row['klass'],
+                    :order => row['order'],
+                    :family => row['family'],
+                    :genus => row['genus'],
+                    :species => row['species'],
+                    :subspecies => row['subspecies']
                 }
             end
            
@@ -335,11 +335,14 @@ module SequenceServer
                 #logger.info "Hit Def #{hit_elem['Hit_def']}"
                 
                 hit_id = hit_elem[:id]
-                gid = 'GCA_'+hit_id.split('_')[1].split('|')[0]
-                hmt=''
+                
                 if db_type == 'refseq'
                     # ID == HMT-389_16S000742
                     hmt = hit_id.split('_')[0]
+                    gid = 'refseq'
+                else
+                    hmt = 'genome'
+                    gid = 'GCA_'+hit_id.split('_')[1].split('|')[0]
                 end
                 #logger.info "GID FROM HIT-ID #{gid}"
                 
@@ -375,7 +378,7 @@ module SequenceServer
                     }
                     
                     #use_hash = tax_hmt_hash
-                    if !tax_hmt_hash.has_key?(hmt) || !tax_gid_hash.has_key?(gid)
+                    if !(tax_hmt_hash.has_key?(hmt) && !tax_gid_hash.has_key?(gid))
                         logger.info "Key #{gid} does not exist in the tax hash."
                         tmp_hash2 = {
                            :hmt       =>  '',
