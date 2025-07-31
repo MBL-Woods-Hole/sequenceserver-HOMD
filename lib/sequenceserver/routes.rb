@@ -493,9 +493,6 @@ module SequenceServer
             worksheet.write(row,col+25,el[:strain])
             
             
-            
-            
-            
             row += 1
         end
         
