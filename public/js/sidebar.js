@@ -5,6 +5,7 @@ import React, { Component, useState } from 'react';
 import _ from 'underscore';
 
 import downloadFASTA from './download_fasta';
+import downloadSQLQUERY from './download_sqlquery';
 import AlignmentExporter from './alignment_exporter'; // to download textual alignment
 
 /**
@@ -19,6 +20,10 @@ export default class extends Component {
         this.downloadFastaOfSelected = this.downloadFastaOfSelected.bind(this);
         this.downloadAlignmentOfAll = this.downloadAlignmentOfAll.bind(this);
         this.downloadAlignmentOfSelected = this.downloadAlignmentOfSelected.bind(this);
+        
+         /*  Found in public/js/download_sqlquery.js */
+        this.mysql_download = this.mysql_download.bind(this);
+        
         this.topPanelJSX = this.topPanelJSX.bind(this);
         this.summaryString = this.summaryString.bind(this);
         this.indexJSX = this.indexJSX.bind(this);
@@ -69,6 +74,21 @@ export default class extends Component {
         return false;
     }
 
+    mysql_download(ftype) {
+        //var ftype = 'xlsx'
+        var path = location.pathname.split('/');
+        // Get job id.
+        var job_id = path.pop();
+        let sequence_ids = $('.hit-links :checkbox').map(function () {
+            return this.value;
+        }).get();
+        
+        //var database_ids = _.map(this.props.data.querydb, _.iteratee('id'));
+        // see public/js/download_sqlquery.js and lib/sequenceserver/routes.rb
+        downloadSQLQUERY(sequence_ids, job_id, ftype);
+        return false;
+    }
+    
     downloadAlignmentOfAll() {
         // Get number of hits and array of all hsps.
         var num_hits = 0;
@@ -282,7 +302,7 @@ export default class extends Component {
             <div className="downloads">
                 <div className="section-header-sidebar">
                     <h4>
-                        Download FASTA, XML, TSV
+                        Download FASTA, XML, TSV, XLSX
                     </h4>
                 </div>
                 <ul className="nav">
@@ -347,7 +367,22 @@ export default class extends Component {
                             </a>
                         </li>
                     }
-                   
+                   <li>
+                        <a href="#" className={`btn-link download-alignment-of-all ${!this.props.atLeastOneHit && 'disabled'}`}
+                            data-toggle="tooltip"
+                            title="Excel Speadsheet (xlsx):: 26 columns including HOMD Taxonomy and BLAST Stats."
+                            onClick={() => this.mysql_download('xlsx')}>
+                            HOMD Taxonomy of all hits (xlsx)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" className={`btn-link download-alignment-of-all ${!this.props.atLeastOneHit && 'disabled'}`}
+                            data-toggle="tooltip"
+                            title="TAB Separated Spreadsheet:: 26 columns including HOMD Taxonomy and BLAST Stats."
+                            onClick={() => this.mysql_download('csv')}>
+                            HOMD Taxonomy of all hits (csv)
+                        </a>
+                    </li>
                 </ul>
             </div>
         );
