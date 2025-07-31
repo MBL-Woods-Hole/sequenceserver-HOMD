@@ -75,7 +75,7 @@ export default class extends Component {
     }
     
     mysql_download() {
-        ftype = 'xlsx'
+        var ftype = 'xlsx'
         var path = location.pathname.split('/');
         // Get job id.
         var job_id = path.pop();
