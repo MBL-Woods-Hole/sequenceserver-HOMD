@@ -214,10 +214,6 @@ module SequenceServer
         end
         job_id = params['job_id']
         job = Job.fetch(job_id)
-        # file written to this data directory
-        #
-        
-        
         
         #
         # First get GIDS and Taxonomy from MySQL DB
