@@ -372,7 +372,7 @@ export default class extends Component {
                         <a href="#" className={`btn-link download-alignment-of-all ${!this.props.atLeastOneHit && 'disabled'}`}
                             data-toggle="tooltip"
                             title="Excel Speadsheet (xlsx):: 26 columns including HOMD Taxonomy and BLAST Stats."
-                            onClick={this.mysql_download('xlsx')}>
+                            onClick={() => this.mysql_download('xlsx')}>
                             HOMD Taxonomy of all hits (xlsx)
                         </a>
                     </li>
@@ -380,7 +380,7 @@ export default class extends Component {
                         <a href="#" className={`btn-link download-alignment-of-all ${!this.props.atLeastOneHit && 'disabled'}`}
                             data-toggle="tooltip"
                             title="TAB Separated Spreadsheet:: 26 columns including HOMD Taxonomy and BLAST Stats."
-                            onClick={this.mysql_download('csv')}>
+                            onClick={() => this.mysql_download('csv')}>
                             HOMD Taxonomy of all hits (csv)
                         </a>
                     </li>
