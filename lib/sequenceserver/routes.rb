@@ -207,7 +207,7 @@ module SequenceServer
     
     post '/get_sqlquery' do
         sequence_ids = params['sequence_ids'].split(',')
-        if sequence_ids[0].starts_with?("HMT")
+        if sequence_ids[0].start_with?("HMT")
             db_type = "refseq"
         else
             db_type = "genome"
