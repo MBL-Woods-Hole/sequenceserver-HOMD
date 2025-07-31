@@ -432,7 +432,7 @@ module SequenceServer
       
         worksheet.write('A1',header)
         
-        worksheet.close()
+        workbook.close()
 #       File.open(fpath_out, 'w') do |f|
 #         #f.puts "Genome-ID\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
 #         #f.puts "Genome-ID\tQuery_num\tHit_title\tHit_num\tHit_length\tHit_qcov\tHit_tscore\tHit_evalue\tHit_ident\tHit_Ident(%)\tHsp_num\tHsp_score\tHsp_bitscore\tHsp_eval\tHsp_ident\tHsp_gaps\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
