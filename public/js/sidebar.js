@@ -74,8 +74,8 @@ export default class extends Component {
         return false;
     }
     
-    mysql_download() {
-        var ftype = 'xlsx'
+    mysql_download(ftype) {
+        //var ftype = 'xlsx'
         var path = location.pathname.split('/');
         // Get job id.
         var job_id = path.pop();
@@ -371,8 +371,15 @@ export default class extends Component {
                     <li>
                         <a href="#" className={`btn-link download-alignment-of-all ${!this.props.atLeastOneHit && 'disabled'}`}
                             title="Excel Speadsheet (xlsx):: 26 columns including HOMD Taxonomy and BLAST Stats."
-                            onClick={this.mysql_download}>
+                            onClick={this.mysql_download('xlsx')}>
                             HOMD Taxonomy of all hits (xlsx)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" className={`btn-link download-alignment-of-all ${!this.props.atLeastOneHit && 'disabled'}`}
+                            title="TAB Separated Spreadsheet:: 26 columns including HOMD Taxonomy and BLAST Stats."
+                            onClick={this.mysql_download('csv')}>
+                            HOMD Taxonomy of all hits (csv)
                         </a>
                     </li>
                 </ul>

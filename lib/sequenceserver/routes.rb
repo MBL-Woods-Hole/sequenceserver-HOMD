@@ -203,11 +203,7 @@ module SequenceServer
                 type:     sequences.mime,
                 filename: sequences.filename)
     end
-    post '/get_sqlquery' do
-    end
-    post '/get_sqlquery' do
-    end
-    
+        
     post '/get_sqlquery' do
         out_type = params['filetype'] # xlsx or csv
         sequence_ids = params['sequence_ids'].split(',')
