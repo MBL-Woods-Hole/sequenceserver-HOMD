@@ -378,7 +378,7 @@ module SequenceServer
                     }
                     
                     #use_hash = tax_hmt_hash
-                    if !(tax_hmt_hash.has_key?(hmt) && !tax_gid_hash.has_key?(gid))
+                    if !(tax_hmt_hash.has_key?(hmt) || !tax_gid_hash.has_key?(gid))
                         logger.info "Key #{gid} does not exist in the tax hash."
                         tmp_hash2 = {
                            :hmt       =>  '',
