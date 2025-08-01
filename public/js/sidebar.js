@@ -302,7 +302,7 @@ export default class extends Component {
             <div className="downloads">
                 <div className="section-header-sidebar">
                     <h4>
-                        Download FASTA, XML, TSV
+                        Download FASTA, XML, TSV, XLSX
                     </h4>
                 </div>
                 <ul className="nav">

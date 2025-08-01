@@ -66,7 +66,6 @@ module SequenceServer
 
     # For any request that hits the app,  log incoming params at debug level.
     before do
-      #username = env[‘REMOTE_USER’]}
       logger.debug params
     end
 
@@ -151,20 +150,9 @@ module SequenceServer
       end
     end
 
-#     get '/single' do
-#        puts 'AAV IN SINGLE routes.rb'
-#        #erb :search_single, layout: true
-#        redirect to("/")
-#     end
     # Returns results for the given job id in JSON format.  Returns 202 with
     # an empty body if the job hasn't finished yet.
     get '/:jid.json' do |jid|
-      # if jid.length < 20
-#          # redirect to new search page of single genome databases
-#          puts "AAV Found short jobid: #{jid}"
-#          #redirect to("/")
-#          erb :search, layout: true
-#       end
       job = Job.fetch(jid)
       halt 202 unless job.done?
       Report.generate(job).to_json
@@ -189,7 +177,6 @@ module SequenceServer
     get '/get_sequence/' do
       sequence_ids = params[:sequence_ids].split(',')
       database_ids = params[:database_ids].split(',')
-      logger.info "1-sequence_ids: #{sequence_ids}"
       sequences = Sequence::Retriever.new(sequence_ids, database_ids)
       sequences.to_json
     end
@@ -198,7 +185,6 @@ module SequenceServer
       sequence_ids = params['sequence_ids'].split(',')
       database_ids = params['database_ids'].split(',')
       sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
-      logger.info "2-sequence_ids: #{sequence_ids}" 
       send_file(sequences.file.path,
                 type:     sequences.mime,
                 filename: sequences.filename)
@@ -532,7 +518,6 @@ module SequenceServer
     # Download BLAST report in various formats.
     get '/download/:jid.:type' do |jid, type|
       job = Job.fetch(jid)
-      logger.info "3-job: #{job}" 
       out = BLAST::Formatter.new(job, type)
       send_file out.file, filename: out.filename, type: out.mime
     end
