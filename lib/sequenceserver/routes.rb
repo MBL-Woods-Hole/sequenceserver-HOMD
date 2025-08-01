@@ -1,8 +1,7 @@
 
-#require 'json'
+require 'json'
 require 'tilt/erb'
 require 'sinatra/base'
-#require 'rest-client'
 
 require 'sequenceserver/job'
 require 'sequenceserver/blast'
@@ -13,6 +12,7 @@ require 'sequenceserver/makeblastdb'
 require 'csv'
 require 'time'
 require 'write_xlsx'
+
 
 module SequenceServer
   # Controller.
@@ -77,6 +77,7 @@ module SequenceServer
     # Returns base HTML. Rest happens client-side: rendering the search form.
     get '/' do
       erb :search, layout: true
+      
     end
     
     # Borrowed from makeblastdb.rb
@@ -103,7 +104,6 @@ module SequenceServer
     # Returns data that is used to render the search form client side. These
     # include available databases and user-defined search options.
     get '/searchdata.json' do
-      #puts "in EDIT get '/searchdata.json' do"
       
       # if $DEV_HOST == 'AVhome'
 #          path_prokka = '/Users/avoorhis/programming/blast-db-alt/'  #SEQF1595.fna*
@@ -249,18 +249,20 @@ module SequenceServer
 
     # Queues a search job and redirects to `/:jid`.
     post '/' do
-        # params:
+      # params:
         # {"databases"=>["e17ac02845d0afc7c829031f011476d7"], 
         # "sequence"=>"CTGGGCCGTGTCTCAGTCCCAATGTGGCCGTTTACCCTCTCAGGCCGGCTACGCATCATCGCCTTGGTGGGCCGTT", 
         # "advanced"=>"-task blastn -evalue 1e-5", 
         # "method"=>"blastn"
         # }}
       logger.info "IP:#{request.ip}: URL:#{$HOMD_URL} Method:"+params.fetch(:method)+" Sequence20:"+params.fetch(:sequence)[0,20]
+      
       if params[:input_sequence]
         @input_sequence = params[:input_sequence]
+        
         erb :search, layout: true
       else
-         
+        
         job = Job.create(params)
         #puts 'job.id'
         #puts job.id
@@ -269,8 +271,6 @@ module SequenceServer
         else
            redirect to("/#{$HOMD_URL}/#{job.id}")
         end
-                
-        
       end
     end
 
@@ -287,6 +287,7 @@ module SequenceServer
     get '/:jid' do
       erb :report, layout: true
     end
+
     # @params sequence_ids: whitespace separated list of sequence ids to
     # retrieve
     # @params database_ids: whitespace separated list of database ids to
@@ -312,7 +313,7 @@ module SequenceServer
                 type:     sequences.mime,
                 filename: sequences.filename)
     end
-    
+        
     post '/get_sqlquery' do
         out_type = params['filetype'] # xlsx or csv
         sequence_ids = params['sequence_ids'].split(',')
