@@ -538,7 +538,7 @@ module SequenceServer
             workbook = WriteXLSX.new(fpath_out)
             # Add a worksheet
             worksheet = workbook.add_worksheet
-          
+            logger.info "Writing header row"
             worksheet.write('A1',headerA1)
             worksheet.write('A2',headerA2)
             worksheet.write(2,0,"Query_num")
@@ -572,7 +572,7 @@ module SequenceServer
             
             big_array.each_with_index do |el,i|
                 col = 0
-                
+                logger.info "Writing data row: #{i}"
                 worksheet.write(row,col,el[:query_num])
                 worksheet.write(row,col+1,el[:gid])
                 worksheet.write(row,col+2,el[:hmt])
