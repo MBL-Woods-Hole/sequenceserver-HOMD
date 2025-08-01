@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+
+
 require 'readline'
 require 'English'
 require 'slop'
@@ -415,3 +417,4 @@ rescue Slop::Error => e
   puts "Run '#{$PROGRAM_NAME} -h' for help with command line options."
   exit
 end
+
