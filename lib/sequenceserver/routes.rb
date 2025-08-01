@@ -1,5 +1,5 @@
 
-#require 'json'
+require 'json'
 require 'tilt/erb'
 require 'sinatra/base'
 
@@ -531,7 +531,7 @@ module SequenceServer
             end
         end
 
-      
+        logger.info "Data Array Length: #{big_array.length}"
         fpath_out = File.join(DOTDIR, job_id, "custom_homd_taxonomy.#{out_type}")
         if out_type == 'xlsx'
             # Create a new Excel workbook
@@ -569,6 +569,7 @@ module SequenceServer
             worksheet.write(2,25,"HOMD-Strain")
         
             row = 3
+            
             big_array.each_with_index do |el,i|
                 col = 0
                 
