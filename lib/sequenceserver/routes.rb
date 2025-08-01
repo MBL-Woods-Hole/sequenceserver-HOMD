@@ -599,7 +599,9 @@ module SequenceServer
                 worksheet.write(row,col+23,el[:species])
                 worksheet.write(row,col+24,el[:subspecies])
                 worksheet.write(row,col+25,el[:strain])
-                
+                if big_array.length == 1
+                    workbook.close()
+                end
                 row += 1
             end
             
