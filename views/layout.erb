@@ -70,6 +70,8 @@
             <a href="<%= $blast_url_base %>/genome_blast_single_ncbi/?gid=<%= $GID %>">NCBI</a>&nbsp;&nbsp;|&nbsp;
             <a href="<%= $blast_url_base %>/genome_blast_single_prokka/?gid=<%= $GID %>">PROKKA</a>&nbsp;&nbsp;|&nbsp;
             <a href="<%= $homd_url_base %>/genome/blast_select_genome">Select another genome</a>
+            <%= this.state[:database] %>
+            <%= this.state[:databases] %>
       </div>
      
     </div>
