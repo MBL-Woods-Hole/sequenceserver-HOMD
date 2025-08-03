@@ -70,11 +70,11 @@
             <a href="<%= $blast_url_base %>/genome_blast_single_ncbi/?gid=<%= params[:gid] %>">NCBI</a>&nbsp;&nbsp;|&nbsp;
             <a href="<%= $blast_url_base %>/genome_blast_single_prokka/?gid=<%= params[:gid] %>">PROKKA</a>&nbsp;&nbsp;|&nbsp;
             <a href="<%= $homd_url_base %>/genome/blast_select_genome">Select another genome</a>
-            <% if(params[:gid]){ %>
+            <% if params[:gid] %>
                 <%= params[:gid] || 'no-paramsgid' %>&nbsp;&nbsp;|&nbsp;
-            <% }else{ %>
+            <% else %>
                 <%= $GID || 'no-GID' %>&nbsp;&nbsp;|&nbsp;
-            <% } %>
+            <% end %>
             
             
       </div>
