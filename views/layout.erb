@@ -71,6 +71,7 @@
             <a href="<%= $blast_url_base %>/genome_blast_single_prokka/?gid=<%= params[:gid] %>">PROKKA</a>&nbsp;&nbsp;|&nbsp;
             <a href="<%= $homd_url_base %>/genome/blast_select_genome">Select another genome</a>
             <%= $gid || 'no-gid' %>&nbsp;&nbsp;|&nbsp;
+            <%= $GID || 'no-GID' %>&nbsp;&nbsp;|&nbsp;
             <%= params[:gid] || 'no-paramsgid' %>&nbsp;&nbsp;|&nbsp;
             <%= params[:database_ids] || 'no-paramsDBgid' %>&nbsp;&nbsp;|&nbsp;
             
