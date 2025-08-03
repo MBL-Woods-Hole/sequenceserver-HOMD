@@ -214,10 +214,6 @@ export default class extends Component {
                     </h4>
                 </div>
                 <div>
-                    <a href={`${rootURL}/?job_id=${job_id}`}>
-                        <i className="fa fa-pencil"></i> Edit search
-                    </a>
-                    <span className="line">|</span>
                     <a href={`${homeURL}/genome/blast_select_genome`}
                         onClick={this.clearSession}>
                         <i className="fa fa-file-o"></i> New search
