@@ -205,6 +205,7 @@ export default class extends Component {
         // Deriving rootURL this way is required for subURI deployments
         // - we cannot just send to '/'.
         var rootURL = path.join('/');
+        var homeURL = 'http://homd.org'
         return (
             <div className="sidebar-top-panel">
                 <div className="section-header-sidebar">
@@ -217,7 +218,7 @@ export default class extends Component {
                         <i className="fa fa-pencil"></i> Edit search
                     </a>
                     <span className="line">|</span>
-                    <a href={`${homd_url_base}/genome/blast_select_genome`}
+                    <a href={`${homeURL}/genome/blast_select_genome`}
                         onClick={this.clearSession}>
                         <i className="fa fa-file-o"></i> New search
                     </a>
