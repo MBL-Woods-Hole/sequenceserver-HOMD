@@ -217,7 +217,7 @@ export default class extends Component {
                         <i className="fa fa-pencil"></i> Edit search
                     </a>
                     <span className="line">|</span>
-                    <a href={`${rootURL}/?gid=${gid}`}
+                    <a href={`${homd_url_base}/genome/blast_select_genome`}
                         onClick={this.clearSession}>
                         <i className="fa fa-file-o"></i> New search
                     </a>
