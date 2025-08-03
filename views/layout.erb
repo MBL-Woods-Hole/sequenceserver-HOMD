@@ -67,8 +67,8 @@
         <br><a href="<%= $homd_url_base %>">HOMD Home</a>&nbsp;&nbsp;||&nbsp;
             BLAST:
             <a href="<%= $blast_url_base %>/genome_blast">All Genomes</a>&nbsp;&nbsp;|&nbsp;
-            <a href="<%= $blast_url_base %>/genome_blast_single_ncbi/?gid=<%= $gid %>">NCBI</a>&nbsp;&nbsp;|&nbsp;
-            <a href="<%= $blast_url_base %>/genome_blast_single_prokka/?gid=<%= $gid %>">PROKKA</a>&nbsp;&nbsp;|&nbsp;
+            <a href="<%= $blast_url_base %>/genome_blast_single_ncbi/?gid=<%= params[:gid] %>">NCBI</a>&nbsp;&nbsp;|&nbsp;
+            <a href="<%= $blast_url_base %>/genome_blast_single_prokka/?gid=<%= params[:gid] %>">PROKKA</a>&nbsp;&nbsp;|&nbsp;
             <a href="<%= $homd_url_base %>/genome/blast_select_genome">Select another genome</a>
             
       </div>
