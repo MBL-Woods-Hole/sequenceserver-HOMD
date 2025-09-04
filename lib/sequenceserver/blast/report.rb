@@ -173,7 +173,6 @@ module SequenceServer
           species = ''
           if db_type == "refseq"
              hmt = n[1].split('_')[0]
-             
              species = get_species hmt
           else
               pts = n[2].split()
@@ -181,7 +180,7 @@ module SequenceServer
           end
           logger.info "finalspecies= #{species}"
           hit = Hit.new(query, n[0], n[1], n[3], n[2], n[4],
-                        tsv_ir[n[1]][0], tsv_ir[n[1]][1], [], species)  #species
+                        tsv_ir[n[1]][0], tsv_ir[n[1]][1], [], species)
           extract_hsps(n[5], tsv_ir[n[1]][2], hit)
           query.hits << hit
         end
