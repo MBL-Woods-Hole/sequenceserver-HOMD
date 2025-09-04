@@ -199,7 +199,9 @@ module SequenceServer
             logger.info "species q= #{q}"
             logger.info "species rs= #{rs.species}"
             if rs.count > 0
-               species = rs[0]['genus']+' '+rs[0]['species']+' '+rs[0]['subspecies']
+               rs.each do |row|
+                  species = row['genus']+' '+row['species']+' '+row['subspecies']
+               end
             else
                species = ''
             end
