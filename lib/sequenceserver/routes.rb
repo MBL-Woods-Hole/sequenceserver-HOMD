@@ -307,7 +307,7 @@ module SequenceServer
         big_array = [] # an array of hashes
         
         query_ary.each do |query_elem|
-            
+            logger.info "query_elem #{query_elem}"
             hit_ary = query_elem[:hits]
             hit_ary.each do |hit_elem|
          

@@ -30,16 +30,19 @@ On AWS mysql server 192.168.1.58:
 #dump the tables
 sudo mysqldump NCBI_meta orf > /mnt/efs/bioinfo/projects/mysql_export/NCBI_meta.orf.sql
 sudo mysqldump PROKKA_meta orf > /mnt/efs/bioinfo/projects/mysql_export/PROKKA_meta.orf.sql
+sudo mysqldump homd domain phylum klass order family genus species subspecies genomesV11.0 otid_prime taxonomy > /mnt/efs/bioinfo/projects/mysql_export/genomes_otid_prime_taxonomy.sql
 #secure copy to Forsyth server
-scp -i ~/.ssh/andy.pem -o "ProxyCommand ssh -i ~/.ssh/andy.pem ubuntu@brop.org -W %h:%p" /mnt/efs/bioinfo/projects/mysql_export/NCBI_meta.orf.sql ubuntu@192.168.1.136:/mnt/bioinfo4/ubuntu/homd_blast/mysql_import/
-scp -i ~/.ssh/andy.pem -o "ProxyCommand ssh -i ~/.ssh/andy.pem ubuntu@brop.org -W %h:%p" /mnt/efs/bioinfo/projects/mysql_export/NCBI_meta.orf.sql ubuntu@192.168.1.136:/mnt/bioinfo4/ubuntu/homd_blast/mysql_import/
- 
- 
+scp -i ~/.ssh/andy.pem -o "ProxyCommand ssh -i ~/.ssh/andy.pem ubuntu@brop.org -W %h:%p" /mnt/efs/bioinfo/projects/mysql_export/NCBI_meta.orf.sql ubuntu@192.168.1.136:/mnt/bioinfo4/ubuntu/homd_blast/mysql_import/
+scp -i ~/.ssh/andy.pem -o "ProxyCommand ssh -i ~/.ssh/andy.pem ubuntu@brop.org -W %h:%p" /mnt/efs/bioinfo/projects/mysql_export/PROKKA_meta.orf.sql ubuntu@192.168.1.136:/mnt/bioinfo4/ubuntu/homd_blast/mysql_import/
+scp -i ~/.ssh/andy.pem -o "ProxyCommand ssh -i ~/.ssh/andy.pem ubuntu@brop.org -W %h:%p" /mnt/efs/bioinfo/projects/mysql_export/genomes_otid_prime_taxonomy.sql ubuntu@192.168.1.136:/mnt/bioinfo4/ubuntu/homd_blast/mysql_import/
+
+
 on Forsyth blast_mysql server 192.168.1.136:
- 
+
 #import into corresponding databases
 sudo mysql NCBI_meta < /mnt/bioinfo4/ubuntu/homd_blast/mysql_import/NCBI_meta.orf.sql
 sudo mysql PROKKA_meta < /mnt/bioinfo4/ubuntu/homd_blast/mysql_import/PROKKA_meta.orf.sql
+sudo mysql homd < /mnt/bioinfo4/ubuntu/homd_blast/mysql_import/genomes_otid_prime_taxonomy.sql
 ********************************************************
 
 ### Helpful commands
