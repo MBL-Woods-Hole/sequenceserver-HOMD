@@ -3,7 +3,7 @@ module SequenceServer
   module BLAST
     # Hit object to store all the hits per Query.
     Hit = Struct.new(:query, :number, :id, :accession, :title,
-                     :length, :sciname, :qcovs, :hsps) do
+                     :length, :sciname, :qcovs, :hsps, :species) do
       def initialize(*args)
         args[1] = args[1].to_i
         args[4] = '' if args[4] == 'No definition line'
@@ -22,7 +22,7 @@ module SequenceServer
       def to_json(*args)
         # List all attributes that we want to send to the browser.
         properties = %i[number id accession title length total_score
-                        qcovs sciname hsps links]
+                        qcovs sciname hsps links species]
         properties.inject({}) { |h, k| h[k] = send(k); h }.to_json(*args)
       end
 

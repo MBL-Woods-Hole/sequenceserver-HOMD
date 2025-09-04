@@ -160,8 +160,9 @@ module SequenceServer
             n[1] = defline.shift
             n[2] = defline.join(' ')
           end
+          logger.info "xml_ir[n]= #{n}"
           hit = Hit.new(query, n[0], n[1], n[3], n[2], n[4],
-                        tsv_ir[n[1]][0], tsv_ir[n[1]][1], [])
+                        tsv_ir[n[1]][0], tsv_ir[n[1]][1], [], '')  #species
           extract_hsps(n[5], tsv_ir[n[1]][2], hit)
           query.hits << hit
         end
