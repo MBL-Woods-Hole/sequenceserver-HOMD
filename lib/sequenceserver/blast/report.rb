@@ -196,6 +196,7 @@ module SequenceServer
             q += " JOIN homd.subspecies using(subspecies_id)"
             q += " WHERE otid ='"+hmt.split('-')[1]+"'"
             rs = $conn.query(q)
+            logger.info "species q= #{q}"
             logger.info "species rs= #{rs[0]}"
             if rs.count > 0
                species = rs[0]['genus']+' '+rs[0]['species']+' '+rs[0]['subspecies']
