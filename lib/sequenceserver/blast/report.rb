@@ -161,6 +161,9 @@ module SequenceServer
             n[2] = defline.join(' ')
           end
           logger.info "xml_ir[n]= #{n}"
+          logger.info "db_type == #{db_type}"
+          # Refseq:  n[1] = 'HMT-460_16S003607'
+          
           hit = Hit.new(query, n[0], n[1], n[3], n[2], n[4],
                         tsv_ir[n[1]][0], tsv_ir[n[1]][1], [], '')  #species
           extract_hsps(n[5], tsv_ir[n[1]][2], hit)
