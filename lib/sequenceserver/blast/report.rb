@@ -149,7 +149,7 @@ module SequenceServer
         
         xml_ir.each do |n|
             logger.info "n= #{n}"  #n[1] gnl|BL_ORD_ID|329984
-            if n[1].start_with?("GCA")
+            if n[1].start_with?("GCA") || n[2].start_with?("GCA")
                 db_type = "genome"
             else
                 db_type = "refseq"
