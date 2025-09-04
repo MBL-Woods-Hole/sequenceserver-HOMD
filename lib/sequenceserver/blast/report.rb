@@ -146,12 +146,13 @@ module SequenceServer
       # Create Hit objects for the given query from the given ir.
       def extract_hits(xml_ir, tsv_ir, query)
         return if xml_ir == ["\n"] # => No hits.
-        if xml_ir[0].to_a[1].start_with?("GCA")
-            db_type = "genome"
-        else
-            db_type = "refseq"
-        end
+        
         xml_ir.each do |n|
+            if n[1].start_with?("GCA")
+                db_type = "genome"
+            else
+                db_type = "refseq"
+            end
           # If hit comes from a non -parse_seqids database, then id (n[1]) is a
           # BLAST assigned internal id of the format 'gnl|BL_ORD_ID|serial'. We
           # assign the id to accession (because we use accession for sequence
