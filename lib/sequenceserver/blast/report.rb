@@ -200,13 +200,12 @@ module SequenceServer
             logger.info "species rs= #{rs}"
 #             logger.info "species rs= #{rsspecies}"
             if rs.count > 0
-               rs.each do |row|
-                  return row[:species]
-               end
+               results = rs.to_a
+               species = results[0]['species']
+               
             else
-               return  ''
+               species = 'X'
             end
-            
       end
         
       # Create HSP objects for the given hit from the given ir.
