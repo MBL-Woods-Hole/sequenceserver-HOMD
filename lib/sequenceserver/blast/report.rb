@@ -146,7 +146,7 @@ module SequenceServer
       # Create Hit objects for the given query from the given ir.
       def extract_hits(xml_ir, tsv_ir, query)
         return if xml_ir == ["\n"] # => No hits.
-        if xml_ir[0].to_a.[1].start_with?("GCA")
+        if xml_ir[0].to_a[1].start_with?("GCA")
             db_type = "genome"
         else
             db_type = "refseq"
