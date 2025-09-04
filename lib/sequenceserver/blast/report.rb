@@ -197,6 +197,7 @@ module SequenceServer
             q += " WHERE otid ='"+hmt.split('-')[1]+"'"
             rs = $conn.query(q)
             logger.info "species q= #{q}"
+            logger.info "species rs= #{rs}"
             logger.info "species rs= #{rs.species}"
             if rs.count > 0
                rs.each do |row|
