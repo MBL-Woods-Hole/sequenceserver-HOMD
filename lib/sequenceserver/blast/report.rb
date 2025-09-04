@@ -178,7 +178,7 @@ module SequenceServer
              species = get_species hmt
           else
               pts = n[2].split()
-              species = pts[1]+' '+pts[2]
+              species = "" #pts[1]+' '+pts[2]
           end
           logger.info "finalspecies= #{species}"
           hit = Hit.new(query, n[0], n[1], n[3], n[2], n[4],
