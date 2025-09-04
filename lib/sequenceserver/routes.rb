@@ -206,8 +206,8 @@ module SequenceServer
         #
         mysql_ids = Array.new
         gids_list = ''
-        logger.info "xSEQ IDS= #{sequence_ids}"
-        logger.info "DB TYPE #{db_type}"
+        #logger.info "xSEQ IDS= #{sequence_ids}"
+        #logger.info "DB TYPE #{db_type}"
         sequence_ids.each {|n|
           if db_type == 'refseq'
              # ID == HMT-389_16S000742
@@ -223,7 +223,7 @@ module SequenceServer
           end
         }
         
-        logger.info "MYSQLIDS= #{mysql_ids}"
+        #logger.info "MYSQLIDS= #{mysql_ids}"
         tax_gid_hash = {}
         tax_hmt_hash = {}
         if db_type == 'refseq'
@@ -307,7 +307,7 @@ module SequenceServer
         big_array = [] # an array of hashes
         
         query_ary.each do |query_elem|
-            logger.info "query_elem #{query_elem}"
+            #logger.info "query_elem #{query_elem}"
             #queryID = query_elem[:id]
             hit_ary = query_elem[:hits]
             hit_ary.each do |hit_elem|
@@ -498,7 +498,7 @@ module SequenceServer
                 f.write "HOMD-Domain\tHOMD-Phylum\tHOMD-Class\tHOMD-Order\tHOMD-Family\tHOMD-Genus\tHOMD-Species\tHOMD-Subspecies\tStrain\n"
                 #gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
                 big_array.each do |el|
-                   f.puts "#{el[:query_num]}\t{el[:query_id]}\t#{el[:gid]}\t#{el[:hmt]}\t#{el[:hit_title]}\t#{el[:hit_num]}\t#{el[:hit_length]}\t#{el[:hit_qcov]}\t#{el[:hit_tscore]}\t#{el[:hit_evalue]}\t#{el[:hit_ident]}\t#{el[:hit_ipct]}\t#{el[:hsp_num]}\t#{el[:hsp_score]}\t#{el[:hsp_bitscore]}\t#{el[:hsp_evalue]}\t#{el[:hsp_ident]}\t#{el[:hsp_gaps]}\t#{el[:domain]}\t#{el[:phylum]}\t#{el[:class]}\t#{el[:order]}\t#{el[:family]}\t#{el[:genus]}\t#{el[:species]}\t#{el[:subspecies]}\t#{el[:strain]}"
+                   f.puts "#{el[:query_num]}\t#{el[:query_id]}\t#{el[:gid]}\t#{el[:hmt]}\t#{el[:hit_title]}\t#{el[:hit_num]}\t#{el[:hit_length]}\t#{el[:hit_qcov]}\t#{el[:hit_tscore]}\t#{el[:hit_evalue]}\t#{el[:hit_ident]}\t#{el[:hit_ipct]}\t#{el[:hsp_num]}\t#{el[:hsp_score]}\t#{el[:hsp_bitscore]}\t#{el[:hsp_evalue]}\t#{el[:hsp_ident]}\t#{el[:hsp_gaps]}\t#{el[:domain]}\t#{el[:phylum]}\t#{el[:class]}\t#{el[:order]}\t#{el[:family]}\t#{el[:genus]}\t#{el[:species]}\t#{el[:subspecies]}\t#{el[:strain]}"
                 end
             end
         end
@@ -523,7 +523,9 @@ module SequenceServer
     get '/download/:jid.:type' do |jid, type|
       job = Job.fetch(jid)
       out = BLAST::Formatter.new(job, type)
-      send_file out.file, filename: out.filename, type: out.mime
+      send_file out.file, 
+               filename: out.filename, 
+               type: out.mime
     end
 
     # Catches any exception raised within the app and returns JSON
