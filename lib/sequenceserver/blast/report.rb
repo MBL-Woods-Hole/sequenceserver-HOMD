@@ -189,7 +189,7 @@ module SequenceServer
       
       def get_species(hmt)
             
-            q = "SELECT otid_prime.otid,genus,species,subspecies from homd.`otid_prime`"
+            q = "SELECT otid_prime.otid, genus, species, subspecies from homd.`otid_prime`"
             q += " JOIN homd.taxonomy using(taxonomy_id)"
             q += " JOIN homd.genus using(genus_id)"
             q += " JOIN homd.species using(species_id)"
@@ -198,10 +198,10 @@ module SequenceServer
             rs = $conn.query(q)
             logger.info "species q= #{q}"
             logger.info "species rs= #{rs}"
-            logger.info "species rs= #{rs.species}"
+#             logger.info "species rs= #{rsspecies}"
             if rs.count > 0
                rs.each do |row|
-                  species = row['genus']+' '+row['species']+' '+row['subspecies']
+                  species = row[:genus]+' '+row[:species]+' '+row[:subspecies]
                end
             else
                species = ''
