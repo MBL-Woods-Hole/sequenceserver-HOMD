@@ -206,6 +206,7 @@ module SequenceServer
             else
                species = ''
             end
+            return species
       end
         
       # Create HSP objects for the given hit from the given ir.
