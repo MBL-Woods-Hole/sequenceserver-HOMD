@@ -146,6 +146,11 @@ module SequenceServer
       # Create Hit objects for the given query from the given ir.
       def extract_hits(xml_ir, tsv_ir, query)
         return if xml_ir == ["\n"] # => No hits.
+        if xml_ir[0][1].start_with?("GCA")
+            db_type = "genome"
+        else
+            db_type = "refseq"
+        end
         xml_ir.each do |n|
           # If hit comes from a non -parse_seqids database, then id (n[1]) is a
           # BLAST assigned internal id of the format 'gnl|BL_ORD_ID|serial'. We
@@ -161,16 +166,43 @@ module SequenceServer
             n[2] = defline.join(' ')
           end
           logger.info "xml_ir[n]= #{n}"
-          logger.info "dbtype == #{dbtype}"
-          # Refseq:  n[1] = 'HMT-460_16S003607'
           
+          # Refseq: n[1]:::xml_ir[n]= ["20", "HMT-460_16S003607", "",
+          # Genome n[2]::: xml_ir[n]= ["20", "GCA_000379145.1|KB900701.1", "HMT-597 Bradyrhizobium elkanii USDA 76",
+          logger.info "db_type= #{db_type}"
+          species = ''
+          if db_type == "refseq"
+             hmt = n[1].split('_')[0]
+             
+             species = get_species hmt
+          else
+              pts = n[2].split()
+              species = pts[1]+' '+pts[2]
+          end
+          logger.info "species= #{species}"
           hit = Hit.new(query, n[0], n[1], n[3], n[2], n[4],
-                        tsv_ir[n[1]][0], tsv_ir[n[1]][1], [], '')  #species
+                        tsv_ir[n[1]][0], tsv_ir[n[1]][1], [], species)  #species
           extract_hsps(n[5], tsv_ir[n[1]][2], hit)
           query.hits << hit
         end
       end
-
+      
+      def get_species(hmt)
+            
+            q = "SELECT otid_prime.otid,genus,species,subspecies from homd.`otid_prime`"
+            q += " JOIN homd.taxonomy using(taxonomy_id)"
+            q += " JOIN homd.genus using(genus_id)"
+            q += " JOIN homd.species using(species_id)"
+            q += " JOIN homd.subspecies using(subspecies_id)"
+            q += " WHERE otid ='"+hmt.split('-')[1]+"'"
+            rs = $conn.query(q)
+            if rs.count > 0
+               species = rs[0]['genus']+' '+rs[0]['species']+' '+rs[0]['subspecies']
+            else
+               species = ''
+            end
+      end
+        
       # Create HSP objects for the given hit from the given ir.
       def extract_hsps(xml_ir, tsv_ir, hit)
         xml_ir.each_with_index do |n, i|
