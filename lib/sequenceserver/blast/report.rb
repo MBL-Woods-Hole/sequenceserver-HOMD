@@ -148,6 +148,7 @@ module SequenceServer
         return if xml_ir == ["\n"] # => No hits.
         
         xml_ir.each do |n|
+            logger.info "n[1]= #{n[1]}"
             if n[1].start_with?("GCA")
                 db_type = "genome"
             else
