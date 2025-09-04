@@ -179,7 +179,7 @@ module SequenceServer
               pts = n[2].split()
               species = pts[1]+' '+pts[2]
           end
-          logger.info "species= #{species}"
+          logger.info "finalspecies= #{species}"
           hit = Hit.new(query, n[0], n[1], n[3], n[2], n[4],
                         tsv_ir[n[1]][0], tsv_ir[n[1]][1], [], species)  #species
           extract_hsps(n[5], tsv_ir[n[1]][2], hit)
@@ -201,7 +201,7 @@ module SequenceServer
 #             logger.info "species rs= #{rsspecies}"
             if rs.count > 0
                rs.each do |row|
-                  species = row[:genus]+' '+row[:species]+' '+row[:subspecies]
+                  species = row[:species]
                end
             else
                species = ''
