@@ -114,7 +114,7 @@ export default class extends Component {
         return <div className="section-header">
             <h4>
                 <i className="fa fa-minus-square-o"></i>&nbsp;
-                <strong>{this.props.hit.id} 'XX' {this.props.hit.species}</strong>&nbsp;
+                <strong>{this.props.hit.id}  {this.props.hit.species}</strong>&nbsp;
                 {this.props.hit.title}
             </h4>
             <span className="label label-reset pos-label">{meta}</span>
