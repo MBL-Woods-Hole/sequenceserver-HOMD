@@ -399,7 +399,7 @@ class HitsTable extends Component {
                                                 title={`${hit.id} ${hit.title}`}
                                                 data-toggle="tooltip" data-placement="left">
                                                 <a href={'#Query_' + this.props.query.number + '_hit_' + hit.number}
-                                                    className="btn-link">{hit.id} {hit.title}</a>
+                                                    className="btn-link">{hit.id} {hit.title} <small><i>{hit.species}</i></small></a>
                                             </td>
                                             {hasName &&
                                                 <td className="nowrap-ellipsis" title={hit.sciname}
