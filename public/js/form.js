@@ -72,8 +72,11 @@ export class Form extends Component {
         });
 
         // show overlay to create visual feedback on button click 
+        // only if NOT open in new window
         $('#method').on('click', () => {
-            $('#overlay').css('display', 'block');
+            if (!$('#toggleNewTab').is(':checked')) {
+              $('#overlay').css('display', 'block');
+            }
         });
     }
 
