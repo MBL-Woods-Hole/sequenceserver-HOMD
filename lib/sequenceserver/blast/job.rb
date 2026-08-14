@@ -77,6 +77,14 @@ module SequenceServer
           error = IO.foreach(stderr).grep(ERROR_LINE).join
           error = File.read(stderr) if error.empty?
           fail InputError, "(#{exitstatus}) #{error}"
+        when 3
+          # AAV
+          # We get exit code 3 when enter fasta format '>id' without a CR '\n'
+          fail SystemError, <<~MSG
+            BLAST failed abruptly (exit status: 3). Most likely
+            there is a formatting error in your FASTA input (or there is a
+            problem with the BLAST+ binaries).
+          MSG
         when 4
           # Out of memory. User can retry with a shorter search, so raising
           # InputError here instead of SystemError.

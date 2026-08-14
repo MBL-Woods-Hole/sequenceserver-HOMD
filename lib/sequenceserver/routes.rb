@@ -121,7 +121,7 @@ module SequenceServer
         if $DEV_HOST == 'AVhome'
           $ids_fn = './LOCAL-IDs.csv'
           logger.debug "Reading LOCAL ID File #{$ids_fn}\n"
-        elsif $ANNO == 'ncbi'
+        elsif $ANNO == 'NCBI'
           #$ids_fn = './genome_blastdbIds_ncbiHASH.csv'
           $ids_fn = './NCBI-IDs.csv'
           logger.debug "Reading NCBI ID File #{$ids_fn}\n"
@@ -313,7 +313,21 @@ module SequenceServer
                 type:     sequences.mime,
                 filename: sequences.filename)
     end
+    
+    post '/get_fasta_query' do
+        #sequence_ids = params['sequence_ids'].split(',')
+        #job_id = params['job_id']
+        #job = Job.fetch(job_id)
         
+        sequence_ids = params['sequence_ids'].split(',')
+        database_ids = params['database_ids'].split(',')
+        sequences = Sequence::Retriever.new(sequence_ids, database_ids, true)
+        send_file(sequences.file.path,
+                type:     sequences.mime,
+                filename: sequences.filename)
+        
+    end
+    
     post '/get_sqlquery' do
         out_type = params['filetype'] # xlsx or csv
         sequence_ids = params['sequence_ids'].split(',')
@@ -330,8 +344,9 @@ module SequenceServer
         #
         mysql_ids = Array.new
         gids_list = ''
-        logger.info "xSEQ IDS= #{sequence_ids}"
-        logger.info "DB TYPE #{db_type}"
+        logger.info "xSEQ IDS1= #{sequence_ids}"
+        logger.debug "xSEQ IDS2= #{sequence_ids}"
+        puts "ANNO #{$ANNO}"
         sequence_ids.each {|n|
           if db_type == 'refseq'
              # ID == HMT-389_16S000742
@@ -339,15 +354,18 @@ module SequenceServer
              mysql_ids.push(otid)
           else
              gid = 'GCA_'+n.split('_')[1].split('|')[0]
-              #  prokka::protein sequence_ids look like this:   GCA_937930255.1_00575
-              #  prokka:nucleotide sequence_ids look like this: GCA_937930255.1|pid
-              #  ncbi::protein sequence_ids look like this:     GCA_026783725.1|MCY7224249.1
-              #  ncbi::nucleotide sequence_ids look like this:  GCA_001815865.1|KV822194.1
+              #  prokka::protein sequence_ids look like this:   GCA_937930255.1_00575 ....
+              #  prokka:nucleotide sequence_ids look like this: GCA_937930255.1|{mol_id} ....
+              #  ncbi::protein sequence_ids look like this:     GCA_026783725.1|pid ....
+              #  ncbi::nucleotide sequence_ids look like this:  GCA_001815865.1|{mol_id} ....
+              # protein IDs
+              #    Are only present in PROKKA and NCBI Protein sequence_ids
+              # 
               mysql_ids.push(gid)
           end
         }
         
-        logger.info "MYSQLIDS= #{mysql_ids}"
+        #logger.info "MYSQLIDS= #{mysql_ids}"
         tax_gid_hash = {}
         tax_hmt_hash = {}
         if db_type == 'refseq'
@@ -377,7 +395,7 @@ module SequenceServer
             q += " JOIN homd.`genomesV11.0` using(otid)"
             q += " WHERE genome_id in ('"+mysql_ids.join("','")+"')"
         end
-        logger.info "SQL Query= #{q}"
+        puts "SQL Query= #{q}"
         results = $conn.query(q)
         results.each do |row|
             #f.write("write your stuff here")
@@ -431,7 +449,8 @@ module SequenceServer
         big_array = [] # an array of hashes
         
         query_ary.each do |query_elem|
-            
+            #logger.info "query_elem #{query_elem}"
+            #queryID = query_elem[:id]
             hit_ary = query_elem[:hits]
             hit_ary.each do |hit_elem|
          
@@ -449,7 +468,19 @@ module SequenceServer
                     gid = 'GCA_'+hit_id.split('_')[1].split('|')[0]
                 end
                 #logger.info "GID FROM HIT-ID #{gid}"
-                
+                if params[:method] == 'BLASTN'  # Nucleotide
+                    pid = ''
+                        #  prokka:nucleotide sequence_ids look like this: GCA_937930255.1|{mol_id} ....
+                        #  ncbi::nucleotide sequence_ids look like this:  GCA_001815865.1|{mol_id} ....
+                else
+                    if $ANNO == 'NCBI'
+                        #  ncbi::protein sequence_ids look like this:     GCA_026783725.1|pid ....
+                        pid = hit_id.split('|')[1]
+                    else
+                       #prokka::protein sequence_ids look like this:   GCA_937930255.1_00575
+                        pid = hit_id
+                    end
+                end
                 hsps = hit_elem[:hsps]
                 hit_evalue = hsps[0][:evalue]
                 hit_ident = hsps[0][:identity]
@@ -461,6 +492,7 @@ module SequenceServer
                    #if gid not in tax_hash:
                     tmp_hash1 = {
                            :gid        => gid,
+                           :pid        => pid,
                            :query_num    => query_elem[:number],
                            :query_id     => query_elem[:id],
                            :hit_title    => hit_elem[:title],
@@ -532,83 +564,67 @@ module SequenceServer
             end
         end
 
-        logger.info "Data Array Length: #{big_array.length}"
+      
         fpath_out = File.join(DOTDIR, job_id, "custom_homd_taxonomy.#{out_type}")
         if out_type == 'xlsx'
             # Create a new Excel workbook
             workbook = WriteXLSX.new(fpath_out)
             # Add a worksheet
             worksheet = workbook.add_worksheet
-            logger.info "Writing header row"
+          
+
             worksheet.write('A1',headerA1)
             worksheet.write('A2',headerA2)
             worksheet.write(2,0,"Query_num")
             worksheet.write(2,1,"Query-ID")
             worksheet.write(2,2,"Genome-ID")
-            worksheet.write(2,3,"HMT-ID")
+            worksheet.write(2,3,"Protein-ID")
             worksheet.write(2,4,"Hit_title")
-            worksheet.write(2,5,"Hit_num")
-            worksheet.write(2,6,"Hit_length")
-            worksheet.write(2,7,"Hit_qcov")
-            worksheet.write(2,8,"Hit_tscore")
-            worksheet.write(2,9,"Hit_evalue")
-            worksheet.write(2,10,"Hit_ident")
-            worksheet.write(2,11,"Hit_Ident(%)")
-            worksheet.write(2,12,"Hsp_num")
-            worksheet.write(2,13,"Hsp_score")
-            worksheet.write(2,14,"Hsp_bitscore")
-            worksheet.write(2,15,"Hsp_eval")
-            worksheet.write(2,16,"Hsp_ident")
-            worksheet.write(2,17,"Hsp_gaps")
-            worksheet.write(2,18,"HOMD-Domain")
-            worksheet.write(2,19,"HOMD-Phylum")
-            worksheet.write(2,20,"HOMD-Class")
-            worksheet.write(2,21,"HOMD-Order")
-            worksheet.write(2,22,"HOMD-Family")
-            worksheet.write(2,23,"HOMD-Genus")
-            worksheet.write(2,24,"HOMD-Species")
-            worksheet.write(2,25,"HOMD-Subspecies")
-            worksheet.write(2,26,"HOMD-Strain")
+            worksheet.write(2,5,"Hit_length")
+            worksheet.write(2,6,"Hit_qcov")
+            worksheet.write(2,7,"Hit_tscore")
+            worksheet.write(2,8,"Hit_evalue")
+            worksheet.write(2,9,"Hit_Ident(%)")
+            worksheet.write(2,10,"HMT-ID")
+            worksheet.write(2,11,"HOMD-Domain")
+            worksheet.write(2,12,"HOMD-Phylum")
+            worksheet.write(2,13,"HOMD-Class")
+            worksheet.write(2,14,"HOMD-Order")
+            worksheet.write(2,15,"HOMD-Family")
+            worksheet.write(2,16,"HOMD-Genus")
+            worksheet.write(2,17,"HOMD-Species")
+            worksheet.write(2,18,"HOMD-Subspecies")
+            worksheet.write(2,19,"HOMD-Strain")
         
             row = 3
-            
             big_array.each_with_index do |el,i|
                 col = 0
-                logger.info "Writing data row: #{i}"
+                
                 worksheet.write(row,col,el[:query_num])
                 worksheet.write(row,col+1,el[:query_id])
                 worksheet.write(row,col+2,el[:gid])
-                worksheet.write(row,col+3,el[:hmt])
+                worksheet.write(row,col+3,el[:pid])
                 worksheet.write(row,col+4,el[:hit_title])
-                worksheet.write(row,col+5,el[:hit_num])
-                worksheet.write(row,col+6,el[:hit_length])
-                worksheet.write(row,col+7,el[:hit_qcov])
-                worksheet.write(row,col+8,el[:hit_tscore])
-                worksheet.write(row,col+9,el[:hit_evalue])
-                worksheet.write(row,col+10,el[:hit_ident])
-                worksheet.write(row,col+11,el[:hit_ipct])
-                worksheet.write(row,col+12,el[:hsp_num])
-                worksheet.write(row,col+13,el[:hsp_score])
-                worksheet.write(row,col+14,el[:hsp_bitscore])
-                worksheet.write(row,col+15,el[:hsp_evalue])
-                worksheet.write(row,col+16,el[:hsp_ident])
-                worksheet.write(row,col+17,el[:hsp_gaps])
-                worksheet.write(row,col+18,el[:domain])
-                worksheet.write(row,col+19,el[:phylum])
-                worksheet.write(row,col+20,el[:class])
-                worksheet.write(row,col+21,el[:order])
-                worksheet.write(row,col+22,el[:family])
-                worksheet.write(row,col+23,el[:genus])
-                worksheet.write(row,col+24,el[:species])
-                worksheet.write(row,col+25,el[:subspecies])
-                worksheet.write(row,col+26,el[:strain])
+                worksheet.write(row,col+5,el[:hit_length])
+                worksheet.write(row,col+6,el[:hit_qcov])
+                worksheet.write(row,col+7,el[:hit_tscore])
+                worksheet.write(row,col+8,el[:hit_evalue])
+                worksheet.write(row,col+9,el[:hit_ipct])
+                worksheet.write(row,col+10,el[:hmt])
+                worksheet.write(row,col+11,el[:domain])
+                worksheet.write(row,col+12,el[:phylum])
+                worksheet.write(row,col+13,el[:class])
+                worksheet.write(row,col+14,el[:order])
+                worksheet.write(row,col+15,el[:family])
+                worksheet.write(row,col+16,el[:genus])
+                worksheet.write(row,col+17,el[:species])
+                worksheet.write(row,col+18,el[:subspecies])
+                worksheet.write(row,col+19,el[:strain])
                 
-                break if big_array.length == 1
-                    
                 row += 1
             end
             
-            workbook.close
+            workbook.close()
         else
             #f.puts "#{el[:query_num]}\t#{el[:gid]}\t#{el[:hmt]}\t#{el[:hit_title]}\t#{el[:hit_num]}\t#{el[:hit_length]}\t#{el[:hit_qcov]}\t#
                 #{el[:hit_tscore]}\t#{el[:hit_evalue]}\t#{el[:hit_ident]}\t#{el[:hit_ipct]}\t#{el[:hsp_num]}\t#{el[:hsp_score]}\t#{el[:hsp_bitscore]}
@@ -619,12 +635,12 @@ module SequenceServer
                 #f.puts "Genome-ID\tQuery_num\tHit_title\tHit_num\tHit_length\tHit_qcov\tHit_tscore\tHit_evalue\tHit_ident\tHit_Ident(%)\tHsp_num\tHsp_score\tHsp_bitscore\tHsp_eval\tHsp_ident\tHsp_gaps\tHMT-ID\tDomain\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tSubspecies\tStrain"
                 f.puts headerA1
                 f.puts headerA2
-                f.write "Query_num\tQuery_ID\tGenome-ID\tHMT-ID\tHit_title\tHit_num\tHit_length\tHit_qcov\tHit_tscore\t"
-                f.write "Hit_evalue\tHit_ident\tHit_Ident(%)\tHsp_num\tHsp_score\tHsp_bitscore\tHsp_eval\tHsp_ident\tHsp_gaps\t"
+                f.write "Query_num\tQuery_ID\tGenome-ID\tProtein-ID\tHit_title\tHit_length\tHit_qcov\tHit_tscore\t"
+                f.write "Hit_evalue\tHit_Ident(%)\tHMT-ID\t"
                 f.write "HOMD-Domain\tHOMD-Phylum\tHOMD-Class\tHOMD-Order\tHOMD-Family\tHOMD-Genus\tHOMD-Species\tHOMD-Subspecies\tStrain\n"
                 #gid,hit_def,hit#,hit_length,qcov,tscore,evalue,%ident, hsp#,hsp_score,hsp_evalue,hsp_ident,hsp_gaps,hps_strand,HMT,TAXONOMY}
                 big_array.each do |el|
-                   f.puts "#{el[:query_num]}\t#{el[:query_id]}\t#{el[:gid]}\t#{el[:hmt]}\t#{el[:hit_title]}\t#{el[:hit_num]}\t#{el[:hit_length]}\t#{el[:hit_qcov]}\t#{el[:hit_tscore]}\t#{el[:hit_evalue]}\t#{el[:hit_ident]}\t#{el[:hit_ipct]}\t#{el[:hsp_num]}\t#{el[:hsp_score]}\t#{el[:hsp_bitscore]}\t#{el[:hsp_evalue]}\t#{el[:hsp_ident]}\t#{el[:hsp_gaps]}\t#{el[:domain]}\t#{el[:phylum]}\t#{el[:class]}\t#{el[:order]}\t#{el[:family]}\t#{el[:genus]}\t#{el[:species]}\t#{el[:subspecies]}\t#{el[:strain]}"
+                   f.puts "#{el[:query_num]}\t#{el[:query_id]}\t#{el[:gid]}\t#{el[:pid]}\t#{el[:hit_title]}\t#{el[:hit_length]}\t#{el[:hit_qcov]}\t#{el[:hit_tscore]}\t#{el[:hit_evalue]}\t#{el[:hit_ipct]}\t#{el[:hmt]}\t#{el[:domain]}\t#{el[:phylum]}\t#{el[:class]}\t#{el[:order]}\t#{el[:family]}\t#{el[:genus]}\t#{el[:species]}\t#{el[:subspecies]}\t#{el[:strain]}"
                 end
             end
         end
