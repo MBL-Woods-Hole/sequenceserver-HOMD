@@ -45,6 +45,16 @@ export class Options extends Component {
         }else{
             classNames += ' ltgray-background';
         }
+        var customParams = [
+            "-evalue 1.0e-25 -max_target_seqs 20",
+            "-evalue 1.0e-25 -max_target_seqs 50",
+            "-evalue 1.0e-25 -max_target_seqs 100",
+            "-evalue 1.0e-25 -max_target_seqs 500",
+            "-evalue 1.0e-25 -max_target_seqs 1000",
+            "-evalue 1.0e-25 -max_target_seqs 2000",
+            "-evalue 1.0e-25 -max_target_seqs 4000",
+            "-evalue 1.0e-25 -max_target_seqs 8000"
+        ]
         return (
             <div className="col-md-7">
                 <div className="form-group">
@@ -65,6 +75,21 @@ export class Options extends Component {
                                 placeholder="eg: -evalue 1.0e-5 -max_target_seqs 100"
                                 title="View, and enter advanced parameters."
                             />
+
+                <div className="mt-5 m-auto w-50">
+                  PreSelected Advanced Params:&nbsp;&nbsp;
+                 <select className='customAP' value={this.state.value} onChange={e => this.updateBox(e.target.value)}>
+                    {customParams.map((param) => (
+                      <option 
+                         value={param}
+                         key={param}
+                         >
+                         {param}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                
                             {Object.keys(this.state.preOpts).length > 1 && this.optionsJSX()}
                         </div>
                     </div>
